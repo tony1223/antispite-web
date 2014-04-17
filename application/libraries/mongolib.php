@@ -36,6 +36,9 @@ class MongoLib {
 		$ci->mongo = new MongoQB\Builder(Array('dsn' =>  $this->_connection_string));
 	}
 	
+	public function _show_error($error){
+		die($error);
+	}	
 	public function load($config = 'default')
 	{
 		// Try and load a config file if CodeIgniter
