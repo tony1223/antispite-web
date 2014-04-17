@@ -8,6 +8,12 @@ class  MY_Controller  extends  CI_Controller  {
 	 * @var CommentModel
 	 */
 	var $commentModel;//CommentModel
+	
+	/**
+	 *
+	 * @var UserModel
+	 */
+	var $userModel;//UserModel
 
 	public function __construct(){
 		parent::__construct();

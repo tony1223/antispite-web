@@ -20,7 +20,7 @@ class Welcome extends MY_Controller {
 	public function index()
 	{
 		$this->load->view('welcome_message',Array(
-			"pageTitle" => "All messages" ,
+			"pageTitle" => null ,
 			"selector" => "intro"
 		));
 	}

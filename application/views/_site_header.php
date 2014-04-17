@@ -36,8 +36,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li <?php if($selector == "intro"){ ?> class="active" <?php } ?>><a href="<?=site_url("/")?>">說明</a></li>
-        <li><a href="<?=site_url("post/new_")?>">Chrome 外掛安裝</a></li>
-        <li><a href="<?=site_url("post/new_")?>">瀏覽黑名單 (與 API)</a></li>
+       <!--  <li><a href="<?=site_url("extension/download")?>">Chrome 外掛安裝</a></li> -->
+        <li><a href="<?=site_url("comment/")?>">瀏覽黑名單 (與 API)</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

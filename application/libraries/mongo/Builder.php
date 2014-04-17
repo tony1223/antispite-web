@@ -660,8 +660,12 @@ class Builder
      * @access public
      * @return \MongoQB\Builder
      */
-    public function orderBy($fields = array())
+    public function orderBy($fields = array(),$value = null)
     {
+    	if($value != null){
+    		$fields = Array($fields => $value);
+    	}
+    	
         foreach ($fields as $field => $order) {
             if ($order === -1 OR $order === false OR strtolower($order) ===
              'desc') {
