@@ -1,0 +1,12 @@
+.DS_Store
+application/config/mongodb.php
+
+application/cache/*
+!application/cache/index.html
+!application/cache/.htaccess
+
+application/logs/*
+!application/logs/index.html
+!application/logs/.htaccess
+
+
