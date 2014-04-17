@@ -1,3 +1,4 @@
-#Sat Mar 15 02:58:41 CST 2014
 eclipse.preferences.version=1
-include_path=0;/message
+include_path=0;/antispike
+phpVersion=php5.4
+use_asp_tags_as_php=false

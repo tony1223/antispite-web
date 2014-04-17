@@ -4,10 +4,10 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class  MY_Controller  extends  CI_Controller  {
 
 	/**
-	 *
-	 * @var MongoQB\Builder
+	 * 
+	 * @var CommentModel
 	 */
-	var $mongo;//Builder
+	var $commentModel;//CommentModel
 
 	public function __construct(){
 		parent::__construct();

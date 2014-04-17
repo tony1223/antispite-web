@@ -1,4 +1,6 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php use MongoQB\Builder;
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * A base model with a series of CRUD functions (powered by CI's query builder),
@@ -932,9 +934,11 @@ class MONGO_MODEL {
 	}
 
 	/**
-	 * @var Builder
+	 *
+	 * @var MongoQB\Builder
 	 */
-	var $mongo_db ;
+	var $mongo_db ;//Builder
+	
 
 
 	/**

@@ -3,6 +3,14 @@
 include_once('mongo/Builder.php');
 
 class MongoLib {
+	/**
+	 * Config file.
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $_config_file = 'mongodb';
+	
 	public function __construct(){
 		$ci =& get_instance();
 		
@@ -68,7 +76,6 @@ class MongoLib {
 		$this->_persist_key = trim($this->_config_data['mongo_persist_key']);
 		$this->_replica_set = $this->_config_data['mongo_replica_set'];
 		$this->_query_safety = trim($this->_config_data['mongo_query_safety']);
-		$dbhostflag = (bool) $this->_config_data['mongo_host_db_flag'];
 	
 		$connection_string = 'mongodb://';
 	
@@ -89,15 +96,7 @@ class MongoLib {
 	
 		$connection_string .= $this->_host;
 	
-		if ($dbhostflag === TRUE)
-		{
-			$this->_connection_string = trim($connection_string) . '/' . $this->_dbname;
-		}
-	
-		else
-		{
-			$this->_connection_string = trim($connection_string);
-		}
+		$this->_connection_string = trim($connection_string) . '/' . $this->_dbname;
 	
 	}
 }
