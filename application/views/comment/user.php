@@ -10,7 +10,7 @@
 </style>
 <div class="container">
 	
-	<h2>近期跳針留言清單（<?=count($comments)>=100 ?"最近一百筆" :count($comments) ?>）</h2>
+	<h2><?=$comments[0]["name"] ?> 近期跳針留言清單（<?=count($comments)>=100 ?"最近一百筆" :count($comments) ?>）</h2>
 	<table class="table table-bordered">
 		<tr>
 			<td>回報時間</td>			
@@ -26,7 +26,7 @@
 				FB 留言
 				<?php }?>
 			</td>	
-			<td><a target="_blank" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a></td>
+			<td><a target="_blank"  href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a></td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
 		</tr>
 		<tr>

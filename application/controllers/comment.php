@@ -12,7 +12,7 @@ class Comment extends MY_Controller {
 		$comments = $this->commentModel->get_confirming();
 		
 		$this->load->view('comment/confirm',Array(
-				"pageTitle" => "確認惡意留言" ,
+				"pageTitle" => "確認跳針留言" ,
 				"selector" => "confirm",
 				"comments" => $comments
 		));		
@@ -28,6 +28,23 @@ class Comment extends MY_Controller {
 				"comments" => $comments
 		));
 	}
+	
+
+	public function user(){
+		$key = $this->input->get("key");
+		$this->load->model("commentModel");
+		$comments = $this->commentModel->get_bads_by_user($key);
+		if(count($comments) == 0){
+			return show_404();
+		}
+	
+		$this->load->view('comment/user',Array(
+				"pageTitle" => $comments[0]["name"]." 跳針留言清單" ,
+				"selector" => "confirm",
+				"comments" => $comments
+		));
+	}
+	
 	
 	
 	public function mark($key,$status){
@@ -45,6 +62,34 @@ class Comment extends MY_Controller {
 			redirect(site_url("user/login"));
 			return true;
 		}
+	}
+	
+	public function check(){
+		header("Access-Control-Allow-Origin: https://www.facebook.com");
+		header('Content-Type: application/json; charset=utf-8');
+		
+		$posts = json_decode($this->input->post("posts"),"true");
+		
+		if($posts == null){
+			return $this->return_error(400,"parameter not correct.");
+		}
+		
+		$post_ids = Array();
+		$users = Array();
+		foreach($posts as $post){
+			$post_ids[] = $post["key"];
+			$users[$post["user"]] = 1;
+		}
+		
+		$this->load->model("commentModel");
+		$bad_ids = $this->commentModel->check_ids($post_ids);
+		$bad_users = $this->commentModel->check_users(array_keys($users));
+		
+// 		posts:all_post_ids,
+// 		url:url
+		//all_post_ids.push({key:nowpost.key,type:nowpost.type,user:nowpost.userkey});
+		
+		return $this->return_success_json(Array("bad_posts" => $bad_ids,"bad_users" => $bad_users));
 	}
 	
 	public function report(){

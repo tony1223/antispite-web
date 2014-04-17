@@ -5,12 +5,12 @@
 	<title><?php
 		if(isset($pageTitle)){
 			if(empty($selector) || $selector != "home"){
-				echo $pageTitle." - 反跳針留言 - 留言紀錄與回報程式" ;
+				echo $pageTitle." - 反跳針服務中心" ;
 			}else{
 				echo $pageTitle; 
 			}
 		} else{
-			echo "反跳針留言 - 留言紀錄與回報程式" ; 
+			echo "反跳針服務中心" ; 
 		}
 	?></title>
 	<!-- Latest compiled and minified CSS -->
@@ -37,7 +37,7 @@
       <ul class="nav navbar-nav">
         <li <?php if($selector == "intro"){ ?> class="active" <?php } ?>><a href="<?=site_url("/")?>">說明</a></li>
        <!--  <li><a href="<?=site_url("extension/download")?>">Chrome 外掛安裝</a></li> -->
-        <li><a href="<?=site_url("comment/")?>">瀏覽黑名單 (與 API)</a></li>
+        <li><a href="<?=site_url("comment/")?>">瀏覽跳針留言(含API)</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

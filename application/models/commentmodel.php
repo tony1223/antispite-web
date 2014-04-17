@@ -36,6 +36,25 @@ class CommentModel extends MONGO_MODEL {
 					"status" => $status ));		
 	}
 	
+	public function check_ids($post_ids){
+		return $this->mongo_db->select(Array("_id"))->whereIn("_id",$post_ids)->where("status",CommentModel::STATUS_BAD)->get($this->_collection);
+	}
+	
+	public function check_users($users){
+		$results = Array();
+		foreach($users as $user){
+			$user_count = $this->mongo_db->where("userkey",$user)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
+			if($user_count > 0 ){
+				$results[] = Array("user" => $user,"count" => $user_count);
+			}
+		}
+		return $results;
+	}
+	
+	public function get_bads_by_user($key){
+		return $this->mongo_db->orderBy("createDate","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
+	}
+	
 	public function insert($data){
 		
 // 		{

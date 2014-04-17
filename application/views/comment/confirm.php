@@ -16,6 +16,7 @@
 	?>
 	<table class="table table-bordered">
 		<tr>
+			<td>key</td>
 			<td>回報時間</td>			
 			<td>類型</td>
 			<td>留言者</td>
@@ -24,6 +25,7 @@
 		</tr>
 		<?php foreach($comments as $comment){?>
 		<tr>
+			<td><?=h($comment["_id"]) ?></td>
 			<td><?=_display_date_with_fulldate_ms($comment["createDate"]) ?></td>
 			<td>
 				<?php if($comment["type"] == "FBComment"){ ?>
@@ -35,7 +37,7 @@
 			<td><?=count($comment["reporters"]) ?></td>
 		</tr>
 		<tr>
-			<td colspan="4" style="padding-left:40px;">
+			<td colspan="6" style="padding-left:40px;">
 				<a href="<?=h($comment["url"]) ?>"><?=h($comment["url"]) ?></a>
 				<hr />
 				<?=nl2br(h($comment["content"]))?>

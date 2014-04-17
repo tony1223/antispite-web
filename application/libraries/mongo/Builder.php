@@ -300,6 +300,7 @@ class Builder
     {
         if ( ! is_array($includes)) {
             $includes = array();
+            
         }
 
         if ( ! is_array($excludes)) {
