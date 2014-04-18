@@ -7,6 +7,7 @@ class CommentModel extends MONGO_MODEL {
 	
 	var $_collection = "comment";
 	var $_collection_record = "comment_record";
+	var $_collection_log = "comment_log";
 	const STATUS_WAIT = 0;
 	const STATUS_BAD = 1;
 	const STATUS_OK = 2;
@@ -57,6 +58,18 @@ class CommentModel extends MONGO_MODEL {
 	
 	public function get_bads_by_user($key){
 		return $this->mongo_db->orderBy("createDate","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
+	}
+	
+	
+	public function insert_check_log($ueid,$type,$url){
+		$now = time() *1000.0;
+		$this->mongo_db->insert($this->_collection_log,
+			Array("reporter"=>$data["ueid"],
+					"createDate" => $now,
+					"type" => $type,
+					"url" => $url)
+		);
+		
 	}
 	
 	public function insert($data){

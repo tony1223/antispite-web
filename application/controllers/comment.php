@@ -85,9 +85,11 @@ class Comment extends MY_Controller {
 		$bad_ids = $this->commentModel->check_ids($post_ids);
 		$bad_users = $this->commentModel->check_users(array_keys($users));
 		
+		$this->commentModel->insert_check_log($this->input->post("ueid"),$posts[0]["type"],$this->input->post("url"));
 // 		posts:all_post_ids,
 // 		url:url
 		//all_post_ids.push({key:nowpost.key,type:nowpost.type,user:nowpost.userkey});
+
 		
 		return $this->return_success_json(Array("bad_posts" => $bad_ids,"bad_users" => $bad_users));
 	}
