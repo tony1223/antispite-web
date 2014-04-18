@@ -14,7 +14,6 @@
 <div class="container">
 	
 	<h2>跳針留言小幫手說明</h2>
-	
 	<ul>
 		<li>目前只支援 Chrome </li>
 		<li>目前只支援 FB 留言板偵測（未來預計會支援更多類型留言） </li>
@@ -23,6 +22,8 @@
 			
 		<li>回報跳針後會需要一點時間處理才會標示為跳針留言，回報不保證一定會標示為跳針。</li>
 	</ul>
+	<p>安裝後瀏覽留言時，遇到跳針留言會幫忙標示為跳針留言並增加回報跳針按鈕，如下圖：</p>
+	<p><img src="<?=base_url("img/example.png")?>" /></p>	
 	
 	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
 	
