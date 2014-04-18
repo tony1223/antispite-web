@@ -838,7 +838,7 @@ class Builder
 
         $options = array_merge(
                     array(
-                        $this->_querySafety => true
+                        "w" => 1,
                     ),
                     $options
                 );
@@ -891,7 +891,7 @@ class Builder
 
         $options = array_merge(
                     array(
-                        $this->_querySafety => true
+                        "w" => 1,
                     ),
                     $options
                 );
@@ -931,7 +931,8 @@ class Builder
         }
 
         try {
-            $options = array_merge(array($this->_querySafety => true,
+            $options = array_merge(array(
+            		"w" => 1,
              'multiple' => false), $options);
             $result = $this->_dbhandle->{$collection}->update($this->wheres,
              $this->updates, $options);
@@ -977,7 +978,8 @@ class Builder
         }
 
         try {
-            $options = array_merge(array($this->_querySafety => true,
+            $options = array_merge(array(
+            		"w" => 1,
              'multiple' => true), $options);
             $result = $this->_dbhandle->{$collection}->update($this->wheres,
              $this->updates, $options);
@@ -1244,7 +1246,7 @@ class Builder
 
         try {
             $this->_dbhandle->{$collection}->remove($this->wheres,
-             array($this->_querySafety => true, 'justOne' => true));
+             array("w" => 1, 'justOne' => true));
             $this->_clear($collection, 'delete');
 
             return true;
@@ -1277,7 +1279,7 @@ class Builder
 
         try {
             $this->_dbhandle->{$collection}->remove($this->wheres,
-             array($this->_querySafety => true, 'justOne' => false));
+             array("w" => 1, 'justOne' => false));
             $this->_clear($collection, 'delete_all');
 
             return true;
