@@ -14,14 +14,12 @@
 	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
 	<table class="table table-bordered">
 		<tr>
-			<td>回報時間</td>			
 			<td>類型</td>
 			<td>留言者</td>
 			<td>留言時間</td>
 		</tr>
 		<?php foreach($comments as $comment){?>
 		<tr>
-			<td><?=_display_date_with_fulldate_ms($comment["createDate"]) ?></td>
 			<td>
 				<?php if($comment["type"] == "FBComment"){ ?>
 				FB 留言
