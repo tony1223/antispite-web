@@ -64,7 +64,7 @@ class CommentModel extends MONGO_MODEL {
 	public function insert_check_log($ueid,$type,$url){
 		$now = time() *1000.0;
 		$this->mongo_db->insert($this->_collection_log,
-			Array("reporter"=>$data["ueid"],
+			Array("ueid"=>$ueid,
 					"createDate" => $now,
 					"type" => $type,
 					"url" => $url)
