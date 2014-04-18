@@ -15,7 +15,7 @@
 	?></title>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
+	<meta name="google-site-verification" content="AkD7jR9M0OkMfRj9N4EgYUOlcrscDtf9kgfsKcFDvbI" />
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
