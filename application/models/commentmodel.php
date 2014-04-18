@@ -16,12 +16,16 @@ class CommentModel extends MONGO_MODEL {
 		parent::__construct();
 	}
 	
-	public function get_confirming(){
-		return $this->mongo_db->orderBy("createDate","desc")->limit(100)->get($this->_collection);
+	public function get_confirming($status = 0){
+		$query =  $this->mongo_db->orderBy("createDate","desc")->limit(100);
+		if($status != -1){
+			$query->where("status",$status);
+		}
+		return $query->get($this->_collection);
 	}
 	
 	public function get_bads(){
-		return $this->mongo_db->orderBy("createDate","desc")->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
+		return $this->mongo_db->orderBy("time","desc")->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
 	}
 	
 	public function mark($key,$status,$user){
