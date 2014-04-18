@@ -38,6 +38,9 @@
         <li <?php if($selector == "intro"){ ?> class="active" <?php } ?>><a href="<?=site_url("/")?>">說明</a></li>
         <li <?php if($selector == "download"){ ?> class="active" <?php } ?>><a href="<?=site_url("extension/download")?>">跳針留言小幫手</a></li>
         <li <?php if($selector == "comments"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/")?>">瀏覽跳針留言(含API)</a></li>
+        <?php if(is_login()){?>
+        <li <?php if($selector == "confirm"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/confirm")?>">確認跳針留言</a></li>
+        <?php }?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

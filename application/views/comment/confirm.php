@@ -14,6 +14,8 @@
 	<?php 
 
 	?>
+	<a class="btn btn-default" href="<?=site_url("comment/confirm/-1")?>">確認全部留言</a>
+	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
 	<table class="table table-bordered">
 		<tr>
 			<td>key</td>
