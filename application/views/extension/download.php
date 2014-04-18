@@ -13,7 +13,7 @@
 </style>
 <div class="container">
 	
-	<h2>跳針留言小幫手說明</h2>
+	<h2>跳針留言小幫手說明 <div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
 	<ul>
 		<li>目前只支援 Chrome </li>
 		<li>目前只支援 FB 留言板偵測（未來預計會支援更多類型留言） </li>

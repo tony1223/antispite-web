@@ -11,7 +11,7 @@
 <div class="container">
 
 
-	<h1>反跳針計畫</h1>
+	<h1>反跳針計畫<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h1>
 	<div class="content" style="max-width:800px;">
 		<p>網路上一直充斥著蓄意離題與回應與文章無關，但與其欲打擊的對象有關之留言，
 			也有部份蓄意謾罵以激起使用者怒火，當使用者回嗆時蒐集資料提出訴訟之訟棍。
