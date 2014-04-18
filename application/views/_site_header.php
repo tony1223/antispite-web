@@ -36,8 +36,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li <?php if($selector == "intro"){ ?> class="active" <?php } ?>><a href="<?=site_url("/")?>">說明</a></li>
-       <!--  <li><a href="<?=site_url("extension/download")?>">Chrome 外掛安裝</a></li> -->
-        <li><a href="<?=site_url("comment/")?>">瀏覽跳針留言(含API)</a></li>
+        <li <?php if($selector == "download"){ ?> class="active" <?php } ?>><a href="<?=site_url("extension/download")?>">跳針留言小幫手</a></li>
+        <li <?php if($selector == "comments"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/")?>">瀏覽跳針留言(含API)</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

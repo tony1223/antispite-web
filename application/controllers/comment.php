@@ -24,7 +24,7 @@ class Comment extends MY_Controller {
 	
 		$this->load->view('comment/index',Array(
 				"pageTitle" => "跳針留言清單" ,
-				"selector" => "confirm",
+				"selector" => "comments",
 				"comments" => $comments
 		));
 	}
@@ -40,7 +40,7 @@ class Comment extends MY_Controller {
 	
 		$this->load->view('comment/user',Array(
 				"pageTitle" => $comments[0]["name"]." 跳針留言清單" ,
-				"selector" => "confirm",
+				"selector" => "comments",
 				"comments" => $comments
 		));
 	}
