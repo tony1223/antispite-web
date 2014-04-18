@@ -21,7 +21,7 @@
 		<li>安裝之後到任一 FB 留言板就會進行偵測。
 			（示範用範例 <a href="http://www.appledaily.com.tw/realtimenews/article/new/20140416/379882/" target="_blank">http://www.appledaily.com.tw/realtimenews/article/new/20140416/379882/</a>）</li>
 			
-		<li>回報跳針後會需要一點時間處理才會標示為跳針留言。</li>
+		<li>回報跳針後會需要一點時間處理才會標示為跳針留言，回報不保證一定會標示為跳針。</li>
 	</ul>
 	
 	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>

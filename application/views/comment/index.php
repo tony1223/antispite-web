@@ -11,6 +11,7 @@
 <div class="container">
 	
 	<h2>近期跳針留言清單（<?=count($comments)>=100 ?"最近一百筆" :count($comments) ?>）</h2>
+	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
 	<table class="table table-bordered">
 		<tr>
 			<td>類型</td>
@@ -36,7 +37,7 @@
 		</tr>			
 		<?php }?>
 	</table>
-
+	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
 </div>
 
 <?php include(__DIR__."/../_site_footer.php")?>
