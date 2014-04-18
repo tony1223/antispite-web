@@ -30,7 +30,7 @@
 		</tr>
 		<tr>
 			<td colspan="4" style="padding-left:40px;">
-				<a target="_blank"  href="<?=h($comment["url"]) ?>"><?=h($comment["url"]) ?></a>
+				<a target="_blank"  href="<?=h($comment["url"]) ?>"><?=h($comment["url"]) ?></a> (<a target="_blank"  href="<?=site_url("commment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>)
 				<hr />
 				<?=nl2br(h($comment["content"]))?>
 			</td>
