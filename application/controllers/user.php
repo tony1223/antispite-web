@@ -16,7 +16,6 @@ class User extends MY_Controller {
 	}
 
 	public function logining(){
-
 		if(is_login()){
 			redirect(site_url("/"));
 			return true;

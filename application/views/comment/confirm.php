@@ -16,7 +16,7 @@
 	?>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/-1")?>">確認全部留言</a>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
-	<table class="table table-bordered">
+	<table class="table table-bordered table-confirm">
 		<tr>
 			<td>key</td>
 			<td>回報時間</td>			
@@ -47,15 +47,30 @@
 				<?=nl2br(h($comment["content"]))?>
 				<hr />
 				目前狀態：
-				<a class="btn btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
-				<a class="btn btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>
-				<a class="btn btn-default<?php if($comment["status"] == 0) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/0")?>">待審查</a>
-				<a class="btn btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/3")?>">很棒的留言</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 0) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/0")?>">待審查</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/3")?>">很棒的留言</a>
 			</td>
 		</tr>			
 		<?php }?>
 	</table>
 
 </div>
+
+<?php function js_section(){?>
+<script>
+	$(function(){
+		$(".table-confirm").on("click",".btn-confirm",function(){
+			var btn = this;
+			$.get(btn.href,function(){
+				$(btn).parent().find(".btn-primary").removeClass("btn-primary");
+				$(btn).addClass("btn-primary");
+			});
+			return false;
+		});
+	});
+</script>
+<?php }?>
 
 <?php include(__DIR__."/../_site_footer.php")?>
