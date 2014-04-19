@@ -57,7 +57,7 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function get_bads_by_user($key){
-		return $this->mongo_db->orderBy("createDate","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
+		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
 	}
 	
 	
