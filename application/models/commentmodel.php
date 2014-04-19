@@ -61,6 +61,15 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	
+	public function get_stats(){
+		$bad = $this->mongo_db->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
+		$ok = $this->mongo_db->where("status",CommentModel::STATUS_OK)->count($this->_collection);
+		$wait = $this->mongo_db->where("status",CommentModel::STATUS_WAIT)->count($this->_collection);
+		
+		return Array($wait,$bad,$ok);
+		
+	}
+	
 	public function insert_check_log($ueid,$type,$url){
 		$now = time() *1000.0;
 		$this->mongo_db->insert($this->_collection_log,

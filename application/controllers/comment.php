@@ -10,11 +10,13 @@ class Comment extends MY_Controller {
 		
 		$this->load->model("commentModel");
 		$comments = $this->commentModel->get_confirming(intval($type,10));
+		$stats = $this->commentModel->get_stats();
 		
 		$this->load->view('comment/confirm',Array(
 				"pageTitle" => "確認跳針留言" ,
 				"selector" => "confirm",
-				"comments" => $comments
+				"comments" => $comments,
+				"stats" => $stats
 		));		
 	}
 

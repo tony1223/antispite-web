@@ -11,11 +11,12 @@
 <div class="container">
 	
 	<h2>待確認留言清單</h2>
-	<?php 
-
-	?>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/-1")?>">確認全部留言</a>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
+	
+	<hr />
+	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
+	<hr />
 	<table class="table table-bordered table-confirm">
 		<tr>
 			<td>key</td>
