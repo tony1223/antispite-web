@@ -138,6 +138,16 @@ class CommentModel extends MONGO_MODEL {
 		
 	}
 	
+	
+	public function get_ranked_users($minial_bad = 0){
+		$query = $this->mongo_db->orderBy("count","desc");
+		if($minial_bad > 0 ){
+			$query->whereGte("count",$minial_bad);
+		}
+		
+		return $query->get($this->_collection_user);
+	}
+	
 	public function insert($data){
 		
 // 		{

@@ -47,6 +47,20 @@ class Comment extends MY_Controller {
 		));
 	}
 	
+	public function rank(){
+		$key = $this->input->get("key");
+		$this->load->model("commentModel");
+		$users = $this->commentModel->get_ranked_users(10);
+		if(count($users) == 0){
+			return show_404();
+		}
+		
+		$this->load->view('comment/rank',Array(
+				"pageTitle" => "跳針王排行榜留言清單" ,
+				"selector" => "comments",
+				"users" => $users
+		));
+	}
 	
 	
 	public function mark($key,$status){
