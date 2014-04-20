@@ -56,8 +56,8 @@ class Comment extends MY_Controller {
 		}
 		
 		$this->load->view('comment/rank',Array(
-				"pageTitle" => "跳針王排行榜留言清單" ,
-				"selector" => "comments",
+				"pageTitle" => "跳針排行榜" ,
+				"selector" => "rank",
 				"users" => $users
 		));
 	}

@@ -10,7 +10,7 @@
 </style>
 <div class="container">
 	
-	<h2>跳針王留言清單<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
+	<h2>跳針排行榜<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
 	<table class="table table-bordered">
 		<tr>
 			<td>類型</td>
