@@ -59,6 +59,11 @@ class Comment extends MY_Controller {
 		redirect(site_url("comment/confirm"));
 	}
 	
+// 	public function review(){
+// 		$this->load->model("commentModel");
+// 		$this->commentModel->review();		
+// 	}
+	
 	public function mark_ok(){
 		if(!is_login()){
 			redirect(site_url("user/login"));

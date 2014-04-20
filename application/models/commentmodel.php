@@ -64,7 +64,38 @@ class CommentModel extends MONGO_MODEL {
 			$this->mongo_db->update($this->_collection_user);			
 			
 		}
+	}
+
+	//only used for rebuild users
+	public function review(){
+		$users = json_decode('[]',true);
+
+		for($ind = 0 ; $ind < count($users);++$ind){
+			$items = $this->mongo_db->where("userkey",$users[$ind])->orderBy("createDate","desc")->limit(1)->get($this->_collection);
+			
+			if(count($items) > 0 ){
+				$current = $items[0];
+				$now = $current["createDate"];
+				$now_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
 		
+				$exists = $this->mongo_db->where("_id",$current["type"].":".$current["userkey"])->count($this->_collection_user) > 0;
+					
+				if(!$exists){
+					$this->mongo_db->insert($this->_collection_user,Array("_id" => $current["type"].":".$current["userkey"],"createDate" => $now));
+				}
+					
+				$this->mongo_db->set(Array(
+						"type" => $current["type"],
+						"user" => $current["userkey"],
+						"name" => $current["name"],
+						"count" => $now_count,
+						"last_update" => $now
+				));
+				$this->mongo_db->where("_id", $current["type"].":".$current["userkey"]);
+				$this->mongo_db->update($this->_collection_user);
+					
+			}
+		}
 	}
 	
 	public function check_ids($post_ids){
