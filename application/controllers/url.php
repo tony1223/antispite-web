@@ -8,12 +8,13 @@ class Url extends MY_Controller {
 		foreach($urls as $url){
 			$remote_content = file_get_contents("http://decenturl.com/api-title?u=".rawurlencode($url["_id"]));
 			$result = json_decode($remote_content,true);
+			
 			if($result[0] == "ok"){
-				$this->urlModel->resolve_url($url,$result[1]);
+				$this->urlModel->resolve_url($url["_id"],$result[1]);
 			}else if($results[0] == "notitle"){
-				$this->urlModel->resolve_url($url,"no-title");
+				$this->urlModel->resolve_url($url["_id"],"no-title");
 			}else if($results[0] =="badurl"){
-				$this->urlModel->resolve_url($url,"(不正確的網址)");
+				$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
 			}
 		}
 	}
