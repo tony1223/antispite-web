@@ -7,6 +7,15 @@
 	.content{
 		line-height:160%;
 	}
+
+	.news-title{
+		color: gray;
+		text-decoration: underline;
+	}
+	
+	.comment-row td{
+	 	border-top:3px double black !important;
+	}
 </style>
 <div class="container">
 	
@@ -18,7 +27,7 @@
 	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
 	<hr />
 	<table class="table table-bordered table-confirm">
-		<tr>
+		<tr class="comment-row">
 			<td>key</td>
 			<td>回報時間</td>			
 			<td>類型</td>
@@ -27,7 +36,7 @@
 			<td>回報數</td>
 		</tr>
 		<?php foreach($comments as $comment){?>
-		<tr>
+		<tr class="comment-row">
 			<td><?=h($comment["_id"]) ?></td>
 			<td><?=_display_date_with_fulldate_ms($comment["createDate"]) ?></td>
 			<td>
@@ -43,7 +52,7 @@
 		</tr>
 		<tr>
 			<td colspan="6" style="padding-left:40px;">
-				<a href="<?=h($comment["url"]) ?>">
+				<a target="_blank" class="news-title" href="<?=h($comment["url"]) ?>">
 					<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
 						<?=h($comment["url_title"]) ?>
 					<?php }else{ ?>
