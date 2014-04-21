@@ -6,7 +6,6 @@
 class CommentModel extends MONGO_MODEL {
 	
 	var $_collection = "comment";
-	var $_collection_user = "comment_user";
 	var $_collection_record = "comment_record";
 	var $_collection_log = "comment_log";
 	const STATUS_WAIT = 0;
@@ -30,72 +29,16 @@ class CommentModel extends MONGO_MODEL {
 		return $this->mongo_db->orderBy("time","desc")->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
 	}
 	
-	public function mark($key,$status,$user,$ueid){
+	public function mark($key,$status,$user){
 		$now = time() *1000.0;
-		
 		$this->mongo_db->where("_id",$key)->set("status",$status)->set("status_update",$now)->update($this->_collection);
 		$this->mongo_db->insert($this->_collection_record,
-			Array("reporter"=> $ueid,
+			Array("reporter"=>$data["ueid"],
 					"createDate" => $now,
 					"target" => $key,
 					"type" => "update_mark",
 					"confirm_user" => $user,
-					"status" => $status ));
-
-		$items = $this->mongo_db->where("_id",$key)->get($this->_collection);
-		if(count($items) > 0 ){
-			$current = $items[0];
-			$now_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
-
-			$exists = $this->mongo_db->where("_id",$current["type"].":".$current["userkey"])->count($this->_collection_user) > 0;
-			
-			if(!$exists){
-				$this->mongo_db->insert($this->_collection_user,Array("_id" => $current["type"].":".$current["userkey"],"createDate" => $now));
-			}
-			
-			$this->mongo_db->set(Array(
-				"type" => $current["type"],
-				"user" => $current["userkey"],
-				"name" => $current["name"],
-				"count" => $now_count,
-				"last_update" => $now
-			));
-			$this->mongo_db->where("_id", $current["type"].":".$current["userkey"]);
-			$this->mongo_db->update($this->_collection_user);			
-			
-		}
-	}
-
-	//only used for rebuild users
-	public function review(){
-		$users = json_decode('[]',true);
-
-		for($ind = 0 ; $ind < count($users);++$ind){
-			$items = $this->mongo_db->where("userkey",$users[$ind])->orderBy("createDate","desc")->limit(1)->get($this->_collection);
-			
-			if(count($items) > 0 ){
-				$current = $items[0];
-				$now = $current["createDate"];
-				$now_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
-		
-				$exists = $this->mongo_db->where("_id",$current["type"].":".$current["userkey"])->count($this->_collection_user) > 0;
-					
-				if(!$exists){
-					$this->mongo_db->insert($this->_collection_user,Array("_id" => $current["type"].":".$current["userkey"],"createDate" => $now));
-				}
-					
-				$this->mongo_db->set(Array(
-						"type" => $current["type"],
-						"user" => $current["userkey"],
-						"name" => $current["name"],
-						"count" => $now_count,
-						"last_update" => $now
-				));
-				$this->mongo_db->where("_id", $current["type"].":".$current["userkey"]);
-				$this->mongo_db->update($this->_collection_user);
-					
-			}
-		}
+					"status" => $status ));		
 	}
 	
 	public function check_ids($post_ids){
@@ -106,7 +49,7 @@ class CommentModel extends MONGO_MODEL {
 		$results = Array();
 		foreach($users as $user){
 			$user_count = $this->mongo_db->where("userkey",$user)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
-			if($user_count > 5 ){
+			if($user_count > 0 ){
 				$results[] = Array("user" => $user,"count" => $user_count);
 			}
 		}
@@ -114,18 +57,9 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function get_bads_by_user($key){
-		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
+		return $this->mongo_db->orderBy("createDate","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
 	}
 	
-	
-	public function get_stats(){
-		$bad = $this->mongo_db->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
-		$ok = $this->mongo_db->where("status",CommentModel::STATUS_OK)->count($this->_collection);
-		$wait = $this->mongo_db->where("status",CommentModel::STATUS_WAIT)->count($this->_collection);
-		
-		return Array($wait,$bad,$ok);
-		
-	}
 	
 	public function insert_check_log($ueid,$type,$url){
 		$now = time() *1000.0;
@@ -136,16 +70,6 @@ class CommentModel extends MONGO_MODEL {
 					"url" => $url)
 		);
 		
-	}
-	
-	
-	public function get_ranked_users($minial_bad = 0){
-		$query = $this->mongo_db->orderBy("count","desc");
-		if($minial_bad > 0 ){
-			$query->whereGte("count",$minial_bad);
-		}
-		
-		return $query->get($this->_collection_user);
 	}
 	
 	public function insert($data){
