@@ -9,6 +9,7 @@ class CommentModel extends MONGO_MODEL {
 	var $_collection_user = "comment_user";
 	var $_collection_record = "comment_record";
 	var $_collection_log = "comment_log";
+	
 	const STATUS_WAIT = 0;
 	const STATUS_BAD = 1;
 	const STATUS_OK = 2;
@@ -182,5 +183,4 @@ class CommentModel extends MONGO_MODEL {
 				"userkey" => $data["userkey"] ));
 		
 	}
-
 }

@@ -14,6 +14,12 @@ class  MY_Controller  extends  CI_Controller  {
 	 * @var UserModel
 	 */
 	var $userModel;//UserModel
+	
+	/**
+	 *
+	 * @var UrlModel
+	 */
+	var $urlModel;//UrlModel
 
 	public function __construct(){
 		parent::__construct();

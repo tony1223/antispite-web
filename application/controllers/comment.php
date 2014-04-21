@@ -148,6 +148,10 @@ class Comment extends MY_Controller {
 			}
 			$inserting_data[$key] = $data->$key;
 		}
+		$this->load->model("commentModel");
+		$this->load->model("urlModel");
+		
+		$inserting_data["url_title"] = $this->urlModel->get_url_title($inserting_data["url"]);
 		
 		$ueid = $this->input->post("ueid");
 		if($ueid == ""){
@@ -156,7 +160,6 @@ class Comment extends MY_Controller {
 		$inserting_data["ueid"] = $ueid;
 		
 		$inserting_data["_id"] = $data->key;
-		$this->load->model("commentModel");
 		$this->commentModel->insert($inserting_data);
 		return $this->return_success_json();
 	}
