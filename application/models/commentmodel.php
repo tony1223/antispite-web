@@ -20,7 +20,7 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function get_confirming($status = 0){
-		$query =  $this->mongo_db->orderBy("createDate","desc")->limit(100);
+		$query =  $this->mongo_db->orderBy("createDate","desc")->limit(300);
 		if($status != -1){
 			$query->where("status",$status);
 		}
