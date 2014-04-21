@@ -39,11 +39,13 @@ class Comment extends MY_Controller {
 		if(count($comments) == 0){
 			return show_404();
 		}
+		$count = $this->commentModel->get_bad_count_by_user($key);
 	
 		$this->load->view('comment/user',Array(
 				"pageTitle" => $comments[0]["name"]." 跳針留言清單" ,
 				"selector" => "comments",
-				"comments" => $comments
+				"comments" => $comments,
+				"count" => $count
 		));
 	}
 	
