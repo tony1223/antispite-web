@@ -43,7 +43,13 @@
 		</tr>
 		<tr>
 			<td colspan="6" style="padding-left:40px;">
-				<a href="<?=h($comment["url"]) ?>"><?=h($comment["url"]) ?></a>
+				<a href="<?=h($comment["url"]) ?>">
+					<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
+						<?=h($comment["url_title"]) ?>
+					<?php }else{ ?>
+						<?=h($comment["url"]) ?>
+					<?php }?>				
+				</a>
 				<hr />
 				<?=nl2br(h($comment["content"]))?>
 				<hr />
