@@ -106,7 +106,7 @@ class CommentModel extends MONGO_MODEL {
 		$results = Array();
 		foreach($users as $user){
 			$user_count = $this->mongo_db->where("userkey",$user)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
-			if($user_count > 0 ){
+			if($user_count > 5 ){
 				$results[] = Array("user" => $user,"count" => $user_count);
 			}
 		}
