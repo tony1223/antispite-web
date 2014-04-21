@@ -19,8 +19,9 @@ class CommentModel extends MONGO_MODEL {
 		parent::__construct();
 	}
 	
-	public function get_confirming($status = 0){
-		$query =  $this->mongo_db->orderBy("createDate","desc")->limit(300);
+	public function get_confirming($status = 0,$page = 0){
+		$pagesize = 300;
+		$query =  $this->mongo_db->orderBy("createDate","desc")->offset($page * $pagesize)->limit($pagesize);
 		if($status != -1){
 			$query->where("status",$status);
 		}

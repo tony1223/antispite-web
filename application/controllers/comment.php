@@ -2,14 +2,14 @@
 
 class Comment extends MY_Controller {
 	
-	public function confirm($type = 0){
+	public function confirm($type = 0,$page = 0){
 		if(!is_login()){
 			redirect(site_url("user/login"));
 			return true;
 		}
 		
 		$this->load->model("commentModel");
-		$comments = $this->commentModel->get_confirming(intval($type,10));
+		$comments = $this->commentModel->get_confirming(intval($type,10),intval($page,10));
 		$stats = $this->commentModel->get_stats();
 		
 		$this->load->view('comment/confirm',Array(
