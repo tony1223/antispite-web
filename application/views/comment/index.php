@@ -25,14 +25,24 @@
 				FB 留言
 				<?php }?>
 			</td>	
-			<td><a target="_blank" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a>(<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>)</td>
+			<td>
+				<p><a target="_blank" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a>(<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>)</p>
+				<p style="color:gray;">
+					留言網頁：
+					<a target="_blank"  href="<?=h($comment["url"]) ?>">
+						<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
+							<?=h($comment["url_title"]) ?>
+						<?php }else{ ?>
+							<?=h($comment["url"]) ?>
+						<?php }?>
+					</a>
+				</p>
+			</td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
 		</tr>
 		<tr>
 			<td colspan="4" style="padding-left:40px;">
-				<a target="_blank"  href="<?=h($comment["url"]) ?>"><?=h($comment["url"]) ?></a> 
-				<hr />
-				<?=nl2br(h($comment["content"]))?>
+				<p style="min-height:50px;padding-top:10px;"><?=nl2br(h($comment["content"]))?></p>
 			</td>
 		</tr>			
 		<?php }?>
