@@ -2,14 +2,14 @@
 
 class Comment extends MY_Controller {
 	
-	public function confirm($type = 0){
+	public function confirm($type = 0,$page = 0){
 		if(!is_login()){
 			redirect(site_url("user/login"));
 			return true;
 		}
 		
 		$this->load->model("commentModel");
-		$comments = $this->commentModel->get_confirming(intval($type,10));
+		$comments = $this->commentModel->get_confirming(intval($type,10),intval($page,10));
 		$stats = $this->commentModel->get_stats();
 		
 		$this->load->view('comment/confirm',Array(
@@ -39,11 +39,13 @@ class Comment extends MY_Controller {
 		if(count($comments) == 0){
 			return show_404();
 		}
+		$count = $this->commentModel->get_bad_count_by_user($key);
 	
 		$this->load->view('comment/user',Array(
 				"pageTitle" => $comments[0]["name"]." 跳針留言清單" ,
 				"selector" => "comments",
-				"comments" => $comments
+				"comments" => $comments,
+				"count" => $count
 		));
 	}
 	
@@ -146,6 +148,10 @@ class Comment extends MY_Controller {
 			}
 			$inserting_data[$key] = $data->$key;
 		}
+		$this->load->model("commentModel");
+		$this->load->model("urlModel");
+		
+		$inserting_data["url_title"] = $this->urlModel->get_url_title($inserting_data["url"]);
 		
 		if($this->input->post("exact") == "false"){
 			$inserting_data["time_exact"] = false;
@@ -158,7 +164,6 @@ class Comment extends MY_Controller {
 		$inserting_data["ueid"] = $ueid;
 		
 		$inserting_data["_id"] = $data->key;
-		$this->load->model("commentModel");
 		$this->commentModel->insert($inserting_data);
 		return $this->return_success_json();
 	}

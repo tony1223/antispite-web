@@ -7,6 +7,15 @@
 	.content{
 		line-height:160%;
 	}
+
+	.news-title{
+		color: gray;
+		text-decoration: underline;
+	}
+	
+	.comment-row td{
+	 	border-top:3px double black !important;
+	}
 </style>
 <div class="container">
 	
@@ -18,7 +27,7 @@
 	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
 	<hr />
 	<table class="table table-bordered table-confirm">
-		<tr>
+		<tr class="comment-row">
 			<td>key</td>
 			<td>回報時間</td>			
 			<td>類型</td>
@@ -27,7 +36,7 @@
 			<td>回報數</td>
 		</tr>
 		<?php foreach($comments as $comment){?>
-		<tr>
+		<tr class="comment-row">
 			<td><?=h($comment["_id"]) ?></td>
 			<td><?=_display_date_with_fulldate_ms($comment["createDate"]) ?></td>
 			<td>
@@ -39,11 +48,22 @@
 				<a href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>)
 			</td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
-			<td><?=count($comment["reporters"]) ?></td>
+			<td>
+				<?=count($comment["reporters"]) ?>
+				<?php foreach($comment["reporters"] as $reporter){ ?>
+				<?=h($reporter)?>,
+				<?php }?>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="6" style="padding-left:40px;">
-				<a href="<?=h($comment["url"]) ?>"><?=h($comment["url"]) ?></a>
+				<a target="_blank" class="news-title" href="<?=h($comment["url"]) ?>">
+					<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
+						<?=h($comment["url_title"]) ?>
+					<?php }else{ ?>
+						<?=h($comment["url"]) ?>
+					<?php }?>				
+				</a>
 				<hr />
 				<?=nl2br(h($comment["content"]))?>
 				<hr />
@@ -52,6 +72,7 @@
 				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>
 				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 0) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/0")?>">待審查</a>
 				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/3")?>">很棒的留言</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/4")?>">廣告</a>
 			</td>
 		</tr>			
 		<?php }?>

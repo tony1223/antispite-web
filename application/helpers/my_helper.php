@@ -185,3 +185,9 @@ function array_column($input = null, $columnKey = null, $indexKey = null)
 	return $resultArray;
 }
 
+function startsWith($haystack, $needle)
+{
+	return !strncmp($haystack, $needle, strlen($needle));
+}
+
+

@@ -9,6 +9,7 @@ class CommentModel extends MONGO_MODEL {
 	var $_collection_user = "comment_user";
 	var $_collection_record = "comment_record";
 	var $_collection_log = "comment_log";
+	
 	const STATUS_WAIT = 0;
 	const STATUS_BAD = 1;
 	const STATUS_OK = 2;
@@ -18,8 +19,9 @@ class CommentModel extends MONGO_MODEL {
 		parent::__construct();
 	}
 	
-	public function get_confirming($status = 0){
-		$query =  $this->mongo_db->orderBy("createDate","desc")->limit(100);
+	public function get_confirming($status = 0,$page = 0){
+		$pagesize = 300;
+		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
 		if($status != -1){
 			$query->where("status",$status);
 		}
@@ -117,6 +119,9 @@ class CommentModel extends MONGO_MODEL {
 		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
 	}
 	
+	public function get_bad_count_by_user($key){
+		return $this->mongo_db->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
+	}
 	
 	public function get_stats(){
 		$bad = $this->mongo_db->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
@@ -179,5 +184,4 @@ class CommentModel extends MONGO_MODEL {
 				"userkey" => $data["userkey"] ));
 		
 	}
-
 }
