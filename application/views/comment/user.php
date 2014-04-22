@@ -38,7 +38,14 @@
 			</td>	
 			<td>
 				<p>
+					<?php 
+						$user_url = comment_user_link($comment);
+					?>
+					<?php if($user_url != null){?>
 					<a target="_blank" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a>&nbsp;
+					<?php }else{?>
+						<?=h($comment["name"]) ?>&nbsp;
+					<?php }?>
 					<br />
 					留言網頁：
 					<a class="news-title" target="_blank"  href="<?=h($comment["url"]) ?>">
