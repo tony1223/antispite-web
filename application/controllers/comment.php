@@ -147,6 +147,10 @@ class Comment extends MY_Controller {
 			$inserting_data[$key] = $data->$key;
 		}
 		
+		if($this->input->post("exact") == "false"){
+			$inserting_data["time_exact"] = false;
+		}
+		
 		$ueid = $this->input->post("ueid");
 		if($ueid == ""){
 			return $this->return_error(400,"parameter not correct.");
