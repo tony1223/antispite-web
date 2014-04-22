@@ -1,4 +1,4 @@
-<?php include(__DIR__."/../_site_header.php")?>
+<?php include(__DIR__."/../_site_header.php") ?>
 <style>
 	* {
 	 	font-size:16px;
@@ -16,10 +16,13 @@
 	 	border-top:3px double black !important;
 	}
 </style>
+
 <div class="container">
 	
 	<h2><?=$comments[0]["name"] ?> 近期跳針留言清單（<?=count($comments)>=100 ?"最近一百筆" :count($comments) ?>）<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
 	<p>跳針指數：<?=$count?></p>
+	<div id="chart_div" style="width: 100%; height: 500px;"></div>
+	<hr />
 	<table class="table table-bordered">
 		<tr class="comment-row">
 			<td>類型</td>
@@ -62,4 +65,34 @@
 	
 </div>
 
+<?php 
+$data = array();
+foreach($comments as $comment){
+ 	$data[]=array($comment["time"],mb_strlen($comment["content"]),$comment["content"]);
+} 			
+?>
+<script>
+	window.datas = <?=json_encode($data)?>;
+	for(var i =0 ; i < window.datas.length;++i){
+		window.datas[i][0] = new Date(window.datas[i][0]);
+	}
+</script>
+<?php function js_section(){ ?>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {'packages':['annotatedtimeline']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', '時間');
+        data.addColumn('number', '字數');
+        data.addColumn('string', '內容');
+        
+        data.addRows(window.datas);
+
+        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
+        chart.draw(data, {displayAnnotations: true});
+      }
+    </script>
+<?php }?>
 <?php include(__DIR__."/../_site_footer.php")?>
