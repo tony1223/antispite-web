@@ -55,7 +55,7 @@
 				<?php }?>
 			</td>
 		</tr>
-		<tr>
+		<tr class="controls" data-key="<?=h($comment["userkey"])?>">
 			<td colspan="6" style="padding-left:40px;">
 				<a target="_blank" class="news-title" href="<?=h($comment["url"]) ?>">
 					<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
@@ -68,11 +68,15 @@
 				<?=nl2br(h($comment["content"]))?>
 				<hr />
 				目前狀態：
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 0) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/0")?>">待審查</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/3")?>">很棒的留言</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?>" href="<?=site_url("comment/mark/".h($comment["_id"])."/4")?>">廣告</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?> btn-type-2" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?> btn-type-1 " href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 0) {?> btn-primary <?php }?> btn-type-0" href="<?=site_url("comment/mark/".h($comment["_id"])."/0")?>">待審查</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?> btn-type-3" href="<?=site_url("comment/mark/".h($comment["_id"])."/3")?>">很棒的留言</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?> btn-type-4" href="<?=site_url("comment/mark/".h($comment["_id"])."/4")?>">廣告</a>
+				&nbsp; | &nbsp;
+				<a class="btn btn-confirm-all btn-default" data-type="1" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> 跳針</a>
+				<a class="btn btn-confirm-all btn-default" data-type="0" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> 待審查</a>
+								
 			</td>
 		</tr>			
 		<?php }?>
@@ -83,6 +87,17 @@
 <?php function js_section(){?>
 <script>
 	$(function(){
+		$(".table-confirm").on("click",".btn-confirm-all",function(){
+			var $btn = $(this);
+			var type = $btn.data("type");
+			var key = $btn.data("key");
+			$(".controls").each(function(){
+				var $this= $(this);
+				if($this.data("key") == key){
+					$this.find(".btn-type-"+type).click();
+				}
+			});
+		});
 		$(".table-confirm").on("click",".btn-confirm",function(){
 			var btn = this;
 			$.get(btn.href,function(){
