@@ -153,6 +153,10 @@ class Comment extends MY_Controller {
 		
 		$inserting_data["url_title"] = $this->urlModel->get_url_title($inserting_data["url"]);
 		
+		if($this->input->post("exact") == "false"){
+			$inserting_data["time_exact"] = false;
+		}
+		
 		$ueid = $this->input->post("ueid");
 		if($ueid == ""){
 			return $this->return_error(400,"parameter not correct.");
