@@ -19,25 +19,30 @@ class Url extends MY_Controller {
 		}
 	}
 	
-	public function review_urls(){
-		$this->load->model("commentModel");
-		$urls = $this->commentModel->review_urls();
-		
-	}
+// 	public function review_urls(){
+// 		$this->load->model("commentModel");
+// 		$urls = $this->commentModel->review_urls();
+// 	}
 	
 	public function index(){
-		if(is_login()){
-			return redirect(site_url("user/login"));
-		}
 		$this->load->model("urlModel");
 		$urls = $this->urlModel->get_urls();
 
 		$this->load->view('url/index',Array(
 				"pageTitle" => "相關網址列表" ,
-				"selector" => "urls",
+				"selector" => "url",
 				"urls" => $urls
 		));		
-		
+	}
+	public function hot(){
+		$this->load->model("urlModel");
+		$urls = $this->urlModel->get_hot_urls();
+	
+		$this->load->view('url/index',Array(
+				"pageTitle" => "相關網址列表" ,
+				"selector" => "url",
+				"urls" => $urls
+		));
 	}
 	
 }

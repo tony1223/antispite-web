@@ -88,11 +88,11 @@ class CommentModel extends MONGO_MODEL {
 		foreach($urls as $url){
 			$now_url_count = $this->mongo_db->where(Array("url" => $url["_id"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
 			
-			$item = $this->mongo_db->where(Array("url" => $url["_id"]))->orderBy("time","asc")->limit(1)->get($this->_collection);
-			
+			$items = $this->mongo_db->where(Array("url" => $url["_id"]))->orderBy("time","asc")->limit(1)->get($this->_collection);
+			$item = $items[0];
 			$this->mongo_db->set(Array(
 				"count" => $now_url_count,
-				"last_count_update" => $now,
+				"last_count_update" => time()*1000.0,
 				"createDate" => $item["time"],
 			));
 			$this->mongo_db->where("_id", $url["_id"]);
