@@ -6,8 +6,7 @@ class Url extends MY_Controller {
 		$this->load->model("urlModel");
 		$urls = $this->urlModel->get_unsolved_urls();
 		foreach($urls as $url){
-			$remote_content = file_get_contents("http://decenturl.com/api-title?u=".rawurlencode($url["_id"]));
-			$result = json_decode($remote_content,true);
+			$result = $this->parse_url($url["_id"]);
 			
 			if($result[0] == "ok"){
 				$this->urlModel->resolve_url($url["_id"],$result[1]);
@@ -17,6 +16,26 @@ class Url extends MY_Controller {
 				$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
 			}
 		}
+	}
+	
+	private function parse_url($url){
+
+		$this->load->library("simple_html_dom");
+		$content = file_get_contents($url);
+		$oHtml = str_get_html($content );
+		$title = array_shift($oHtml->find('title'))->innertext;
+		return Array("ok",$title);		
+		
+// 		$remote_content = file_get_contents("http://decenturl.com/api-title?u=".rawurlencode($url));
+// 		$result = json_decode($remote_content,true);
+// 		return $result;
+	}
+	
+	public function test(){
+		$url = "http://www.appledaily.com.tw/appledaily/article/headline/20140426/35792698/";
+		$result = $this->parse_url($url);
+		var_dump($result[1]);
+		
 	}
 	
 // 	public function review_urls(){
