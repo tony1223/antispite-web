@@ -20,7 +20,8 @@
 <div class="container">
 	
 	<h2>跳針留言相關新聞列表 <div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
-	<a target="_blank" href="<?=site_url("url/hot")?>">熱門跳針留言網址</a>
+	
+	<a class="btn btn-default" href="<?=site_url("url/hot")?>">熱門跳針留言網址</a>
 	<table class="table table-bordered table-url">
 		<tr class="comment-row">
 			<td>#</td>
