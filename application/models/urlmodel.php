@@ -16,7 +16,7 @@ class UrlModel extends MONGO_MODEL {
 		$results = $this->mongo_db->where("_id",$url)->limit(1)->get($this->_collection);
 	
 		if(count($results) <= 0){
-			$this->mongo_db->insert($this->_collection,Array("_id" => $url,"title" => null,"resolved" => false));
+			$this->mongo_db->insert($this->_collection,Array("_id" => $url,"createDate" => time()*1000.0,"title" => null,"resolved" => false));
 			return null;
 		}
 		return $results[0]["title"];
@@ -25,6 +25,11 @@ class UrlModel extends MONGO_MODEL {
 	public function get_unsolved_urls(){
 		return $this->mongo_db->where("resolved",false)->get($this->_collection);
 	}
+	
+
+	public function get_urls(){
+		return $this->mongo_db->orderBy("resolved_date","desc")->get($this->_collection);
+	}	
 	
 	public function resolve_url($url,$title){
 		$this->mongo_db->where("_id",$url)

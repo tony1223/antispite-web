@@ -9,6 +9,7 @@ class CommentModel extends MONGO_MODEL {
 	var $_collection_user = "comment_user";
 	var $_collection_record = "comment_record";
 	var $_collection_log = "comment_log";
+	var $_collection_urls = "urls";
 	
 	const STATUS_WAIT = 0;
 	const STATUS_BAD = 1;
@@ -47,6 +48,8 @@ class CommentModel extends MONGO_MODEL {
 		$items = $this->mongo_db->where("_id",$key)->get($this->_collection);
 		if(count($items) > 0 ){
 			$current = $items[0];
+			
+			//update user
 			$now_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
 
 			$exists = $this->mongo_db->where("_id",$current["type"].":".$current["userkey"])->count($this->_collection_user) > 0;
@@ -63,11 +66,41 @@ class CommentModel extends MONGO_MODEL {
 				"last_update" => $now
 			));
 			$this->mongo_db->where("_id", $current["type"].":".$current["userkey"]);
-			$this->mongo_db->update($this->_collection_user);			
+			$this->mongo_db->update($this->_collection_user);
+			
+			//update urls
+			$now_url_count = $this->mongo_db->where(Array("url" => $current["url"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
+
+			$this->mongo_db->set(Array(
+				"count" => $now_url_count,
+				"last_count_update" => $now
+			));
+			$this->mongo_db->where("_id", $current["url"]);
+			$this->mongo_db->update($this->_collection_urls);
 			
 		}
 	}
 
+	public function review_urls(){
+		//update urls
+		$urls = $this->mongo_db->get($this->_collection_urls);
+		
+		foreach($urls as $url){
+			$now_url_count = $this->mongo_db->where(Array("url" => $url["_id"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
+			
+			$item = $this->mongo_db->where(Array("url" => $url["_id"]))->orderBy("time","asc")->limit(1)->get($this->_collection);
+			
+			$this->mongo_db->set(Array(
+				"count" => $now_url_count,
+				"last_count_update" => $now,
+				"createDate" => $item["time"],
+			));
+			$this->mongo_db->where("_id", $url["_id"]);
+			$this->mongo_db->update($this->_collection_urls);
+		}
+			
+	}
+	
 	//only used for rebuild users
 	public function review(){
 		$users = json_decode('[]',true);
