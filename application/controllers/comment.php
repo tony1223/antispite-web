@@ -72,7 +72,6 @@ class Comment extends MY_Controller {
 		}
 		$this->load->model("commentModel");
 		$this->commentModel->mark($key,intval($status,10),$_SESSION["suser"]["account"]);
-		redirect(site_url("comment/confirm"));
 	}
 	
 // 	public function review(){
