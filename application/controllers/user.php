@@ -42,6 +42,10 @@ class User extends MY_Controller {
 	
 	}
 	
+	public function logout(){
+		unset($_SESSION["suser"]); 
+	}
+	
 }
 
 /* End of file welcome.php */
