@@ -16,7 +16,7 @@
 	<h2>跳針留言小幫手說明 <div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
 	<ul>
 		<li>目前只支援 Chrome </li>
-		<li>目前只支援 FB 留言板偵測（未來預計會支援更多類型留言） </li>
+		<li>目前只支援 FB 留言板、Yahoo 留言板偵測（未來預計會支援更多類型留言） </li>
 		<li>安裝之後到任一 FB 留言板就會進行偵測。
 			（示範用範例 <a href="http://www.appledaily.com.tw/realtimenews/article/new/20140416/379882/" target="_blank">http://www.appledaily.com.tw/realtimenews/article/new/20140416/379882/</a>）</li>
 			
