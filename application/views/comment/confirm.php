@@ -26,6 +26,68 @@
 	<hr />
 	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
 	<hr />
+	
+	<hr />
+	
+	<?php 
+	$confirming_users = Array();
+	$keywords = Array("民進黨","國民黨","綠吱","藍蛆","暴民","林飛帆","帆神","學運",
+			"大腸花","太陽花","馬英九","小英","冥進黨","狗民黨","中共","日本","共產黨","打死");
+	foreach($comments as $comment){
+		if(!isset($confirming_users[$comment["userkey"]])){
+			$confirming_users[$comment["userkey"]] = Array(
+				"count" => 0,
+				"keywords" => Array() ,
+				"name" => $comment["name"],
+				"key" => $comment["userkey"]
+			);
+		}
+		$confirming_users[$comment["userkey"]]["count"] ++;
+		
+		foreach($keywords as $keyword){
+			if(strpos($comment["content"],$keyword) !== False){
+				if(!isset($confirming_users[$comment["userkey"]]["keywords"][$keyword])){
+					$confirming_users[$comment["userkey"]]["keywords"][$keyword] = 0;
+				}
+				$confirming_users[$comment["userkey"]]["keywords"][$keyword]++;
+			}
+		};
+	} 
+	
+	function confirming_cmp($a, $b)
+	{
+		if ($a["count"] == $b["count"]) {
+			return 0;
+		}
+		return ($a["count"] > $b["count"]) ? -1 : 1;
+	}	
+	usort($confirming_users, "confirming_cmp");
+	?>
+	<table class="table table-bordered table-confirm">
+		<tr>
+			<td class="span1">
+				使用者
+			</td>
+			<td class="span2">
+				跳針輔助評估
+			</td>
+		</tr>
+		<?php foreach($confirming_users as $userkey => $user){
+			if($user["count"] < 3){
+				continue;
+			}
+		?>
+		<tr >
+			<td><a href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>)</td>
+			<td>
+				<?php foreach($confirming_users[$userkey]["keywords"] as $keyword => $detail){ ?>
+					<?=$keyword?>:<?=$detail?> <br />
+				<?php }?>
+			</td>
+			<td>
+		</td>
+		<?php }?>
+	</table>
 	<table class="table table-bordered table-confirm">
 		<tr class="comment-row">
 			<td>key</td>
@@ -45,7 +107,7 @@
 				<?php }?>
 			</td>	
 			<td>
-				<a href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>)
+				<a name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>)
 			</td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
 			<td>
