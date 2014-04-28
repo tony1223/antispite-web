@@ -30,7 +30,6 @@
 			<td>留言時間</td>
 		</tr>
 		<?php foreach($comments as $comment){?>
-		<tr class="comment-row">
 			<td rowspan="2" width="100px">
 				<?php if($comment["type"] == "FBComment"){ ?>
 				FB 留言
@@ -57,7 +56,7 @@
 					</a>
 				</p>
 			</td>
-			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
+			<td><a href="<?=site_url("comment/user/?key=".urlencode($comment["userkey"])."#".urlencode($comment["_id"]))?>" name="<?=$comment["_id"]?>"><?=_display_date_with_fulldate_ms($comment["time"]) ?></a></td>
 		</tr>
 		<tr>
 			<td colspan="3" style="padding-left:20px;">
