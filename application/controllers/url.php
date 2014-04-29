@@ -7,7 +7,6 @@ class Url extends MY_Controller {
 		$urls = $this->urlModel->get_unsolved_urls();
 		foreach($urls as $url){
 			$result = $this->parse_url($url["_id"]);
-			
 			if($result[0] == "ok"){
 				$this->urlModel->resolve_url($url["_id"],$result[1]);
 			}else if($results[0] == "notitle"){
@@ -23,6 +22,8 @@ class Url extends MY_Controller {
 		$this->load->library("simple_html_dom");
 		$content = file_get_contents($url);
 		if(strpos($url,"udn.com") !== FALSE && strpos($url,"blog.udn.com") === FALSE){
+			$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
+		}else if(strpos($content,'charset="big5"') !==FALSE || strpos($content,'charset=big5') !== FALSE){
 			$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
 		}
 				

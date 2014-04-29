@@ -30,18 +30,32 @@
 			<td>紀錄時間</td>
 		</tr>
 		<?php foreach($urls as $ind => $url){?>
-		<tr>
-			<td><?=h($ind +1 )?></td>
-			<td>
-				<?=h($url["title"])?>
-				<br />
-				<a target="_blank" href="<?=h($url["_id"])?>"><?=h($url["_id"])?></a>
-			</td>
-			<td><?=h($url["count"])?></td>
-			<td>
-				<?=_display_date_with_fulldate_ms($url["resolved_date"])?>
-			</td>
-		</tr>			
+		
+			<?php if(isset($url["resolved_date"])){?>
+			<tr>
+				<td><?=h($ind +1 )?></td>
+				<td>
+					<?=h($url["title"])?>
+					<br />
+					<a target="_blank" href="<?=h($url["_id"])?>"><?=h($url["_id"])?></a>
+				</td>
+				<td><?=h($url["count"])?></td>
+				<td>
+					<?=_display_date_with_fulldate_ms($url["createDate"])?>
+				</td>
+			</tr>			
+			<?php }else{ ?>
+			<tr>
+				<td><?=h($ind +1 )?></td>
+				<td>
+					<a target="_blank" href="<?=h($url["_id"])?>"><?=h($url["_id"])?></a>
+				</td>
+				<td><?=h($url["count"])?></td>
+				<td>
+					<?=_display_date_with_fulldate_ms($url["createDate"])?>
+				</td>
+			</tr>				
+			<?php }?>
 		<?php }?>
 	</table>
 	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
