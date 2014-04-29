@@ -9,27 +9,36 @@ class Url extends MY_Controller {
 			$result = $this->parse_url($url["_id"]);
 			if($result[0] == "ok"){
 				$this->urlModel->resolve_url($url["_id"],$result[1]);
-			}else if($results[0] == "notitle"){
+			}else if($result[0] == "notitle"){
 				$this->urlModel->resolve_url($url["_id"],"no-title");
-			}else if($results[0] =="badurl"){
+			}else if($result[0] =="badurl"){
 				$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
+			}else{
+				echo "can't resolve:".$url["_id"]."<br />";
 			}
 		}
 	}
 	
 	private function parse_url($url){
 
-		$this->load->library("simple_html_dom");
-		$content = file_get_contents($url);
-		if(strpos($url,"udn.com") !== FALSE && strpos($url,"blog.udn.com") === FALSE){
-			$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
-		}else if(strpos($content,'charset="big5"') !==FALSE || strpos($content,'charset=big5') !== FALSE){
-			$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
-		}
-				
-		$oHtml = str_get_html($content );
-		$title = array_shift($oHtml->find('title'))->innertext;
-		return Array("ok",$title);		
+		try{
+			$this->load->library("simple_html_dom");
+			$content = @file_get_contents($url);
+			if(strpos($url,"udn.com") !== FALSE && strpos($url,"blog.udn.com") === FALSE){
+				$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
+			}else if(strpos($content,'charset="big5"') !==FALSE || strpos($content,'charset=big5') !== FALSE){
+				$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
+			}
+			$oHtml = str_get_html($content );
+			
+			if($oHtml == null){
+				return Array("exception",null);
+			}			
+			$title = array_shift($oHtml->find('title'))->innertext;
+			return Array("ok",$title);
+		}catch(Exception $ex){
+			return Array("exception",$title);
+		}		
 
 // 		$remote_content = file_get_contents("http://decenturl.com/api-title?u=".rawurlencode($url));
 // 		$result = json_decode($remote_content,true);
