@@ -68,7 +68,8 @@
 				"count" => 0,
 				"keywords" => Array() ,
 				"name" => $comment["name"],
-				"key" => $comment["userkey"]
+				"key" => $comment["userkey"],
+				"confirm_count" => $comment["count"]
 			);
 		}
 		$confirming_users[$comment["userkey"]]["count"] ++;
@@ -104,7 +105,8 @@
 			}
 		?>
 		<tr >
-			<td><a href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>)
+			<td>
+				<a href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>/ <span style='color:red;'><?=$user["confirm_count"]?></span>)
 				<br />
 				<?php foreach($confirming_users[$userkey]["keywords"] as $keyword => $detail){ ?>
 					<span class="keywords" data-keyword="<?=h($keyword)?>" ><?=$keyword?>:<?=$detail?></span>,
@@ -133,6 +135,7 @@
 			</td>	
 			<td>
 				<a name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>) <br />
+				<span style='color:red;'>目前跳針指數 <?=$comment["count"]?></span>
 			</td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
 			<td>
