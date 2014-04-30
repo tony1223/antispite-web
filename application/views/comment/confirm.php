@@ -100,9 +100,6 @@
 			</td>
 		</tr>
 		<?php foreach($confirming_users as $userkey => $user){
-			if($user["count"] < 3){
-				continue;
-			}
 		?>
 		<tr >
 			<td>
