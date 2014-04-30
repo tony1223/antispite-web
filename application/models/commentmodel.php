@@ -21,7 +21,7 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function get_confirming($status = 0,$page = 0){
-		$pagesize = 100;
+		$pagesize = 500;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
 		if($status != -1){
 			$query->where("status",$status);
