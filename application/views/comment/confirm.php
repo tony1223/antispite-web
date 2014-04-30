@@ -20,7 +20,7 @@
 	.table-confirm-user{
 		position: fixed;
 		background: white;
-		width: 450px;
+		width: auto;
 		height: 241px;
 		display: block;
 		overflow: auto;
