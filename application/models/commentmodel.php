@@ -169,6 +169,12 @@ class CommentModel extends MONGO_MODEL {
 		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(500)->get($this->_collection);
 	}
 	
+
+	public function get_all_by_user($key){
+		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->limit(500)->get($this->_collection);
+	}
+	
+	
 	public function get_bad_count_by_user($key){
 		return $this->mongo_db->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
 	}

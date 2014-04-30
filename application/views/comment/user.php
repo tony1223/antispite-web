@@ -30,6 +30,7 @@
 			<td>留言時間</td>
 		</tr>
 		<?php foreach($comments as $comment){?>
+		<tr>
 			<td rowspan="2" width="100px">
 				<?php if($comment["type"] == "FBComment"){ ?>
 				FB 留言

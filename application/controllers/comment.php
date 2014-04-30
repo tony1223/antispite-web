@@ -35,7 +35,12 @@ class Comment extends MY_Controller {
 	public function user(){
 		$key = $this->input->get("key");
 		$this->load->model("commentModel");
-		$comments = $this->commentModel->get_bads_by_user($key);
+		
+		if(is_login()){
+			$comments = $this->commentModel->get_all_by_user($key);
+		}else{
+			$comments = $this->commentModel->get_bads_by_user($key);
+		}
 		if(count($comments) == 0){
 			return show_404();
 		}
