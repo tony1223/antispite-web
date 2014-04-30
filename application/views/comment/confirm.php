@@ -13,8 +13,33 @@
 		text-decoration: underline;
 	}
 	
-	.comment-row td{
+	.comment-row td,.comment-row-head td{
 	 	border-top:3px double black !important;
+	}
+	
+	.table-confirm-user{
+		position: fixed;
+		background: white;
+		width: 450px;
+		height: 241px;
+		display: block;
+		overflow: auto;
+		top: 53px;
+		left: 0;
+		border: 1px solid red;
+		padding:20px;
+	}
+	
+	.page-controls{
+		position: fixed;
+		background: white;
+		width: 340px;
+		display: block;
+		overflow: auto;
+		top: 50px;
+		left: 30%;
+		padding:20px;
+		border: 1px solid red;
 	}
 </style>
 <div class="container">
@@ -26,7 +51,11 @@
 	<hr />
 	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
 	<hr />
-	
+	<div class="page-controls">
+		<input type="text" class="keyword" value="" />
+		<button class="btn btn-default btn-reset">重設條件</button>
+		<p class="rules">全部</p>
+	</div>
 	<hr />
 	
 	<?php 
@@ -63,13 +92,10 @@
 	}	
 	usort($confirming_users, "confirming_cmp");
 	?>
-	<table class="table table-bordered table-confirm">
+	<table class="table table-bordered table-confirm table-confirm-user">
 		<tr>
 			<td class="span1">
-				使用者
-			</td>
-			<td class="span2">
-				跳針輔助評估
+				使用者/跳針輔助評估
 			</td>
 		</tr>
 		<?php foreach($confirming_users as $userkey => $user){
@@ -78,18 +104,17 @@
 			}
 		?>
 		<tr >
-			<td><a href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>)</td>
-			<td>
+			<td><a href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>)
+				<br />
 				<?php foreach($confirming_users[$userkey]["keywords"] as $keyword => $detail){ ?>
-					<?=$keyword?>:<?=$detail?> <br />
+					<span class="keywords" data-keyword="<?=h($keyword)?>" ><?=$keyword?>:<?=$detail?></span>,
 				<?php }?>
 			</td>
-			<td>
-		</td>
+		</tr>
 		<?php }?>
 	</table>
 	<table class="table table-bordered table-confirm">
-		<tr class="comment-row">
+		<tr class="comment-row-head">
 			<td>key</td>
 			<td>回報時間</td>			
 			<td>類型</td>
@@ -98,7 +123,7 @@
 			<td>回報數</td>
 		</tr>
 		<?php foreach($comments as $comment){?>
-		<tr class="comment-row">
+		<tr class="comment-row comment-handle" data-url='<?=$comment["url"]?>' data-user='<?=$comment["userkey"]?>'>
 			<td><?=h($comment["_id"]) ?></td>
 			<td><?=_display_date_with_fulldate_ms($comment["createDate"]) ?></td>
 			<td>
@@ -107,7 +132,7 @@
 				<?php }?>
 			</td>	
 			<td>
-				<a name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>)
+				<a name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>) <br />
 			</td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
 			<td>
@@ -117,7 +142,7 @@
 				<?php }?>
 			</td>
 		</tr>
-		<tr class="controls" data-key="<?=h($comment["userkey"])?>">
+		<tr class="controls comment-handle" data-url='<?=$comment["url"]?>' data-user='<?=$comment["userkey"]?>' data-key="<?=h($comment["userkey"])?>">
 			<td colspan="6" style="padding-left:40px;">
 				<a target="_blank" class="news-title" href="<?=h($comment["url"]) ?>">
 					<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
@@ -126,8 +151,18 @@
 						<?=h($comment["url"]) ?>
 					<?php }?>				
 				</a>
+				<button 
+					<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
+						data-title="<?=h($comment["url_title"]) ?>"
+					<?php }else{ ?>
+						data-title="<?=h($comment["url"]) ?>"
+					<?php }?>				
+				
+				data-url='<?=$comment["url"]?>' class="btn btn-default btn-filter-url">Filter</button>
 				<hr />
-				<?=nl2br(h($comment["content"]))?>
+				<div class="comment-content">
+					<?=nl2br(h($comment["content"]))?>
+				</div>
 				<hr />
 				目前狀態：
 				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?> btn-type-2" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
@@ -150,6 +185,81 @@
 <?php function js_section(){?>
 <script>
 	$(function(){
+		$(".page-controls .btn-reset").click(function(){
+			$(".comment-handle").show();
+			$(".rules").text("全部");
+		});
+		$(document).on("keydown",function(e){
+			if(e.keyCode == 27){
+				$(".page-controls .btn-reset").click();
+				return true;
+			}
+			if(e.keyCode == 113){
+				$(".page-controls .keyword").focus().select();
+				return true;
+			}
+		});
+
+		$(".keywords").click(function(){
+			$(".page-controls .keyword").val($(this).data("keyword"));
+			var keyword = $(this).data("keyword") ;
+			var users = {}; 
+			$(".rules").text("關鍵字:"+keyword);
+			$(".comment-handle").hide().each(function(){
+				var $this = $(this);
+				if($this.find(".comment-content").text().indexOf(keyword)!=-1){
+					$this.show();
+					users[$this.data("user")] = 1;
+				}
+			});
+			$(".comment-handle").each(function(){
+				var $this = $(this);
+				if(users[$this.data("user")] != null){
+					$this.show();
+				}
+			});			
+		});
+		$(".page-controls .keyword").keydown(function(e){
+			if(e.keyCode == 13){
+				var keyword = this.value ;
+				var users = {}; 
+				$(".rules").text("關鍵字:"+keyword);
+				$(".comment-handle").hide().each(function(){
+					var $this = $(this);
+					if($this.find(".comment-content").text().indexOf(keyword)!=-1){
+						$this.show();
+						users[$this.data("user")] = 1;
+					}
+				});
+				$(".comment-handle").each(function(){
+					var $this = $(this);
+					if(users[$this.data("user")] != null){
+						$this.show();
+					}
+				});
+			}
+		});
+		$(".table-confirm").on("click",".btn-filter-url",function(){
+			var url = $(this).data("url");
+			var title = $(this).data("title");
+			var users = {}; 
+
+			$(".rules").text("與新聞 "+title+" 有關");
+			$(".comment-handle").hide().each(function(){
+				var $this = $(this);
+				if($this.data("url") == url){
+					$this.show();
+					users[$this.data("user")] = 1;
+				}
+			});
+			$(".comment-handle").each(function(){
+				var $this = $(this);
+				if(users[$this.data("user")] != null){
+					$this.show();
+				}
+			});
+		});
+		
 		$(".table-confirm").on("click",".btn-confirm-all",function(){
 			var $btn = $(this);
 			var type = $btn.data("type");
@@ -163,9 +273,15 @@
 		});
 		$(".table-confirm").on("click",".btn-confirm",function(){
 			var btn = this;
+			var oldtext = $(btn).text();
+			$(btn).text("處理");
+			$(btn).addClass("btn-wanring");
 			$.get(btn.href,function(){
 				$(btn).parent().find(".btn-primary").removeClass("btn-primary");
 				$(btn).addClass("btn-primary");
+				$(btn).removeClass("btn-wanring");
+				$(btn).text(oldtext);
+				oldtext = null;
 			});
 			return false;
 		});
