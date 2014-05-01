@@ -71,7 +71,10 @@
 						<hr />
 					</div>
 					<?php }else{ ?>
-				<?php }?>				
+				<?php }?>		
+				<?php if(is_login()){ ?>
+					<a  target="_blank" href="<?=site_url("comment/removeReply/?key=".rawurlencode($comment["_id"]))?>" >移除補充</a>
+				<?php }?>
 			</td>
 		</tr>
 		<tr>

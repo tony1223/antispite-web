@@ -125,9 +125,15 @@
 						<?php }?>
 						<hr />
 						<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>" >修改補充或回應資料</a>
+						<?php if(is_login()){ ?>
+							<a  target="_blank" href="<?=site_url("comment/removeReply/?key=".rawurlencode($comment["_id"]))?>" >移除補充</a>
+						<?php }?>						
 					</div>
 					<?php }else{ ?>
-					<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>">補充或回應資料</a>
+						<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>">補充或回應資料</a>
+						<?php if(is_login()){ ?>
+							<a  target="_blank" href="<?=site_url("comment/removeReply/?key=".rawurlencode($comment["_id"]))?>" >移除補充</a>
+						<?php }?>					
 				<?php }?>
 				<hr />
 				目前狀態：
