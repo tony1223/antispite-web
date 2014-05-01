@@ -320,10 +320,10 @@ class CommentModel extends MONGO_MODEL {
 		}
 
 		$reply = $replys[0];
-// 		$this->mongo_db
-// 		->where("_id",$mID)
-// 		->set(Array("status" => $status, "modifyDate" => time()*1000.0 ))
-// 		->update($this->_collection_reply);		
+		$this->mongo_db
+		->where("_id",$mID)
+		->set(Array("status" => $status, "modifyDate" => time()*1000.0 ))
+		->update($this->_collection_reply);		
 		
 		if($status == CommentModel::REPLY_OK){
 			$reply["status"] = $status;
