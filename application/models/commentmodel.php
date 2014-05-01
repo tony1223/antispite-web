@@ -157,7 +157,7 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function check_ids($post_ids){
-		return $this->mongo_db->select(Array("_id","reply.url","reply.content","reply.createDate"))->whereIn("_id",$post_ids)->where("status",CommentModel::STATUS_BAD)->get($this->_collection);
+		return $this->mongo_db->select(Array("_id","reply.url_title","reply.url","reply.content","reply.createDate"))->whereIn("_id",$post_ids)->where("status",CommentModel::STATUS_BAD)->get($this->_collection);
 	}
 	
 	public function check_users($users){
@@ -310,7 +310,14 @@ class CommentModel extends MONGO_MODEL {
 		return $results;
 	}
 	
-	public function mark_reply($id,$status){
+	public function get_reply($id){
+		$mID = new MongoId($id);
+		$query = $this->mongo_db->where("_id",$mID);
+		$replys = $query->get($this->_collection_reply);
+		return count($replys) > 0 ? $replys[0] : null;
+	}
+	
+	public function mark_reply($id,$status,$url_title){
 		$mID = new MongoId($id);
 		$query = $this->mongo_db->where("_id",$mID);
 		$replys = $query->get($this->_collection_reply);
@@ -320,14 +327,25 @@ class CommentModel extends MONGO_MODEL {
 		}
 
 		$reply = $replys[0];
-		$this->mongo_db
+		
+		$query = $this->mongo_db
 		->where("_id",$mID)
-		->set(Array("status" => $status, "modifyDate" => time()*1000.0 ))
-		->update($this->_collection_reply);		
+		->set(Array("status" => $status, "modifyDate" => time()*1000.0 ));
+		
+		if($url_title != null){
+			$query->set("url_title" ,$url_title);
+		}
+		
+		$query->update($this->_collection_reply);		
 		
 		if($status == CommentModel::REPLY_OK){
 			$reply["status"] = $status;
 			$reply["modifyDate"] = time()*1000.0;
+
+			if($url_title != null){
+				$reply["url_title"] = $url_title;
+			}
+			
 			$query = $this->mongo_db->where("_id", $reply["commentID"]);
 			$query->set(Array("reply" => $reply,"reply_updated" => time() *1000.0));
 			$query->update($this->_collection);

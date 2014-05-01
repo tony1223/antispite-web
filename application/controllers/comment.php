@@ -156,7 +156,19 @@ class Comment extends MY_Controller {
 		$id = $this->input->post("id");
 		
 		$this->load->model("commentModel");
-		$this->commentModel->mark_reply($id,$status);
+		$this->load->model("urlModel");
+		
+		$reply = $this->commentModel->get_reply($id);
+		if($reply == null){
+			return show_404();
+		}
+		
+		$title = null;
+		if($status == CommentModel::REPLY_OK ){
+			$title = $this->urlModel->get_url_title($reply["url"]);
+		}
+		
+		$this->commentModel->mark_reply($id,$status,$title);
 		
 	}
 	
@@ -252,10 +264,10 @@ class Comment extends MY_Controller {
 		$stats = $this->commentModel->get_reply_stats();
 		
 		$this->load->view('comment/confirm_replys',Array(
-				"pageTitle" => "確認跳針留言" ,
-				"selector" => "confirm",
-				"comment_replys" => $comment_replys,
-				"stats" => $stats
+			"pageTitle" => "確認跳針留言" ,
+			"selector" => "confirm",
+			"comment_replys" => $comment_replys,
+			"stats" => $stats
 		));
 	}
 	

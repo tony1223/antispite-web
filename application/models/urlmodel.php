@@ -6,6 +6,7 @@
 class UrlModel extends MONGO_MODEL {
 	var $_collection = "urls";
 	var $_collection_comment = "comment";
+	var $_collection_reply = "comment_reply";
 	
 	function __construct()
 	{
@@ -32,7 +33,7 @@ class UrlModel extends MONGO_MODEL {
 	}
 	public function get_hot_urls(){
 		return $this->mongo_db->whereGt("count",0)->orderBy(Array("count" => "desc","createDate"=>"desc"))->get($this->_collection);
-	}	
+	}
 	
 	
 	public function resolve_url($url,$title){
@@ -41,9 +42,18 @@ class UrlModel extends MONGO_MODEL {
 			->set("resolved",true)
 			->set("resolved_date",time()*1000.0)
 		->update($this->_collection);
+		
 		$this->mongo_db->where("url",$url)
 			->set("url_title",$title)
 			->updateAll($this->_collection_comment);
+		
+		$this->mongo_db->where("url",$url)
+		->set("url_title",$title)
+		->updateAll($this->_collection_reply);
+		
+		$this->mongo_db->where("reply.url",$url)
+		->set("reply.url_title",$title)
+		->updateAll($this->_collection_comment);
 		
 	}
 	
