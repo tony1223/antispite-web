@@ -121,7 +121,15 @@
 						<p style="color:red;">小幫手網友想說：  </p>
 						<p><?=nl2br(h($comment["reply"]["content"])) ?></p>
 						<?php if(!empty($comment["reply"]["url"])){?>
-							<p>相關連結:<a href="<?=h($comment["reply"]["url"])?>"><?=h($comment["reply"]["url"])?></a></p>
+							<p>相關連結: 
+								<a href="<?=h($comment["reply"]["url"])?>">
+								<?php if(isset($comment["reply"]["url_title"])){?>
+									<?=h($comment["reply"]["url_title"])?>
+								<?php }else{ ?>
+									<?=h($comment["reply"]["url"])?>
+								<?php }?>
+								</a>
+							</p>
 						<?php }?>
 						<hr />
 						<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>" >修改補充或回應資料</a>

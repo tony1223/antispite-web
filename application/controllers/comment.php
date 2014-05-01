@@ -108,6 +108,42 @@ class Comment extends MY_Controller {
 		));
 	}
 	
+	public function url(){
+		$url = $this->input->get("id");
+		$this->load->model("commentModel");
+		$this->load->model("urlModel");
+		$url_item = $this->urlModel->get($url);
+		
+		if($url_item == null){
+			return show_404();
+		}
+		
+	
+		if(is_login()){
+			//https://tw.news.yahoo.com/%E5%8D%81%E8%90%AC%E7%BE%A4%E7%9C%BE%E9%9C%B8%E6%8D%B7%E9%81%8B-%E6%8D%B7%E9%81%8B%E8%AD%A6-%E5%85%88%E6%9F%94%E6%80%A7%E5%8B%B8%E9%9B%A2-052929940.html
+			$comments = $this->commentModel->get_all_by_url($url);
+		}else{
+			$comments = $this->commentModel->get_bads_by_url($url);
+		}
+		if(count($comments) == 0){
+			return show_404();
+		}
+
+		$title = isset($url_item["title"]) ? $url_item["title"] : $url_item["_id"];
+		
+		$count = $this->commentModel->get_bad_count_by_url($url);
+	
+		
+		$this->load->view('comment/url',Array(
+				"pageTitle" => $title." 相關跳針留言清單" ,
+				"selector" => "comments",
+				"comments" => $comments,
+				"title" => $title,
+				"count" => $count,
+				"url" => $url_item
+		)); 
+	}
+	
 	public function rank(){
 		$key = $this->input->get("key");
 		$this->load->model("commentModel");

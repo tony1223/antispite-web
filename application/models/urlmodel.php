@@ -31,6 +31,13 @@ class UrlModel extends MONGO_MODEL {
 	public function get_urls(){
 		return $this->mongo_db->whereGt("count",0)->orderBy("createDate","desc")->get($this->_collection);
 	}
+	
+	public function get($url){
+		$results = $this->mongo_db->where("_id",$url)->get($this->_collection);
+		
+		return count($results) > 0 ? $results[0]: null;
+	}
+	
 	public function get_hot_urls(){
 		return $this->mongo_db->whereGt("count",0)->orderBy(Array("count" => "desc","createDate"=>"desc"))->get($this->_collection);
 	}

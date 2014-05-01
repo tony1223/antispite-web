@@ -19,8 +19,8 @@
 
 <div class="container">
 	
-	<h2><?=$comments[0]["name"] ?> 近期跳針留言清單（<?=count($comments)>=100 ?"最近一百筆" :count($comments) ?>）<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
-	<p>跳針指數：<?=$count?></p>
+	<h2><?=$title?> 相關跳針留言清單（<?=count($comments) ?>）<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
+	<p>跳針總數：<?=$count?></p>
 	<div id="chart_div" style="width: 100%; height: 500px;"></div>
 	<hr />
 	<table class="table table-bordered table-comment">
