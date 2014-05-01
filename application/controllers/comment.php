@@ -270,7 +270,7 @@ class Comment extends MY_Controller {
 		$inserting_data = Array();
 		foreach ($keys as $key){
 			if(!isset($data->$key)){
-				return $this->return_error(400,"parameter not correct.");
+				return $this->return_error(400,"parameter not correct. [".$key."] ");
 			}
 			$inserting_data[$key] = $data->$key;
 		}
