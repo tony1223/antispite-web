@@ -25,7 +25,7 @@
 	<p><img src="<?=base_url("img/example.png")?>" /></p>
 	
 	<p>如果有使用者提供資料，則會顯示於畫面上，如下圖：(2014/5/1 新增功能)</p>
-	<p><img src="<?=base_url("img/example2.png")?>" /></p>
+	<p><img src="<?=base_url("img/example2.jpg")?>" /></p>
 	
 	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
 	
