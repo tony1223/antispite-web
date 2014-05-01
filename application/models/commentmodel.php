@@ -11,9 +11,15 @@ class CommentModel extends MONGO_MODEL {
 	var $_collection_log = "comment_log";
 	var $_collection_urls = "urls";
 	
+	var $_collection_reply = "comment_reply";
+	
 	const STATUS_WAIT = 0;
 	const STATUS_BAD = 1;
 	const STATUS_OK = 2;
+	
+	const REPLY_WAIT = 0;
+	const REPLY_HISTORY = 1;
+	const REPLY_OK = 2;
 	 
 	function __construct()
 	{
@@ -50,12 +56,12 @@ class CommentModel extends MONGO_MODEL {
 		return $this->mongo_db->orderBy("time","desc")->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
 	}
 	
-	public function mark($key,$status,$user,$ueid){
+	public function mark($key,$status,$user){
 		$now = time() *1000.0;
 		
 		$this->mongo_db->where("_id",$key)->set("status",$status)->set("status_update",$now)->update($this->_collection);
 		$this->mongo_db->insert($this->_collection_record,
-			Array("reporter"=> $ueid,
+			Array(
 					"createDate" => $now,
 					"target" => $key,
 					"type" => "update_mark",
@@ -151,7 +157,7 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function check_ids($post_ids){
-		return $this->mongo_db->select(Array("_id"))->whereIn("_id",$post_ids)->where("status",CommentModel::STATUS_BAD)->get($this->_collection);
+		return $this->mongo_db->select(Array("_id","reply.url","reply.content","reply.createDate"))->whereIn("_id",$post_ids)->where("status",CommentModel::STATUS_BAD)->get($this->_collection);
 	}
 	
 	public function check_users($users){
@@ -174,6 +180,14 @@ class CommentModel extends MONGO_MODEL {
 		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->limit(500)->get($this->_collection);
 	}
 	
+	public function get($key){
+		$results = $this->mongo_db->where("_id", $key )->limit(1)->get($this->_collection);
+		if(count($results) <= 0 ){
+			return null;
+		}
+		return $results[0];
+	}
+	
 	
 	public function get_bad_count_by_user($key){
 		return $this->mongo_db->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
@@ -185,16 +199,25 @@ class CommentModel extends MONGO_MODEL {
 		$wait = $this->mongo_db->where("status",CommentModel::STATUS_WAIT)->count($this->_collection);
 		
 		return Array($wait,$bad,$ok);
+	}
+	
+	public function get_reply_stats(){
+		$bad = $this->mongo_db->where("status",CommentModel::REPLY_OK)->count($this->_collection_reply);
+//		$ok = $this->mongo_db->where("status",CommentModel::REPLY_HISTORY)->count($this->_collection_reply);
+		$wait = $this->mongo_db->where("status",CommentModel::REPLY_WAIT)->count($this->_collection_reply);
+		return Array($wait,$bad);
 		
 	}
 	
 	public function insert_check_log($ueid,$type,$url){
 		$now = time() *1000.0;
 		$this->mongo_db->insert($this->_collection_log,
-			Array("ueid"=>$ueid,
-					"createDate" => $now,
-					"type" => $type,
-					"url" => $url)
+			Array(
+				"ueid"=>$ueid,
+				"createDate" => $now,
+				"type" => $type,
+				"url" => $url
+			)
 		);
 		
 	}
@@ -238,6 +261,84 @@ class CommentModel extends MONGO_MODEL {
 				"target" => $data["key"],
 				"type" => $data["type"],
 				"userkey" => $data["userkey"] ));
-		
 	}
+	
+	public function insert_reply($commentID,$url,$comment){ 
+		$this->mongo_db->insert($this->_collection_reply,
+			Array(
+				"createDate" => time() * 1000.0,
+				"commentID" => $commentID,
+				"url" => $url,
+				"content" => $comment,
+				"status" => CommentModel::REPLY_WAIT,
+				"ip" => get_ip()
+			)
+		);
+	}
+	
+	
+	public function get_reply_waiting(){
+		$query = $this->mongo_db->where("status", CommentModel::REPLY_WAIT);
+		$comment_replys = $query->get($this->_collection_reply);
+		
+		$comment_replys_map = Array();
+		foreach($comment_replys as $comment_reply){
+			if(!isset($comment_replys_map[$comment_reply["commentID"]])){
+				$comment_replys_map[$comment_reply["commentID"]] = Array();
+			}
+			$comment_replys_map[$comment_reply["commentID"]][] = $comment_reply; 
+		}
+		
+		$results = Array();
+		foreach($comment_replys_map as $commentID => &$comment_reply){
+			$query = $this->mongo_db->where("_id", $commentID);
+			$comments = $query->get($this->_collection);
+			
+			$comment_merged = Array("replys" => $comment_reply);
+			if( count($comments) >0){
+				$comment_merged["comment"] = $comments[0];
+				$comment_result = $this->mongo_db->where(Array("user" => $comments[0]["userkey"]))->get($this->_collection_user);
+				if(count($comment_result) <= 0){
+					$comment_merged["comment"]["count"] = 0;
+				}else{
+					$comment_merged["comment"]["count"] = $comment_result[0]["count"];
+				}				
+			} 
+			$results[] = $comment_merged; 
+			
+		}
+		return $results;
+	}
+	
+	public function mark_reply($id,$status){
+		$mID = new MongoId($id);
+		$query = $this->mongo_db->where("_id",$mID);
+		$replys = $query->get($this->_collection_reply);
+		
+		if(count($replys) <= 0){
+			return false;
+		}
+
+		$reply = $replys[0];
+// 		$this->mongo_db
+// 		->where("_id",$mID)
+// 		->set(Array("status" => $status, "modifyDate" => time()*1000.0 ))
+// 		->update($this->_collection_reply);		
+		
+		if($status == CommentModel::REPLY_OK){
+			$reply["status"] = $status;
+			$reply["modifyDate"] = time()*1000.0;
+			$query = $this->mongo_db->where("_id", $reply["commentID"]);
+			$query->set(Array("reply" => $reply,"reply_updated" => time() *1000.0));
+			$query->update($this->_collection);
+		}
+	}
+	
+	public function removeReply($key){
+		$query = $this->mongo_db->where("_id", $key);
+		$query->unsetField("reply");
+		$query->set(Array("reply_updated" => time() *1000.0));
+		$query->update($this->_collection);
+	}
+	
 }

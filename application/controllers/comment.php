@@ -32,6 +32,60 @@ class Comment extends MY_Controller {
 	}
 	
 
+	public function provide(){
+		$key = $this->input->get("key");
+		$this->load->model("commentModel");
+	
+		$comment = $this->commentModel->get($key);
+		
+		if( $comment == null){
+			return show_404();
+		}
+		
+		$count = $this->commentModel->get_bad_count_by_user($comment["userkey"]);
+	
+		$this->load->view('comment/provide',Array(
+				"pageTitle" => "提供留言參考資料" ,
+				"selector" => "comments",
+				"comment" => $comment,
+				"count" => $count
+		));
+	}
+	
+
+	public function reply(){
+		$info = $this->input->post("info");
+		$url = $this->input->post("url");
+		$id = $this->input->post("id");
+		$this->load->model("commentModel");
+		
+		$comment = $this->commentModel->get($id);
+		
+		if($comment == null){
+			return show_404();
+		}
+		
+		$this->commentModel->insert_reply($id,$url,$info);
+	
+		redirect(site_url("comment/thanks/?key=".$id));
+	}
+	
+	public function thanks(){
+		$id = $this->input->get("key");
+		$this->load->model("commentModel");
+		$comment = $this->commentModel->get($id);
+		if($comment == null){
+			return show_404();
+		}
+		
+		$this->load->view('comment/thanks',Array(
+				"pageTitle" => "您的參考意見已送出" ,
+				"selector" => "thanks",
+				"comment" => $comment,
+		));
+	}
+		
+
 	public function user(){
 		$key = $this->input->get("key");
 		$this->load->model("commentModel");
@@ -47,10 +101,10 @@ class Comment extends MY_Controller {
 		$count = $this->commentModel->get_bad_count_by_user($key);
 	
 		$this->load->view('comment/user',Array(
-				"pageTitle" => $comments[0]["name"]." 跳針留言清單" ,
-				"selector" => "comments",
-				"comments" => $comments,
-				"count" => $count
+			"pageTitle" => $comments[0]["name"]." 跳針留言清單" ,
+			"selector" => "comments",
+			"comments" => $comments,
+			"count" => $count
 		));
 	}
 	
@@ -89,10 +143,25 @@ class Comment extends MY_Controller {
 			redirect(site_url("user/login"));
 			return true;
 		}
+		
+	}
+	
+	public function mark_reply(){
+		if(!is_login()){
+			redirect(site_url("user/login"));
+			return true;
+		}
+		
+		$status = intval($this->input->post("status"),10);
+		$id = $this->input->post("id");
+		
+		$this->load->model("commentModel");
+		$this->commentModel->mark_reply($id,$status);
+		
 	}
 	
 	public function check(){
-		header("Access-Control-Allow-Origin: https://www.facebook.com");
+		header("Access-Control-Allow-Origin: *");
 		header('Content-Type: application/json; charset=utf-8');
 		
 		$posts = json_decode($this->input->post("posts"),"true");
@@ -170,6 +239,35 @@ class Comment extends MY_Controller {
 		$inserting_data["_id"] = $data->key;
 		$this->commentModel->insert($inserting_data);
 		return $this->return_success_json();
+	}
+	
+	public function reply_confirm(){
+		if(!is_login()){
+			redirect(site_url("user/login"));
+			return true;
+		}
+		
+		$this->load->model("commentModel");
+		$comment_replys = $this->commentModel->get_reply_waiting();
+		$stats = $this->commentModel->get_reply_stats();
+		
+		$this->load->view('comment/confirm_replys',Array(
+				"pageTitle" => "確認跳針留言" ,
+				"selector" => "confirm",
+				"comment_replys" => $comment_replys,
+				"stats" => $stats
+		));
+	}
+	
+	public function removeReply(){
+		if(!is_login()){
+			redirect(site_url("user/login"));
+			return true;
+		}		
+		$key = $this->input->get("key");
+		$this->load->model("commentModel");
+		$comment_replys = $this->commentModel->removeReply($key);
+		
 	}
 }
 

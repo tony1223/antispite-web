@@ -60,9 +60,30 @@
 		</tr>
 		<tr>
 			<td colspan="3" style="padding-left:20px;">
-				<p style="min-height:50px;padding-top:10px;">
-					<?=nl2br(h($comment["content"]))?>
-				</p>
+				<div style="min-height:50px;padding-top:10px;">
+					<div class="comment-content">
+						<?=nl2br(h($comment["content"]))?>
+					</div>
+					<?php 
+					if(isset($comment["reply"])){?>
+					<div style="padding-left:30px;">
+						<hr />
+						<p style="color:red;">小幫手網友想說：  </p>
+						<p><?=nl2br(h($comment["reply"]["content"])) ?></p>
+						<?php if(!empty($comment["reply"]["url"])){?>
+							<p>相關連結:<a href="<?=h($comment["reply"]["url"])?>"><?=h($comment["reply"]["url"])?></a></p>
+						<?php }?>
+						<hr />
+						<a  target="_blank" href="<?=site_url("comment/provide/?key=".rawurlencode($comment["_id"]))?>" >修改補充或回應資料</a>
+						<?php if(is_login()){ ?>
+							<a  target="_blank" href="<?=site_url("comment/removeReply/?key=".rawurlencode($comment["_id"]))?>" >移除補充</a>
+						<?php }?>
+					</div>
+					<?php }else{ ?>
+					<a  target="_blank" href="<?=site_url("comment/provide/?key=".rawurlencode($comment["_id"]))?>">補充或回應資料</a>
+					<?php }?>
+										
+				</div>
 			</td>
 		</tr>			
 		<?php }?>

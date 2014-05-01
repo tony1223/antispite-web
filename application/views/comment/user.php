@@ -64,8 +64,28 @@
 				<p style="min-height:50px;padding-top:10px;">
 					<?=nl2br(h($comment["content"]))?>
 				</p>
+				<?php 
+				if(isset($comment["reply"])){?>
+				<div style="padding-left:30px;">
+					<hr />
+					<p style="color:red;">小幫手網友想說：  </p>
+					<p><?=nl2br(h($comment["reply"]["content"])) ?></p>
+					<?php if(!empty($comment["reply"]["url"])){?>
+						<p>相關連結:<a href="<?=h($comment["reply"]["url"])?>"><?=h($comment["reply"]["url"])?></a></p>
+					<?php }?>
+					<hr />
+					<a  target="_blank" href="<?=site_url("comment/provide/?key=".$comment["_id"])?>" >修改補充或回應資料</a>
+					<?php if(is_login()){ ?>
+						<a  target="_blank" href="<?=site_url("comment/removeReply/?key=".rawurlencode($comment["_id"]))?>" >移除補充</a>
+					<?php }?>					
+				</div>
+				<?php }else{ ?>
+				<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>">補充或回應資料</a>
+				<?php }?>
+				
 				
 				<?php if(is_login()){?>
+					<br />
 					目前狀態：
 					<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?> btn-type-2" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
 					<a class="btn btn-confirm btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?> btn-type-1 " href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>

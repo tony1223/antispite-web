@@ -41,82 +41,25 @@
 		padding:20px;
 		border: 1px solid red;
 	}
+	
+	.table-confirm .reply{
+		border:1px solid #DDDDDD;
+		padding:20px;
+	}
+	.table-confirm .reply-0{
+		border:1px solid #DDDDDD;
+	}
+	.table-confirm .reply-1{
+		border:1px solid red;
+	}
+	.table-confirm .reply-2{
+		border:1px solid gray;
+	}
 </style>
 <div class="container">
 	
-	<h2>待確認留言清單</h2>
-	<a class="btn btn-default" href="<?=site_url("comment/confirm/-1")?>">確認全部留言</a>
-	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
-	
-	<hr />
-	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
-	<hr />
-	<div class="page-controls">
-		<input type="text" class="keyword" value="" />
-		<button class="btn btn-default btn-reset">重設條件</button>
-		<p class="rules">全部</p>
-	</div>
-	<hr />
-	
-	<?php 
-	$confirming_users = Array();
-	$keywords = Array("民進黨","國民黨","綠吱","藍蛆","暴民","林飛帆","帆神","學運",
-			"大腸花","太陽花","馬英九","小英","冥進黨","狗民黨","中共","日本","共產黨","打死");
-	foreach($comments as $comment){
-		if(!isset($confirming_users[$comment["userkey"]])){
-			$confirming_users[$comment["userkey"]] = Array(
-				"count" => 0,
-				"keywords" => Array() ,
-				"name" => $comment["name"],
-				"key" => $comment["userkey"],
-				"confirm_count" => $comment["count"]
-			);
-		}
-		$confirming_users[$comment["userkey"]]["count"] ++;
-		
-		foreach($keywords as $keyword){
-			if(strpos($comment["content"],$keyword) !== False){
-				if(!isset($confirming_users[$comment["userkey"]]["keywords"][$keyword])){
-					$confirming_users[$comment["userkey"]]["keywords"][$keyword] = 0;
-				}
-				$confirming_users[$comment["userkey"]]["keywords"][$keyword]++;
-			}
-		};
-	} 
-	
-	function confirming_cmp($a, $b)
-	{
-		if ($a["count"] == $b["count"]) {
-			return 0;
-		}
-		return ($a["count"] > $b["count"]) ? -1 : 1;
-	}	
-	usort($confirming_users, "confirming_cmp");
-	?>
-	<table class="table table-bordered table-confirm table-confirm-user">
-		<tr>
-			<td class="span1">
-				使用者/跳針輔助評估
-			</td>
-		</tr>
-		<?php foreach($confirming_users as $userkey => $user){
-		?>
-		<tr >
-			<td>
-				<a href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>
-				
-					<?php if($user["confirm_count"] >0 ){?>
-					/ <span style='color:red;'><?=$user["confirm_count"]?></span>
-					<?php }?>
-				)
-				<br />
-				<?php foreach($confirming_users[$userkey]["keywords"] as $keyword => $detail){ ?>
-					<span class="keywords" data-keyword="<?=h($keyword)?>" ><?=$keyword?>:<?=$detail?></span>,
-				<?php }?>
-			</td>
-		</tr>
-		<?php }?>
-	</table>
+	<h2>待確認留言資訊清單</h2>
+
 	<table class="table table-bordered table-confirm">
 		<tr class="comment-row-head">
 			<td>key</td>
@@ -126,7 +69,10 @@
 			<td>留言時間</td>
 			<td>回報數</td>
 		</tr>
-		<?php foreach($comments as $comment){?>
+		<?php foreach($comment_replys as $ind => $comment_reply){
+			$comment = $comment_reply["comment"];
+			$replys = $comment_reply["replys"];
+			?>
 		<tr class="comment-row comment-handle" data-url='<?=$comment["url"]?>' data-user='<?=$comment["userkey"]?>'>
 			<td><?=h($comment["_id"]) ?></td>
 			<td><?=_display_date_with_fulldate_ms($comment["createDate"]) ?></td>
@@ -169,22 +115,20 @@
 				<div class="comment-content">
 					<?=nl2br(h($comment["content"]))?>
 				</div>
-				<?php 
-				if(isset($comment["reply"])){?>
-				<div style="padding-left:30px;">
-					<hr />
-					<p style="color:red;">小幫手網友想說：  </p>
-					<p><?=nl2br(h($comment["reply"]["content"])) ?></p>
-					<?php if(!empty($comment["reply"]["url"])){?>
-						<p>相關連結:<a href="<?=h($comment["reply"]["url"])?>"><?=h($comment["reply"]["url"])?></a></p>
-					<?php }?>
-					<hr />
-					<a target="_blank" href="<?=site_url("comment/provide/?key=".$comment["_id"])?>" >修改補充或回應資料</a>
-				</div>
-				<?php }else{ ?>
-				<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>">補充或回應資料</a>
+				<?php if(isset($comment["reply"])){?>
+					<div style="padding-left:30px;">
+						<hr />
+						<p style="color:red;">小幫手網友想說：  </p>
+						<p><?=nl2br(h($comment["reply"]["content"])) ?></p>
+						<?php if(!empty($comment["reply"]["url"])){?>
+							<p>相關連結:<a href="<?=h($comment["reply"]["url"])?>"><?=h($comment["reply"]["url"])?></a></p>
+						<?php }?>
+						<hr />
+						<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>" >修改補充或回應資料</a>
+					</div>
+					<?php }else{ ?>
+					<a href="<?=site_url("comment/provide/?key=".$comment["_id"])?>">補充或回應資料</a>
 				<?php }?>
-								
 				<hr />
 				目前狀態：
 				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?> btn-type-2" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
@@ -196,8 +140,17 @@
 				<a class="btn btn-confirm-all btn-default" data-type="2" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> OK</a>
 				<a class="btn btn-confirm-all btn-default" data-type="1" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> 跳針</a>
 				<a class="btn btn-confirm-all btn-default" data-type="0" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> 待審查</a>
+				<hr />
+				<?php foreach($replys as $reply){?>
+				<div class="reply reply-<?=$reply["status"]?>" >
+					<p class="url"><a href="<?=h($reply["url"])?>"><?=h($reply["url"])?></a></p>
+					<p class="內容"><?=nl2br(($reply["content"]))?></p>
+					<button data-id="<?=h($reply["_id"])?>" data-status="0" class="btn-approve btn">未處理</button>
+					<button data-id="<?=h($reply["_id"])?>" data-status="2" class="btn-approve btn">採用</button>
+					<button data-id="<?=h($reply["_id"])?>" data-status="1" class="btn-approve btn">不採用</button>
+				</div>
 				
-								
+				<?php }?>
 			</td>
 		</tr>			
 		<?php }?>
@@ -282,6 +235,29 @@
 				}
 			});
 		});
+
+		$(".table-confirm").on("click",".btn-approve",function(){
+			var status = $(this).data("status");
+			var id = $(this).data("id");
+
+			var btn = this;
+			var oldtext = $(btn).text();
+			$(btn).text("處理");
+			$(btn).addClass("btn-wanring");
+			$.post("<?=site_url("comment/mark_reply")?>",
+				{
+					status:status,
+					id:id
+				},
+				function(){
+					$(btn).parent().find(".btn-primary").removeClass("btn-primary");
+					$(btn).addClass("btn-primary");
+					$(btn).removeClass("btn-wanring");
+					$(btn).text(oldtext);
+					oldtext = null;
+			});
+		});
+		
 		
 		$(".table-confirm").on("click",".btn-confirm-all",function(){
 			var $btn = $(this);
@@ -294,7 +270,6 @@
 				}
 			});
 		});
-		
 		$(".table-confirm").on("click",".btn-confirm",function(){
 			var btn = this;
 			var oldtext = $(btn).text();
