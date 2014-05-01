@@ -20,7 +20,7 @@
 <div class="container">
 	
 	<h2>近期跳針留言清單（<?=count($comments)>=100 ?"最近一百筆" :count($comments) ?>）<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
-	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
+	<p><a href="<?=site_url("extension/download")?>" target="_blank" >想要即時看到跳針資料嗎？ 馬上安裝跳針留言小幫手</a></p>
 	<table class="table table-bordered">
 		<tr class="comment-row">
 			<td>類型</td>
@@ -96,7 +96,7 @@
 		</tr>			
 		<?php }?>
 	</table>
-	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
+	<p><a href="<?=site_url("extension/download")?>" target="_blank" >想要即時看到跳針資料嗎？ 馬上安裝跳針留言小幫手</a></p>
 </div>
 
 <?php include(__DIR__."/../_site_footer.php")?>

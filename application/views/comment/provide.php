@@ -108,7 +108,7 @@
 	
 	
 	
-	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
+	<p><a href="<?=site_url("extension/download")?>" target="_blank" >也想要即時看到跳針資料嗎？ 馬上安裝跳針留言小幫手</a></p>
 	
 </div>
 
