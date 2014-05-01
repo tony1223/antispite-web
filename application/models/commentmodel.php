@@ -220,14 +220,15 @@ class CommentModel extends MONGO_MODEL {
 		
 	}
 	
-	public function insert_check_log($ueid,$type,$url){
+	public function insert_check_log($ueid,$type,$url,$client = "chrome"){
 		$now = time() *1000.0;
 		$this->mongo_db->insert($this->_collection_log,
 			Array(
 				"ueid"=>$ueid,
 				"createDate" => $now,
 				"type" => $type,
-				"url" => $url
+				"url" => $url,
+				"client" => $client
 			)
 		);
 		
@@ -243,7 +244,7 @@ class CommentModel extends MONGO_MODEL {
 		return $query->get($this->_collection_user);
 	}
 	
-	public function insert($data){
+	public function insert($data,$client = "chrome"){
 		
 // 		{
 // 			type:"FBComment",
@@ -271,7 +272,9 @@ class CommentModel extends MONGO_MODEL {
 				"createDate" => $now,
 				"target" => $data["key"],
 				"type" => $data["type"],
-				"userkey" => $data["userkey"] ));
+				"userkey" => $data["userkey"],
+				"client" => $client 
+			));
 	}
 	
 	public function insert_reply($commentID,$url,$comment){ 

@@ -228,8 +228,13 @@ class Comment extends MY_Controller {
 		$this->load->model("commentModel");
 		$bad_ids = $this->commentModel->check_ids($post_ids);
 		$bad_users = $this->commentModel->check_users(array_keys($users));
+
+		$client = "chrome";
+		if($this->input->post("client") == "ff"){
+			$client = "ff";
+		}		
 		
-		$this->commentModel->insert_check_log($this->input->post("ueid"),$posts[0]["type"],$this->input->post("url"));
+		$this->commentModel->insert_check_log($this->input->post("ueid"),$posts[0]["type"],$this->input->post("url"),$client);
 // 		posts:all_post_ids,
 // 		url:url
 		//all_post_ids.push({key:nowpost.key,type:nowpost.type,user:nowpost.userkey});
@@ -278,14 +283,18 @@ class Comment extends MY_Controller {
 			$inserting_data["time_exact"] = false;
 		}
 		
+		$client = "chrome";
+		if($this->input->post("client") == "ff"){
+			$client = "ff";
+		}
+		
 		$ueid = $this->input->post("ueid");
 		if($ueid == ""){
 			return $this->return_error(400,"parameter not correct.");
 		}
 		$inserting_data["ueid"] = $ueid;
-		
 		$inserting_data["_id"] = $data->key;
-		$this->commentModel->insert($inserting_data);
+		$this->commentModel->insert($inserting_data,$client);
 		return $this->return_success_json();
 	}
 	
