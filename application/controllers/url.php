@@ -25,11 +25,11 @@ class Url extends MY_Controller {
 			$this->load->library("simple_html_dom");
 			$content = @file_get_contents($url);
 			if(strpos($url,"udn.com") !== FALSE && strpos($url,"blog.udn.com") === FALSE){
-				$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
+				$content = @iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
 			}else if(strpos($content,'charset="big5"') !==FALSE || strpos($content,'charset=big5') !== FALSE){
-				$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
+				$content = @iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
 			}else if(strpos($url,"www.nownews.com") !== FALSE ){
-				$content = iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
+				$content = @iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
 			}
 			$oHtml = str_get_html($content );
 			
