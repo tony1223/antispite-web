@@ -264,8 +264,8 @@ class Comment extends MY_Controller {
 		$stats = $this->commentModel->get_reply_stats();
 		
 		$this->load->view('comment/confirm_replys',Array(
-			"pageTitle" => "確認跳針留言" ,
-			"selector" => "confirm",
+			"pageTitle" => "確認跳針留言回應" ,
+			"selector" => "confirm_reply",
 			"comment_replys" => $comment_replys,
 			"stats" => $stats
 		));

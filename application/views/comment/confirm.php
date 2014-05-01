@@ -20,14 +20,14 @@
 	.table-confirm-user{
 		position: fixed;
 		background: white;
-		width: auto;
-		height: 241px;
+		width: 300px;
+		height: 800px;
 		display: block;
 		overflow: auto;
 		top: 53px;
 		left: 0;
 		border: 1px solid red;
-		padding:20px;
+		padding: 10px;
 	}
 	
 	.page-controls{

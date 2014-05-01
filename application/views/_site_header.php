@@ -42,6 +42,7 @@
         <li <?php if($selector == "url"){ ?> class="active" <?php } ?>><a href="<?=site_url("url")?>">跳針網址</a></li>
         <?php if(is_login()){?>
         <li <?php if($selector == "confirm"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/confirm")?>">確認跳針留言</a></li>
+        <li <?php if($selector == "confirm_reply"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/reply_confirm")?>">確認跳針留言回應</a></li>
         <?php }?>
       </ul>
     </div><!-- /.navbar-collapse -->
