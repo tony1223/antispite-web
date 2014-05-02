@@ -9,6 +9,8 @@ function comment_user_link($comment,$key = "userkey"){
 		}else{
 			return "https://www.facebook.com/".$comment[$key];
 		}
+	}else if($comment["type"] == "YahooComment"){
+		return "https://profile.yahoo.com/".$comment[$key];
 	}
 	return "";
 }

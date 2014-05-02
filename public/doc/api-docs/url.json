@@ -1,0 +1,48 @@
+{
+    "basePath":"http://antispite.tonyq.org/api/url",
+    "swaggerVersion":"1.2",
+    "apiVersion":"1.0",
+    "resourcePath":"/url",
+    "apis":[
+        {
+            "path":"/index",
+            "description":"\u53d6\u5f97\u6240\u6709\u8df3\u91dd\u76f8\u95dc\u7db2\u5740\u5217\u8868",
+            "operations":[
+                {
+                    "method":"GET",
+                    "summary":"\u53d6\u5f97\u8df3\u91dd\u76f8\u95dc\u7db2\u5740\u5217\u8868\uff0c\u6ce8\u610f\uff1a\u4e0d\u4e00\u5b9a\u6709 title\u3002",
+                    "nickname":"index",
+                    "parameters":[
+                        {
+                            "paramType":"query",
+                            "name":"order",
+                            "type":"string",
+                            "required":false,
+                            "description":"'hot'(\u5f9e\u8df3\u91dd\u6578\u591a\u5230\u5c11) \u6216 'recent' (\u6642\u9593\u5f9e\u8fd1\u5230\u4e45)\uff0c\u9810\u8a2d\u662f recent\u3002"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path":"/view",
+            "description":"\u53d6\u5f97\u7279\u5b9a\u7db2\u5740\u5e95\u4e0b\u7684\u8df3\u91dd\u7559\u8a00",
+            "operations":[
+                {
+                    "method":"GET",
+                    "summary":"\u53d6\u5f97\u7279\u5b9a\u7db2\u5740\u7684\u8df3\u91dd\u4f7f\u7528\u8005\u76f8\u95dc\u8df3\u91dd\u7559\u8a00\u6e05\u55ae\u3002\u6ce8\u610f\u4e0d\u4e00\u5b9a\u6703\u6709 url_title/reply\u3002(createDate \u5728 FB \u662f\u767c\u8a00\u6642\u9593\uff0cyahoo \u5247\u662f\u7d00\u9304\u6642\u9593(\u62ff\u4e0d\u5230\u767c\u8a00\u6642\u9593..QQ))",
+                    "nickname":"view",
+                    "parameters":[
+                        {
+                            "paramType":"query",
+                            "name":"url",
+                            "type":"string",
+                            "required":true,
+                            "description":"\u7db2\u5740(\u5b8c\u6574\u7db2\u5740\uff0c\u5305\u542b http:// \u8ddf https://\uff0c\u53ef\u53c3\u8003 /index \u7684 url \u8cc7\u6599)"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

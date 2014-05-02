@@ -174,7 +174,18 @@ class CommentModel extends MONGO_MODEL {
 	public function get_bads_by_user($key){
 		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(500)->get($this->_collection);
 	}
+	
+	public function get_bads_by_user_all($key){
+		return $this->mongo_db->select(Array("_id","type","name","userkey","content","time","url","url_title",
+				"reply.url_title","reply.url","reply.content","reply.createDate"))->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->get($this->_collection);
+	}
 
+	public function get_recent_bads(){
+		return $this->mongo_db->select(Array("_id","type","name","userkey","content","time","url","url_title",
+				"reply.url_title","reply.url","reply.content","reply.createDate"))->orderBy("time","desc")
+				->where("status",CommentModel::STATUS_BAD)->limit(200)->get($this->_collection);
+	}
+	
 	public function get_all_by_user($key){
 		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->limit(500)->get($this->_collection);
 	}

@@ -69,6 +69,7 @@ class Url extends MY_Controller {
 				"urls" => $urls
 		));		
 	}
+	
 	public function hot(){
 		$this->load->model("urlModel");
 		$urls = $this->urlModel->get_hot_urls();

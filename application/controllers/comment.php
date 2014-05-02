@@ -145,7 +145,6 @@ class Comment extends MY_Controller {
 	}
 	
 	public function rank(){
-		$key = $this->input->get("key");
 		$this->load->model("commentModel");
 		$users = $this->commentModel->get_ranked_users(10);
 		if(count($users) == 0){
