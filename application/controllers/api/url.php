@@ -6,7 +6,7 @@
  *     apiVersion="1.0",
  *     swaggerVersion="1.2",
  *     resourcePath="/url",
- *     basePath="http://antispite/api/url"
+ *     basePath="http://antispite.tonyq.org/api/url"
  *
  * )
 */
