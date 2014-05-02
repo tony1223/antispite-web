@@ -119,28 +119,91 @@ foreach($comments as $comment){
 ?>
 <script>
 	window.datas = <?=json_encode($data)?>;
-	for(var i =0 ; i < window.datas.length;++i){
-		window.datas[i][0] = new Date(window.datas[i][0]);
-	}
+
 </script>
 <?php function js_section(){ ?>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load('visualization', '1', {'packages':['annotatedtimeline']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('datetime', '時間');
-        data.addColumn('number', '字數');
-        data.addColumn('string', '內容');
-        
-        data.addRows(window.datas);
+<script type="text/javascript">
+//width 取得DIV寬度會較好
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 1024 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
-        chart.draw(data, {displayAnnotations: true});
-      }
-    </script>
+var x = d3.time.scale().range([0, width]);
 
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select(".chart_div").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+
+  x.domain(d3.extent(window.datas, function(d) { return new Date(d[0]); })).nice();
+  y.domain(d3.extent(window.datas, function(d) { return d[1]; })).nice();
+
+
+var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+var formatTime = d3.time.format("%Y-%m-%d %H:%M:%S");
+  svg.selectAll(".dot")
+      .data(window.datas)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("r", 10)
+      .attr("cx", function(d) { return x(new Date(d[0]) ); })
+      .attr("cy", function(d) { return y(d[1]); })
+      .on("mouseover",function(d){           
+          div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+          div .html(formatTime(new Date(d[0])) + "<br/>字數:"  + d[1]+"<br/>"+d[2])  
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");  
+      })
+      .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+      })
+      .style("fill", function(d) { return color(d[1]); });
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text("發文時間");
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("字數")
+</script>
 <?php if(is_login()){?>
 	<script>
 		$(function(){
