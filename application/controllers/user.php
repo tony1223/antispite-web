@@ -14,6 +14,47 @@ class User extends MY_Controller {
 				"selector" => "login"
 		));
 	}
+	
+	public function reigster(){
+		if(is_login()){
+			redirect(site_url("/"));
+			return true;
+		}
+		
+		if(is_login()){
+			redirect(site_url("/"));
+			return true;
+		}
+		
+		$this->load->view('user/regist',Array(
+				"pageTitle" => "管理者註冊" ,
+				"selector" => "login"
+		));
+	}
+	
+	public function registering(){
+		if(is_login()){
+			redirect(site_url("/"));
+			return true;
+		}
+		
+		$account = $this->input->post("account");
+		$pwd = $this->input->post("password");
+		
+		if($account == "" || $pwd == ""){
+			redirect(site_url("user/login"));
+			return true;
+		}
+		
+		$this->load->model("userModel");
+		$success = $this->userModel->insert($account, $pwd);
+		
+		if($success){
+			echo "註冊完成";
+		}else{
+			echo "帳號重複";
+		}
+	}
 
 	public function logining(){
 		if(is_login()){
@@ -30,7 +71,7 @@ class User extends MY_Controller {
 		}
 	
 		$this->load->model("userModel");
-		$user = $this->userModel->find_user($account, $pwd);
+		$user = $this->userModel->find_valid_user($account, $pwd);
 		if($user == null){
 			redirect(site_url("user/login"));
 			return true;
