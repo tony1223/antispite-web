@@ -21,11 +21,6 @@ class User extends MY_Controller {
 			return true;
 		}
 		
-		if(is_login()){
-			redirect(site_url("/"));
-			return true;
-		}
-		
 		$this->load->view('user/regist',Array(
 				"pageTitle" => "管理者註冊" ,
 				"selector" => "login"
