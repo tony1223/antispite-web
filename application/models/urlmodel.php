@@ -28,10 +28,35 @@ class UrlModel extends MONGO_MODEL {
 	}
 	
 
-	public function get_urls(){
-		return $this->mongo_db->whereGt("count",0)->orderBy("createDate","desc")->get($this->_collection);
+	public function get_urls($order = "recent"){
+		
+		//TODO:fix this
+		$query = $this->mongo_db->whereGt("count",0)->limit(10);
+		
+		if($order =="recent" ){
+			$query->orderBy("createDate","desc");
+		}else{
+			$query->orderBy(Array("count" => "desc","createDate"=>"desc"));
+		}
+		
+		return $query->get($this->_collection);
 	}
 	
+	public function get_urls_for_api($order = "recent"){
+	
+		//TODO:fix this
+		$query = $this->mongo_db->select(Array("_id","createDate","title","count"))->whereGt("count",0)->limit(10);
+	
+		if($order =="recent" ){
+			$query->orderBy("createDate","desc");
+		}else{
+			$query->orderBy(Array("count" => "desc","createDate"=>"desc"));
+		}
+	
+		return $query->get($this->_collection);
+	}
+	
+
 	public function get($url){
 		$results = $this->mongo_db->where("_id",$url)->get($this->_collection);
 		

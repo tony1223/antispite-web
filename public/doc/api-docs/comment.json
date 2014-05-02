@@ -1,0 +1,50 @@
+{
+    "basePath":"http://localhost/antispite/api/comment",
+    "swaggerVersion":"1.2",
+    "apiVersion":"1.0",
+    "resourcePath":"/comment",
+    "apis":[
+        {
+            "path":"/rank",
+            "description":"\u53d6\u5f97\u8df3\u91dd\u4f7f\u7528\u8005\u6e05\u55ae",
+            "operations":[
+                {
+                    "method":"GET",
+                    "summary":"\u53d6\u5f97\u6240\u6709\u8df3\u91dd\u6578\u8d85\u904e10 \u7684\uff0c\u4ee5\u8df3\u91dd\u6578\u6392\u5e8f\u3002",
+                    "nickname":"rank"
+                }
+            ]
+        },
+        {
+            "path":"/recent",
+            "description":"\u53d6\u5f97\u6700\u8fd1\u5169\u767e\u7b46\u8df3\u91dd\u7559\u8a00\u6e05\u55ae",
+            "operations":[
+                {
+                    "method":"GET",
+                    "summary":"\u53d6\u5f97\u6700\u8fd1\u5169\u767e\u7b46\u8df3\u91dd\u7559\u8a00\u6e05\u55ae\u3002(createDate \u5728 FB \u662f\u767c\u8a00\u6642\u9593\uff0cyahoo \u5247\u662f\u7d00\u9304\u6642\u9593(\u62ff\u4e0d\u5230\u767c\u8a00\u6642\u9593..QQ))",
+                    "nickname":"recent"
+                }
+            ]
+        },
+        {
+            "path":"/user",
+            "description":"\u53d6\u5f97\u8df3\u91dd\u4f7f\u7528\u8005\u8df3\u91dd\u7559\u8a00\u6e05\u55ae\u3002\u6ce8\u610f\u4e0d\u4e00\u5b9a\u6703\u6709 url_title/reply\u3002",
+            "operations":[
+                {
+                    "method":"GET",
+                    "summary":"\u53d6\u5f97\u8a72\u4f7f\u7528\u8005\u6240\u6709\u8df3\u91dd\u8a55\u8ad6 (createDate \u5728 FB \u662f\u767c\u8a00\u6642\u9593\uff0cyahoo \u5247\u662f\u7d00\u9304\u6642\u9593(\u62ff\u4e0d\u5230\u767c\u8a00\u6642\u9593..QQ))",
+                    "nickname":"user",
+                    "parameters":[
+                        {
+                            "paramType":"query",
+                            "name":"userID",
+                            "type":"string",
+                            "required":true,
+                            "description":"\u4f7f\u7528\u8005 ID\uff0c\u53ef\u4ee5\u5f9e rank \u6216\u5176\u4ed6 api \u53d6\u5f97"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
