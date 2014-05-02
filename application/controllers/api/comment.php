@@ -6,7 +6,7 @@
  *     apiVersion="1.0",
  *     swaggerVersion="1.2",
  *     resourcePath="/comment",
- *     basePath="http://localhost/antispite/api/comment"
+ *     basePath="http://antispite/api/comment"
  *
  * )
 */
