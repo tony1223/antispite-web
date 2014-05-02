@@ -122,6 +122,7 @@ foreach($comments as $comment){
 
 </script>
 <?php function js_section(){ ?>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <script type="text/javascript">
 //width 取得DIV寬度會較好
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
