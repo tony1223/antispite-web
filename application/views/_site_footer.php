@@ -1,7 +1,11 @@
 	<div class="footer">
       <div class="container" style="padding-bottom:20px;">
     	 <hr />
-    	 <p>Powered by TonyQ, welcome to fork or contribute on Github(<a href="https://github.com/tony1223/antispite-web" target="_blank">Website</a>/<a href="https://github.com/tony1223/antispite-extension" target="_blank">Extension</a>). </p>
+    	 <p>Powered by TonyQ, welcome to fork or contribute on our Github projects
+    	 	(<a href="https://github.com/tony1223/antispite-web" target="_blank">Website</a>/
+    	 	 <a href="https://github.com/tony1223/antispite-extension" target="_blank">Chrome Extension</a> /
+    	 	 <a href="https://github.com/tony1223/antispite-addon" target="_blank">Firefox Addon</a>  
+    	 	). </p>
       </div>
     </div>
 

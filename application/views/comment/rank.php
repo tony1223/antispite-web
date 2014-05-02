@@ -26,7 +26,7 @@
 				FB 留言
 				<?php }?>
 			</td>	
-			<td><a target="_blank" href="<?=h(comment_user_link($user,"user"))?>"><?=h($user["name"]) ?></a></td>
+			<td><a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["user"])) ?>"><?=h($user["name"]) ?></a></td>
 			<td><?=h($user["count"])?> </td>
 			<td><a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["user"])) ?>">跳針留言清單</a></td>
 			<td><?=_display_date_with_fulldate_ms($user["last_update"]) ?></td>
