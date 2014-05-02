@@ -33,7 +33,7 @@
 		</tr>
 		<?php }?>
 	</table>
-	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
+	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary install_extension">馬上安裝跳針留言小幫手</a></p>
 </div>
 
 <?php include(__DIR__."/../_site_footer.php")?>
