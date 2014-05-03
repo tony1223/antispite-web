@@ -224,6 +224,14 @@ class Comment extends MY_Controller {
 		$users = Array();
 		foreach($posts as $post){
 			$post_ids[] = $post["key"];
+			try{
+				if($strpos($post["user"],"people/") !== FALSE){
+					$keys = explode("/",$post["user"]);
+					$post["user"]= "?id=".$keys[2];
+				}
+			}catch(Exception $e){
+			
+			}
 			$users[$post["user"]] = 1;
 		}
 		
@@ -309,6 +317,19 @@ class Comment extends MY_Controller {
 		return $this->return_success_json();
 	}
 	
+	public function review_userkey(){
+		$inserting_data = Array("userkey" => "people/陳瘦子/100004045310734" , "type" => "FBComment");
+		 
+		try{
+			if($inserting_data["type"] == "FBComment" && strpos($inserting_data["userkey"],"people/") !== FALSE){
+				$keys = explode("/",$inserting_data["userkey"]);
+				$inserting_data["userkey"]= "?id=".$keys[2];
+			}
+		}catch(Exception $e){
+				
+		}
+		var_dump($inserting_data["userkey"]);
+	}
 	
 	public function reply_confirm(){
 		if(!is_login()){
