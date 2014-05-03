@@ -225,7 +225,7 @@ class Comment extends MY_Controller {
 		foreach($posts as $post){
 			$post_ids[] = $post["key"];
 			try{
-				if($strpos($post["user"],"people/") !== FALSE){
+				if(strpos($post["user"],"people/") !== FALSE){
 					$keys = explode("/",$post["user"]);
 					$post["user"]= "?id=".$keys[2];
 				}
