@@ -36,7 +36,7 @@
 <a class="navbar-brand" href="<?=site_url("/")?>">反跳針留言 </a>
 </div>
 <div class="collapse navbar-collapse navbar-ex1-collapse">
-    <ul class="nav navbar-nav pull-right">
+    <ul class="nav navbar-nav ">
         <li <?php if($selector == "intro"){ ?> class="active" <?php } ?>><a href="<?=site_url("/")?>">說明</a></li>
         <li <?php if($selector == "download"){ ?> class="active" <?php } ?>><a href="<?=site_url("extension/download")?>">跳針留言小幫手</a></li>
         <li <?php if($selector == "comments"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/")?>">瀏覽跳針留言</a></li>
