@@ -25,16 +25,18 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand" href="<?=site_url("/")?>">反跳針留言 </a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+    <span class="sr-only">展開選單</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="<?=site_url("/")?>">反跳針留言 </a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav pull-right">
         <li <?php if($selector == "intro"){ ?> class="active" <?php } ?>><a href="<?=site_url("/")?>">說明</a></li>
         <li <?php if($selector == "download"){ ?> class="active" <?php } ?>><a href="<?=site_url("extension/download")?>">跳針留言小幫手</a></li>
         <li <?php if($selector == "comments"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/")?>">瀏覽跳針留言</a></li>
@@ -46,8 +48,6 @@
         <li <?php if($selector == "confirm"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/confirm")?>">確認跳針留言</a></li>
         <li <?php if($selector == "confirm_reply"){ ?> class="active" <?php } ?>><a href="<?=site_url("comment/reply_confirm")?>">確認跳針留言回應</a></li>
         <?php }?>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
+    </ul>   
+</div>
+</div>
