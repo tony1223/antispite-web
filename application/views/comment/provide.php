@@ -39,6 +39,7 @@
 					<?php }else{?>
 						<?=h($comment["name"]) ?>&nbsp;
 					<?php }?>
+					 (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>) 
 					<br />
 					留言網頁：
 					<a class="news-title" target="_blank"  href="<?=h($comment["url"]) ?>">
