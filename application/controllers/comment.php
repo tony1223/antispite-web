@@ -279,6 +279,14 @@ class Comment extends MY_Controller {
 		$this->load->model("commentModel");
 		$this->load->model("urlModel");
 		
+		try{
+			if($inserting_data["type"] == "FBComment" && strpos($inserting_data["userkey"],"people/") !== FALSE){
+				$inserting_data["userkey"]= "?id=".explode("/",$inserting_data["userkey"])[2];
+			}
+		}catch(Exception $e){
+			
+		}
+		
 		$inserting_data["url_title"] = $this->urlModel->get_url_title($inserting_data["url"]);
 		
 		if($this->input->post("exact") == "false"){
