@@ -27,9 +27,7 @@
 		</tr>
 		<tr>
 			<td rowspan="2" width="150px">
-				<?php if($comment["type"] == "FBComment"){ ?>
-				FB 留言
-				<?php }?>
+				<?=get_comment_type_description($comment["type"])?>
 			</td>	
 			<td>
 				<p>

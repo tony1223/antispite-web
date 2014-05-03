@@ -22,9 +22,7 @@
 		<?php foreach($users as $user){?>
 		<tr>
 			<td>
-				<?php if($user["type"] == "FBComment"){ ?>
-				FB 留言
-				<?php }?>
+				<?=get_comment_type_description($user["type"])?>
 			</td>	
 			<td><a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["user"])) ?>"><?=h($user["name"]) ?></a></td>
 			<td><?=h($user["count"])?> </td>

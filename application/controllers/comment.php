@@ -65,8 +65,11 @@ class Comment extends MY_Controller {
 			return show_404();
 		}
 		
+		if($url =="" && $info == ""){
+			return redirect(site_url("comment/thanks/?key=".$id));
+		}
+		
 		$this->commentModel->insert_reply($id,$url,$info);
-	
 		redirect(site_url("comment/thanks/?key=".$id));
 	}
 	
