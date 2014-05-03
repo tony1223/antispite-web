@@ -281,7 +281,8 @@ class Comment extends MY_Controller {
 		
 		try{
 			if($inserting_data["type"] == "FBComment" && strpos($inserting_data["userkey"],"people/") !== FALSE){
-				$inserting_data["userkey"]= "?id=".explode("/",$inserting_data["userkey"])[2];
+				$keys = explode("/",$inserting_data["userkey"]);
+				$inserting_data["userkey"]= "?id=".$keys[2];
 			}
 		}catch(Exception $e){
 			
@@ -307,6 +308,7 @@ class Comment extends MY_Controller {
 		$this->commentModel->insert($inserting_data,$client);
 		return $this->return_success_json();
 	}
+	
 	
 	public function reply_confirm(){
 		if(!is_login()){
