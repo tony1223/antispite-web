@@ -227,7 +227,7 @@ class Comment extends MY_Controller {
 			try{
 				if(strpos($post["user"],"people/") !== FALSE){
 					$keys = explode("/",$post["user"]);
-					$post["user"]= "?id=".$keys[2];
+					$post["user"]= "id=".$keys[2];
 				}
 			}catch(Exception $e){
 			
@@ -290,7 +290,7 @@ class Comment extends MY_Controller {
 		try{
 			if($inserting_data["type"] == "FBComment" && strpos($inserting_data["userkey"],"people/") !== FALSE){
 				$keys = explode("/",$inserting_data["userkey"]);
-				$inserting_data["userkey"]= "?id=".$keys[2];
+				$inserting_data["userkey"]= "id=".$keys[2];
 			}
 		}catch(Exception $e){
 			
