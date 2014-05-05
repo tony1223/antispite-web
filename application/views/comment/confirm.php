@@ -60,8 +60,10 @@
 	
 	<?php 
 	$confirming_users = Array();
-	$keywords = Array("民進黨","國民黨","綠吱","藍蛆","暴民","林飛帆","帆神","學運",
-			"大腸花","太陽花","馬英九","小英","冥進黨","狗民黨","中共","日本","共產黨","打死");
+	$keywords = Array();
+	foreach($tokens as $token){
+		$keywords[] = Array("id"=>$token["_id"],"count" => 0 );
+	}
 	foreach($comments as $comment){
 		if(!isset($confirming_users[$comment["userkey"]])){
 			$confirming_users[$comment["userkey"]] = Array(
@@ -74,12 +76,13 @@
 		}
 		$confirming_users[$comment["userkey"]]["count"] ++;
 		
-		foreach($keywords as $keyword){
-			if(strpos($comment["content"],$keyword) !== False){
-				if(!isset($confirming_users[$comment["userkey"]]["keywords"][$keyword])){
-					$confirming_users[$comment["userkey"]]["keywords"][$keyword] = 0;
+		foreach($keywords as &$keyword){
+			if(strpos($comment["content"],$keyword["id"]) !== False){
+				if(!isset($confirming_users[$comment["userkey"]]["keywords"][$keyword["id"]])){
+					$confirming_users[$comment["userkey"]]["keywords"][$keyword["id"]] = 0;
 				}
-				$confirming_users[$comment["userkey"]]["keywords"][$keyword]++;
+				$confirming_users[$comment["userkey"]]["keywords"][$keyword["id"]]++;
+				$keyword["count"] ++;
 			}
 		};
 	} 
@@ -103,7 +106,7 @@
 		?>
 		<tr >
 			<td>
-				<a href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>
+				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>
 				
 					<?php if($user["confirm_count"] >0 ){?>
 					/ <span style='color:red;'><?=$user["confirm_count"]?></span>
@@ -116,6 +119,16 @@
 			</td>
 		</tr>
 		<?php }?>
+		<tr>
+			<td colspan="2">
+			<b>關鍵字清單</b><br />
+			<?php foreach($keywords as $keyword){?>
+				<?php if($keyword["count"] > 0 ){?>
+				<?=h($keyword["id"])?>:<?=h($keyword["count"])?>,<br />
+				<?php }?>
+			<?php }?>
+			</td>
+		</tr>
 	</table>
 	<table class="table table-bordered table-confirm">
 		<tr class="comment-row-head">
@@ -134,7 +147,7 @@
 				<?=get_comment_type_description($comment["type"])?>
 			</td>	
 			<td>
-				<a name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>) <br />
+				<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>) <br />
 				<?php if($comment["count"] >0 ){?>
 					<span style='color:red;'>目前跳針指數 <?=$comment["count"]?></span>
 				<?php }?>
@@ -208,7 +221,7 @@
 		</tr>			
 		<?php }?>
 	</table>
-
+	<a href="<?=site_url("comment/add_token")?>" target="_blank">增加新 token 。</a>
 </div>
 
 <?php function js_section(){?>
@@ -218,6 +231,11 @@
 			$(".comment-handle").show();
 			$(".rules").text("全部");
 		});
+
+		$(".user-link").click(function(){
+			$(".comment-handle").show();
+		});
+		
 		$(document).on("keydown",function(e){
 			if(e.keyCode == 27){
 				$(".page-controls .btn-reset").click();

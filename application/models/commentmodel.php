@@ -10,6 +10,7 @@ class CommentModel extends MONGO_MODEL {
 	var $_collection_record = "comment_record";
 	var $_collection_log = "comment_log";
 	var $_collection_urls = "urls";
+	var $_collection_tokens = "comment_tokens";
 	
 	var $_collection_reply = "comment_reply";
 	
@@ -26,8 +27,18 @@ class CommentModel extends MONGO_MODEL {
 		parent::__construct();
 	}
 	
+	public function get_tokens(){
+		return $this->mongo_db->get($this->_collection_tokens);
+	}
+	
+	public function insert_token($token){
+		$this->mongo_db->insert($this->_collection_tokens,Array("_id" => $token));
+	}
+	
 	public function get_confirming($status = 0,$page = 0){
-		$pagesize = 500;
+		
+		//TODO fix this
+		$pagesize = 10;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
 		if($status != -1){
 			$query->where("status",$status);

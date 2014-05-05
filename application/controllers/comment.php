@@ -11,13 +11,39 @@ class Comment extends MY_Controller {
 		$this->load->model("commentModel");
 		$comments = $this->commentModel->get_confirming(intval($type,10),intval($page,10));
 		$stats = $this->commentModel->get_stats();
+		$tokens = $this->commentModel->get_tokens();
 		
 		$this->load->view('comment/confirm',Array(
 				"pageTitle" => "確認跳針留言" ,
 				"selector" => "confirm",
 				"comments" => $comments,
-				"stats" => $stats
+				"stats" => $stats,
+				"tokens" => $tokens
 		));		
+	}
+	
+	public function add_token(){
+		if(!is_login()){
+			redirect(site_url("user/login"));
+			return true;
+		}
+		$token = $this->input->post("token");
+		$this->load->model("commentModel");
+		if(!empty($token)){
+			$tokens = explode(",",$token);
+			foreach($tokens as $toInsertedToken){
+				$this->commentModel->insert_token($toInsertedToken);
+			}
+		}
+		
+		$tokens = $this->commentModel->get_tokens();
+		
+		$this->load->view('comment/add_token',Array(
+				"pageTitle" => "跳針留言清單" ,
+				"selector" => "comments",
+				"tokens" => $tokens
+		));
+		
 	}
 
 	public function index(){
