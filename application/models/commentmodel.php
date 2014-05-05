@@ -292,13 +292,15 @@ class CommentModel extends MONGO_MODEL {
 		$exist = $this->mongo_db->select("status")->where("_id",$data["key"])->get($this->_collection);
 		$now = time() * 1000.0;
 		if(count($exist) == 0 ){
-			$data["reporters"] = Array($data["ueid"]);
 			$data["createDate"] = $now;
-			
+
+			$data["creator"] = $data["ueid"]; 
 			if($check){
 				$data["status"] = CommentModel::STATUS_CHECK;
+				$data["reporters"] = Array();
 			}else{
 				$data["status"] = CommentModel::STATUS_WAIT;
+				$data["reporters"] = Array($data["ueid"]);
 			}
 			$this->mongo_db->insert($this->_collection,$data);			
 		}else if(!$check){
