@@ -264,7 +264,9 @@ class Comment extends MY_Controller {
 		$this->load->model("commentModel");
 		$bad_ids = $this->commentModel->check_ids($post_ids);
 		$bad_users = $this->commentModel->check_users(array_keys($users));
-
+		
+		$check_ids = $this->commentModel->check_id_not_exists($post_ids);
+		
 		$client = "chrome";
 		if($this->input->post("client") == "ff"){
 			$client = "ff";
@@ -276,7 +278,7 @@ class Comment extends MY_Controller {
 		//all_post_ids.push({key:nowpost.key,type:nowpost.type,user:nowpost.userkey});
 
 		
-		return $this->return_success_json(Array("bad_posts" => $bad_ids,"bad_users" => $bad_users));
+		return $this->return_success_json(Array("bad_posts" => $bad_ids,"bad_users" => $bad_users, "check_ids" => $check_ids));
 	}
 	
 	public function report(){
@@ -328,6 +330,11 @@ class Comment extends MY_Controller {
 			$inserting_data["time_exact"] = false;
 		}
 		
+		$check = false;
+		if(isset($data->check) && $data->check == "true"){
+			$check = true;
+		}
+		
 		$client = "chrome";
 		if($this->input->post("client") == "ff"){
 			$client = "ff";
@@ -339,7 +346,57 @@ class Comment extends MY_Controller {
 		}
 		$inserting_data["ueid"] = $ueid;
 		$inserting_data["_id"] = $data->key;
-		$this->commentModel->insert($inserting_data,$client);
+		$this->commentModel->insert($inserting_data,$client,$check);
+		return $this->return_success_json();
+	}
+	
+	public function report_check(){
+		header("Access-Control-Allow-Origin: https://www.facebook.com");
+		header('Content-Type: application/json; charset=utf-8');
+	
+		$data = json_decode($this->input->post("data"));
+		if($data == null){
+			return $this->return_error(400,"parameter not correct.");
+		}
+		$keys = Array("type","name","userkey","content","time","key","url");
+	
+		$inserting_data = Array();
+		foreach ($keys as $key){
+			if(!isset($data->$key)){
+				return $this->return_error(400,"parameter not correct. [".$key."] ");
+			}
+			$inserting_data[$key] = $data->$key;
+		}
+		$this->load->model("commentModel");
+		$this->load->model("urlModel");
+	
+		try{
+			if($inserting_data["type"] == "FBComment" && strpos($inserting_data["userkey"],"people/") !== FALSE){
+				$keys = explode("/",$inserting_data["userkey"]);
+				$inserting_data["userkey"]= "id=".$keys[2];
+			}
+		}catch(Exception $e){
+				
+		}
+	
+		$inserting_data["url_title"] = $this->urlModel->get_url_title($inserting_data["url"]);
+	
+		if($this->input->post("exact") == "false"){
+			$inserting_data["time_exact"] = false;
+		}
+	
+		$client = "chrome";
+		if($this->input->post("client") == "ff"){
+			$client = "ff";
+		}
+	
+		$ueid = $this->input->post("ueid");
+		if($ueid == ""){
+			return $this->return_error(400,"parameter not correct.");
+		}
+		$inserting_data["ueid"] = $ueid;
+		$inserting_data["_id"] = $data->key;
+		$this->commentModel->insert($inserting_data,$client,true);
 		return $this->return_success_json();
 	}
 	

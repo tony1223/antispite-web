@@ -14,6 +14,7 @@ class CommentModel extends MONGO_MODEL {
 	
 	var $_collection_reply = "comment_reply";
 	
+	const STATUS_CHECK = -1;
 	const STATUS_WAIT = 0;
 	const STATUS_BAD = 1;
 	const STATUS_OK = 2;
@@ -170,6 +171,17 @@ class CommentModel extends MONGO_MODEL {
 		return $this->mongo_db->select(Array("_id","reply.url_title","reply.url","reply.content","reply.createDate"))->whereIn("_id",$post_ids)->where("status",CommentModel::STATUS_BAD)->get($this->_collection);
 	}
 	
+	public function check_id_not_exists($post_ids){
+		$results = Array();
+		foreach($post_ids as $id){ 
+			$id_count = $this->mongo_db->where("_id",$id)->count($this->_collection);
+			if($id_count <= 0 ){
+				$results[] = $id;
+			} 
+		}
+		return $results;
+	}
+	
 	public function check_users($users){
 		$results = Array();
 		foreach($users as $user){
@@ -265,7 +277,7 @@ class CommentModel extends MONGO_MODEL {
 		return $query->get($this->_collection_user);
 	}
 	
-	public function insert($data,$client = "chrome"){
+	public function insert($data,$client = "chrome",$check = false){
 		
 // 		{
 // 			type:"FBComment",
@@ -277,15 +289,24 @@ class CommentModel extends MONGO_MODEL {
 // 			url:url,
 // 			ueid:chrome.runtime.id
 // 		}
-		$exist = $this->mongo_db->where("_id",$data["key"])->count($this->_collection);
+		$exist = $this->mongo_db->select("status")->where("_id",$data["key"])->get($this->_collection);
 		$now = time() * 1000.0;
-		if($exist == 0 ){
+		if(count($exist) == 0 ){
 			$data["reporters"] = Array($data["ueid"]);
 			$data["createDate"] = $now;
-			$data["status"] = CommentModel::STATUS_WAIT;
+			
+			if($check){
+				$data["status"] = CommentModel::STATUS_CHECK;
+			}else{
+				$data["status"] = CommentModel::STATUS_WAIT;
+			}
 			$this->mongo_db->insert($this->_collection,$data);			
-		}else{
-			$this->mongo_db->where("_id",$data["key"])->addToSet("reporters",$data["ueid"])->update($this->_collection);
+		}else if(!$check){
+			$query = $this->mongo_db->where("_id",$data["key"])->addToSet("reporters",$data["ueid"]);
+			if($exist[0]["status"] == CommentModel::STATUS_CHECK ){
+				$query->set("status",  CommentModel::STATUS_WAIT);
+			}
+			$query->update($this->_collection);
 		}
 		
 		$this->mongo_db->insert($this->_collection_record, 
@@ -294,7 +315,8 @@ class CommentModel extends MONGO_MODEL {
 				"target" => $data["key"],
 				"type" => $data["type"],
 				"userkey" => $data["userkey"],
-				"client" => $client 
+				"client" => $client ,
+				"check" => $check
 			));
 	}
 	
