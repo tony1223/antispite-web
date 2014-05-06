@@ -42,7 +42,7 @@ class CommentModel extends MONGO_MODEL {
 			->offset($page * $pagesize)
 			->limit($pagesize);
 		$query->where("content",new MongoRegex('/'+$keyword+'/i'));
-		$query->whereIn("status",Array(0,1));
+		$query->whereIn("status",Array(0,-1));
 		$items=  $query->get($this->_collection);
 		$users = Array();
 		foreach($items as &$item){
