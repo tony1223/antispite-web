@@ -375,7 +375,7 @@
 			$(btn).addClass("btn-wanring");
 			var type = $(btn).data("type");
 			$.get(btn.href,function(){
-				$(btn).removeClass("controls-0").removeClass("controls-1")
+				$(btn).parents(".controls").removeClass("controls-0").removeClass("controls-1")
 					.removeClass("controls-2").removeClass("controls-3").removeClass("controls-4")
 					.addClass("controls-"+type);
 				//type
