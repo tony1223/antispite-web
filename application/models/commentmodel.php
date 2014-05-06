@@ -37,12 +37,12 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function search_check($keyword,$page){
-		$pagesize = 600;
+		$pagesize = 200;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )
 			->offset($page * $pagesize)
 			->limit($pagesize);
-		$query->where("content",new MongoRegex('/'+$keyword+'/i'));
-		$query->whereIn("status",Array(0,-1));
+		$query->whereLike("content" , $keyword);
+		$query->whereIn("status",Array(CommentModel::STATUS_CHECK,CommentModel::STATUS_WAIT));
 		$items=  $query->get($this->_collection);
 		$users = Array();
 		foreach($items as &$item){

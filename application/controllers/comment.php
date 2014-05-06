@@ -30,8 +30,6 @@ class Comment extends MY_Controller {
 		$search = $this->input->get("q");
 		$page = $this->input->get("p");
 		
-		
-		
 		$this->load->model("commentModel");
 		$comments = Array();
 		
