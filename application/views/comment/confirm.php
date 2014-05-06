@@ -41,6 +41,10 @@
 		padding:20px;
 		border: 1px solid red;
 	}
+	
+	.control-focus{
+		border:2px solid red;
+	}
 </style>
 <div class="container">
 	
@@ -246,6 +250,47 @@
 				return true;
 			}
 		});
+
+		var c_index = 0 ;
+		var controls = $(".controls");
+		controls.on("mouseenter",function(){
+			var ind = controls.index(this);
+			c_index = ind;
+			var now = controls.eq(c_index);
+			$(".control-focus").removeClass("control-focus");
+			now.addClass("control-focus");
+		});
+		$(document).on("keydown",function(e){
+			if(e.keyCode == 38 || e.keyCode == 40){
+				if(e.keyCode == 38){ //up
+					c_index --;
+					if(c_index < 0 ){
+						c_index = 0;
+					}
+				}else if(e.keyCode == 40){ //down
+					c_index = (c_index + 1 ) % controls.length ;
+				}
+				var now = controls.eq(c_index);
+				$(".control-focus").removeClass("control-focus");
+				now.addClass("control-focus");
+				$(window).scrollTop(now.offset().top - 200);
+			}
+			var now = controls.eq(c_index);
+
+			if(e.keyCode == 65){ //a
+				now.find(".btn-type-2").click();
+			}else if(e.keyCode == 83){ //s
+				now.find(".btn-type-1").click();
+			}else if(e.keyCode == 68){ //d
+				now.find(".btn-type-0").click();
+			}else if(e.keyCode == 81){ //q
+				now.find(".btn-confirm-all:eq(0)").click();
+			}else if(e.keyCode == 87){ //w
+				now.find(".btn-confirm-all:eq(1)").click();
+			}
+			console.log(e.keyCode);
+		});
+		
 
 		$(".keywords").click(function(){
 			$(".page-controls .keyword").val($(this).data("keyword"));
