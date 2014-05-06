@@ -49,7 +49,7 @@
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
 	
 	<hr />
-	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
+	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題,<?=$stats[3]?> 其他.
 	<hr />
 	<div class="page-controls">
 		<input type="text" class="keyword" value="" />

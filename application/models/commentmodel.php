@@ -36,6 +36,16 @@ class CommentModel extends MONGO_MODEL {
 		$this->mongo_db->insert($this->_collection_tokens,Array("_id" => $token));
 	}
 	
+	public function search_check($keyword,$page){
+		$pagesize = 600;
+		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )
+			->offset($page * $pagesize)
+			->limit($pagesize);
+		$query->where("content",new MongoRegex('/'+$keyword+'/i'));
+		$query->whereIn("status",Array(0,1));
+		return $this->query->get($this->_collection);
+	}
+	
 	public function get_confirming($status = 0,$page = 0){
 		
 		$pagesize = 600;
@@ -241,8 +251,9 @@ class CommentModel extends MONGO_MODEL {
 		$bad = $this->mongo_db->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
 		$ok = $this->mongo_db->where("status",CommentModel::STATUS_OK)->count($this->_collection);
 		$wait = $this->mongo_db->where("status",CommentModel::STATUS_WAIT)->count($this->_collection);
+		$check = $this->mongo_db->where("status",CommentModel::STATUS_CHECK)->count($this->_collection);
 		
-		return Array($wait,$bad,$ok);
+		return Array($wait,$bad,$ok,$check);
 	}
 	
 	public function get_reply_stats(){

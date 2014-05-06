@@ -22,6 +22,34 @@ class Comment extends MY_Controller {
 		));		
 	}
 	
+	public function search(){
+		if(!is_login()){
+			redirect(site_url("user/login"));
+			return true;
+		}
+		$search = $this->input->get("q");
+		$page = $this->input->get("p");
+		
+		
+		
+		$this->load->model("commentModel");
+		$comments = Array();
+		
+		if(! empty($search) ){
+			$comments = $this->commentModel->search_check($search,intval($page,10));
+		}
+		$stats = $this->commentModel->get_stats();
+		$tokens = $this->commentModel->get_tokens();
+	
+		$this->load->view('comment/confirm',Array(
+				"pageTitle" => "確認跳針留言" ,
+				"selector" => "confirm",
+				"comments" => $comments,
+				"stats" => $stats,
+				"tokens" => $tokens
+		));
+	}
+	
 	public function add_token(){
 		if(!is_login()){
 			redirect(site_url("user/login"));
