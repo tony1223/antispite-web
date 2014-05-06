@@ -43,7 +43,7 @@ class CommentModel extends MONGO_MODEL {
 			->limit($pagesize);
 		$query->where("content",new MongoRegex('/'+$keyword+'/i'));
 		$query->whereIn("status",Array(0,1));
-		return $this->query->get($this->_collection);
+		return $query->get($this->_collection);
 	}
 	
 	public function get_confirming($status = 0,$page = 0){
