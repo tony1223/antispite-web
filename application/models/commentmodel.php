@@ -43,7 +43,20 @@ class CommentModel extends MONGO_MODEL {
 			->limit($pagesize);
 		$query->where("content",new MongoRegex('/'+$keyword+'/i'));
 		$query->whereIn("status",Array(0,1));
-		return $query->get($this->_collection);
+		$items=  $query->get($this->_collection);
+		$users = Array();
+		foreach($items as &$item){
+			if(!isset($users[$item["userkey"]])){
+				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
+				if(count($result) <= 0){
+					$users[$item["userkey"]] = 0;
+				}else{
+					$users[$item["userkey"]] = $result[0]["count"];
+				}
+			}
+			$item["count"] = $users[$item["userkey"]];
+		}
+		return $items;
 	}
 	
 	public function get_confirming($status = 0,$page = 0){
