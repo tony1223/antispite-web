@@ -41,6 +41,14 @@
 		padding:20px;
 		border: 1px solid red;
 	}
+	
+	.control-focus{
+		border:2px solid red;
+	}
+	
+	.control-1{
+		border:2px solid gray;
+	}
 </style>
 <div class="container">
 	
@@ -49,7 +57,7 @@
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
 	
 	<hr />
-	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題.
+	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題,<?=$stats[3]?> 其他.
 	<hr />
 	<div class="page-controls">
 		<input type="text" class="keyword" value="" />
@@ -160,7 +168,7 @@
 				<?php }?>
 			</td>
 		</tr>
-		<tr class="controls comment-handle" data-url='<?=$comment["url"]?>' data-user='<?=$comment["userkey"]?>' data-key="<?=h($comment["userkey"])?>">
+		<tr class="controls control-<?=$comment["status"]?> comment-handle" data-url='<?=$comment["url"]?>' data-user='<?=$comment["userkey"]?>' data-key="<?=h($comment["userkey"])?>">
 			<td colspan="6" style="padding-left:40px;">
 				<a target="_blank" class="news-title" href="<?=h($comment["url"]) ?>">
 					<?php if(isset($comment["url_title"]) && $comment["url_title"] !="no-title"){ ?>
@@ -206,11 +214,11 @@
 								
 				<hr />
 				目前狀態：
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?> btn-type-2" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?> btn-type-1 " href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 0) {?> btn-primary <?php }?> btn-type-0" href="<?=site_url("comment/mark/".h($comment["_id"])."/0")?>">待審查</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?> btn-type-3" href="<?=site_url("comment/mark/".h($comment["_id"])."/3")?>">很棒的留言</a>
-				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?> btn-type-4" href="<?=site_url("comment/mark/".h($comment["_id"])."/4")?>">廣告</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 2) {?> btn-primary <?php }?> btn-type-2" data-type="2" href="<?=site_url("comment/mark/".h($comment["_id"])."/2")?>">OK</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 1) {?> btn-primary <?php }?> btn-type-1 " data-type="1" href="<?=site_url("comment/mark/".h($comment["_id"])."/1")?>">跳針</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 0) {?> btn-primary <?php }?> btn-type-0" data-type="0"  href="<?=site_url("comment/mark/".h($comment["_id"])."/0")?>">待審查</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 3) {?> btn-primary <?php }?> btn-type-3"  data-type="3" href="<?=site_url("comment/mark/".h($comment["_id"])."/3")?>">很棒的留言</a>
+				<a class="btn btn-confirm btn-default<?php if($comment["status"] == 4) {?> btn-primary <?php }?> btn-type-4"  data-type="4" href="<?=site_url("comment/mark/".h($comment["_id"])."/4")?>">廣告</a>
 				&nbsp; | &nbsp;
 				<a class="btn btn-confirm-all btn-default" data-type="2" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> OK</a>
 				<a class="btn btn-confirm-all btn-default" data-type="1" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> 跳針</a>
@@ -246,6 +254,47 @@
 				return true;
 			}
 		});
+
+		var c_index = 0 ;
+		var controls = $(".controls");
+		controls.on("mouseenter",function(){
+			var ind = controls.index(this);
+			c_index = ind;
+			var now = controls.eq(c_index);
+			$(".control-focus").removeClass("control-focus");
+			now.addClass("control-focus");
+		});
+		$(document).on("keydown",function(e){
+			if(e.keyCode == 38 || e.keyCode == 40){
+				if(e.keyCode == 38){ //up
+					c_index --;
+					if(c_index < 0 ){
+						c_index = 0;
+					}
+				}else if(e.keyCode == 40){ //down
+					c_index = (c_index + 1 ) % controls.length ;
+				}
+				var now = controls.eq(c_index);
+				$(".control-focus").removeClass("control-focus");
+				now.addClass("control-focus");
+				$(window).scrollTop(now.offset().top - 200);
+			}
+			var now = controls.eq(c_index);
+
+			if(e.keyCode == 65){ //a
+				now.find(".btn-type-2").click();
+			}else if(e.keyCode == 83){ //s
+				now.find(".btn-type-1").click();
+			}else if(e.keyCode == 68){ //d
+				now.find(".btn-type-0").click();
+			}else if(e.keyCode == 81){ //q
+				now.find(".btn-confirm-all:eq(0)").click();
+			}else if(e.keyCode == 87){ //w
+				now.find(".btn-confirm-all:eq(1)").click();
+			}
+			console.log(e.keyCode);
+		});
+		
 
 		$(".keywords").click(function(){
 			$(".page-controls .keyword").val($(this).data("keyword"));
@@ -324,7 +373,12 @@
 			var oldtext = $(btn).text();
 			$(btn).text("處理");
 			$(btn).addClass("btn-wanring");
+			var type = $(btn).data("type");
 			$.get(btn.href,function(){
+				$(btn).removeClass("controls-0").removeClass("controls-1")
+					.removeClass("controls-2").removeClass("controls-3").removeClass("controls-4")
+					.addClass("controls-"+type);
+				//type
 				$(btn).parent().find(".btn-primary").removeClass("btn-primary");
 				$(btn).addClass("btn-primary");
 				$(btn).removeClass("btn-wanring");

@@ -36,6 +36,29 @@ class CommentModel extends MONGO_MODEL {
 		$this->mongo_db->insert($this->_collection_tokens,Array("_id" => $token));
 	}
 	
+	public function search_check($keyword,$page){
+		$pagesize = 200;
+		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )
+			->offset($page * $pagesize)
+			->limit($pagesize);
+		$query->whereLike("content" , $keyword);
+		$query->whereIn("status",Array(CommentModel::STATUS_CHECK,CommentModel::STATUS_WAIT));
+		$items=  $query->get($this->_collection);
+		$users = Array();
+		foreach($items as &$item){
+			if(!isset($users[$item["userkey"]])){
+				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
+				if(count($result) <= 0){
+					$users[$item["userkey"]] = 0;
+				}else{
+					$users[$item["userkey"]] = $result[0]["count"];
+				}
+			}
+			$item["count"] = $users[$item["userkey"]];
+		}
+		return $items;
+	}
+	
 	public function get_confirming($status = 0,$page = 0){
 		
 		$pagesize = 600;
@@ -241,8 +264,9 @@ class CommentModel extends MONGO_MODEL {
 		$bad = $this->mongo_db->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
 		$ok = $this->mongo_db->where("status",CommentModel::STATUS_OK)->count($this->_collection);
 		$wait = $this->mongo_db->where("status",CommentModel::STATUS_WAIT)->count($this->_collection);
+		$check = $this->mongo_db->where("status",CommentModel::STATUS_CHECK)->count($this->_collection);
 		
-		return Array($wait,$bad,$ok);
+		return Array($wait,$bad,$ok,$check);
 	}
 	
 	public function get_reply_stats(){
