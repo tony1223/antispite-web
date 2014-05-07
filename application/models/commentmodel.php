@@ -72,14 +72,15 @@ class CommentModel extends MONGO_MODEL {
 		foreach($items as &$item){
 			if(!isset($users[$item["userkey"]])){
 				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
+				$not_reported = $this->mongo_db->where(Array("user" => $item["userkey"],"status" => -1))->count($this->_collection);
 				if(count($result) <= 0){
-					$users[$item["userkey"]] = 0;
+					$users[$item["userkey"]] = Array("count"=>0 ,"reported" => $not_reported) ;
 				}else{
-					$users[$item["userkey"]] = $result[0]["count"];
+					$users[$item["userkey"]] = Array("count"=> $result[0]["count"] ,"not_reported" => $not_reported) ; ;
 				}				
+				$users[$item["userkey"]] = $not_reported
 			}
 			$item["count"] = $users[$item["userkey"]];
-			
 				
 		}
 		return $items;
