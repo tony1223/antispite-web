@@ -294,7 +294,7 @@ class CommentModel extends MONGO_MODEL {
 		if(count($exist) == 0 ){
 			$data["createDate"] = $now;
 
-			$data["creator"] = $data["ueid"]; 
+			$data["creator"] = $data["ueid"]; //TODO:refine old data (from reporters[0] => creator)
 			if($check){
 				$data["status"] = CommentModel::STATUS_CHECK;
 				$data["reporters"] = Array();
