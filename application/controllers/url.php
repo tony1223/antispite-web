@@ -7,14 +7,20 @@ class Url extends MY_Controller {
 		$urls = $this->urlModel->get_unsolved_urls();
 		foreach($urls as $url){
 			$result = $this->parse_url($url["_id"]);
-			if($result[0] == "ok"){
-				$this->urlModel->resolve_url($url["_id"],$result[1]);
-			}else if($result[0] == "notitle"){
-				$this->urlModel->resolve_url($url["_id"],"no-title");
-			}else if($result[0] =="badurl"){
-				$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
-			}else{
-				echo "can't resolve:".$url["_id"]."<br />";
+			try{
+				if($result[0] == "ok"){
+					$this->urlModel->resolve_url($url["_id"],$result[1]);
+				}else if($result[0] == "notitle"){
+					$this->urlModel->resolve_url($url["_id"],"no-title");
+				}else if($result[0] =="badurl"){
+					$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
+				}else{
+					echo "can't resolve:".$url["_id"]."<br />";
+				}
+			}catch(Exception $ex){
+				echo " resolve but got exception:".$url["_id"]."<br />";
+				var_dump($result);
+				
 			}
 		}
 	}

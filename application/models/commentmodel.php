@@ -4,7 +4,7 @@
  *
  */
 class CommentModel extends MONGO_MODEL {
-	
+
 	var $_collection = "comment";
 	var $_collection_user = "comment_user";
 	var $_collection_record = "comment_record";
@@ -72,14 +72,16 @@ class CommentModel extends MONGO_MODEL {
 		foreach($items as &$item){
 			if(!isset($users[$item["userkey"]])){
 				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
+// 				$not_reported = $this->mongo_db->where(Array("status" => -1,"user" => $item["userkey"]))->count($this->_collection);
+				$not_reported = 0;
 				if(count($result) <= 0){
-					$users[$item["userkey"]] = 0;
+					$users[$item["userkey"]] = Array("count"=>0 ,"reported" => $not_reported) ;
 				}else{
-					$users[$item["userkey"]] = $result[0]["count"];
+					$users[$item["userkey"]] = Array("count"=> $result[0]["count"] ,"not_reported" => $not_reported) ; 
 				}				
+				$users[$item["userkey"]] = $not_reported;
 			}
 			$item["count"] = $users[$item["userkey"]];
-			
 				
 		}
 		return $items;
@@ -231,8 +233,13 @@ class CommentModel extends MONGO_MODEL {
 				->where("status",CommentModel::STATUS_BAD)->limit(200)->get($this->_collection);
 	}
 	
-	public function get_all_by_user($key){
-		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->limit(500)->get($this->_collection);
+	public function get_all_by_user($key,$status = null){
+		
+		if($status =="" || $status == null){
+			return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->limit(500)->get($this->_collection);
+		}
+		
+		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",intval($status,10))->limit(500)->get($this->_collection);
 	}
 	
 	public function get_bads_by_url($key){
@@ -318,7 +325,7 @@ class CommentModel extends MONGO_MODEL {
 		if(count($exist) == 0 ){
 			$data["createDate"] = $now;
 
-			$data["creator"] = $data["ueid"]; 
+			$data["creator"] = $data["ueid"]; //TODO:refine old data (from reporters[0] => creator)
 			if($check){
 				$data["status"] = CommentModel::STATUS_CHECK;
 				$data["reporters"] = Array();

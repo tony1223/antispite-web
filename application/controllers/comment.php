@@ -143,10 +143,12 @@ class Comment extends MY_Controller {
 
 	public function user(){
 		$key = $this->input->get("key");
+		
+		$status = $this->input->get("status");
 		$this->load->model("commentModel");
 		
 		if(is_login()){
-			$comments = $this->commentModel->get_all_by_user($key);
+			$comments = $this->commentModel->get_all_by_user($key,$status);
 		}else{
 			$comments = $this->commentModel->get_bads_by_user($key);
 		}
