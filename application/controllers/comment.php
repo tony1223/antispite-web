@@ -117,7 +117,7 @@ class Comment extends MY_Controller {
 			return show_404();
 		}
 		
-		if($url =="" && $info == ""){
+		if($url =="" && $info == "" || strpos($url,"onlinecasinoaustraliaaction.com") !== FALSE){
 			return redirect(site_url("comment/thanks/?key=".$id));
 		}
 		
