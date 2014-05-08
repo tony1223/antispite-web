@@ -158,7 +158,8 @@
 				<?php if($comment["count"]["count"] >0 ){?>
 					<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>"><span style='color:red;'>目前跳針指數 <?=$comment["count"]["count"]?> </span> <br />
 				<?php }?>
-					<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=-1") ?>"><span style='color:red;'>未列<?=$comment["count"]["not_reported"]?> </span> <br />
+					<br />
+					<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=-1") ?>"><span >未列入審查資料 </span> <br />
 			</td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
 			<td>
