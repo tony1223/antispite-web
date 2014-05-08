@@ -236,11 +236,10 @@ class CommentModel extends MONGO_MODEL {
 	public function get_all_by_user($key,$status = null){
 		
 		if($status =="" || $status == null){
-			return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status".intval($status,10))->limit(500)->get($this->_collection);
-		}else{
 			return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->limit(500)->get($this->_collection);
 		}
 		
+		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status".intval($status,10))->limit(500)->get($this->_collection);
 	}
 	
 	public function get_bads_by_url($key){
