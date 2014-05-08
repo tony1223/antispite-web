@@ -4,7 +4,7 @@
  *
  */
 class CommentModel extends MONGO_MODEL {
-	
+
 	var $_collection = "comment";
 	var $_collection_user = "comment_user";
 	var $_collection_record = "comment_record";
@@ -76,9 +76,9 @@ class CommentModel extends MONGO_MODEL {
 				if(count($result) <= 0){
 					$users[$item["userkey"]] = Array("count"=>0 ,"reported" => $not_reported) ;
 				}else{
-					$users[$item["userkey"]] = Array("count"=> $result[0]["count"] ,"not_reported" => $not_reported) ; ;
+					$users[$item["userkey"]] = Array("count"=> $result[0]["count"] ,"not_reported" => $not_reported) ; 
 				}				
-				$users[$item["userkey"]] = $not_reported
+				$users[$item["userkey"]] = $not_reported;
 			}
 			$item["count"] = $users[$item["userkey"]];
 				
