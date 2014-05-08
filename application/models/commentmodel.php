@@ -239,7 +239,7 @@ class CommentModel extends MONGO_MODEL {
 			return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->limit(500)->get($this->_collection);
 		}
 		
-		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status".intval($status,10))->limit(500)->get($this->_collection);
+		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",intval($status,10))->limit(500)->get($this->_collection);
 	}
 	
 	public function get_bads_by_url($key){
