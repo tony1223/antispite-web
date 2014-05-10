@@ -132,7 +132,7 @@
 			<b>關鍵字清單</b><br />
 			<?php foreach($keywords as $keyword){?>
 				<?php if($keyword["count"] > 0 ){?>
-				<?=h($keyword["id"])?>:<?=h($keyword["count"])?>,<br />
+					<span class="keywords" data-keyword="<?=h($keyword["id"])?>" ><?=h($keyword["id"])?>:<?=$keyword["count"]?></span>,<br />
 				<?php }?>
 			<?php }?>
 			</td>
