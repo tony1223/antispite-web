@@ -218,8 +218,13 @@ class CommentModel extends MONGO_MODEL {
 		return $results;
 	}
 	
-	public function get_bads_by_user($key){
-		return $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit(500)->get($this->_collection);
+	public function get_bads_by_user($key,$page = 1){
+		$pageSize = 500;
+		$query= $this->mongo_db->orderBy("time","desc")->where("userkey",$key)->where("status",CommentModel::STATUS_BAD)->limit($pageSize);
+		
+		$query->offset($pageSize * ($page -1 ));
+		
+		return $query->get($this->_collection);
 	}
 	
 	public function get_bads_by_user_all($key){

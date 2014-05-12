@@ -147,10 +147,14 @@ class Comment extends MY_Controller {
 		$status = $this->input->get("status");
 		$this->load->model("commentModel");
 		
+		$page = $this->input->get("page");
+		if(empty($page) || !is_numeric($page)){
+			$page = 1;
+		}
 		if(is_login()){
 			$comments = $this->commentModel->get_all_by_user($key,$status);
 		}else{
-			$comments = $this->commentModel->get_bads_by_user($key);
+			$comments = $this->commentModel->get_bads_by_user($key,intval($page,10));
 		}
 		if(count($comments) == 0){
 			return show_404();
