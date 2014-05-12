@@ -152,7 +152,7 @@ class Comment extends MY_Controller {
 			$page = 1;
 		}
 		if(is_login()){
-			$comments = $this->commentModel->get_all_by_user($key,$status);
+			$comments = $this->commentModel->get_all_by_user($key,$status,intval($page,10));
 		}else{
 			$comments = $this->commentModel->get_bads_by_user($key,intval($page,10));
 		}
