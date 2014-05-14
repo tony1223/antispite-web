@@ -23,6 +23,16 @@
 	<p>跳針指數：<?=$count?></p>
 	<div id="chart_div" style="width: 100%; height: 500px;"></div>
 	<hr />
+	<?php if(is_login()){?>
+	<hr />
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=0")?>" href="">待審(<?=$stats[0]?>)</a>
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=1")?>">跳針(<?=$stats[1]?>)</a>
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=2")?>">ok(<?=$stats[2]?>)</a>
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=-1")?>">其他(<?=$stats[2]?>)</a>
+	<Br />
+	<a class="btn btn-default" onclick='$(".btn-type-1").click()'>全列跳針</a>
+	<a class="btn btn-default" onclick='$(".btn-type-0").click()'>全列待審</a>
+	<?php }?>
 	<table class="table table-bordered table-comment">
 		<tr class="comment-row">
 			<td>類型</td>

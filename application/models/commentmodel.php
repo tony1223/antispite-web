@@ -282,6 +282,15 @@ class CommentModel extends MONGO_MODEL {
 		return Array($wait,$bad,$ok,$check);
 	}
 	
+	public function get_stats_by_user($userkey){
+		$bad = $this->mongo_db->where("userkey",$userkey)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
+		$ok = $this->mongo_db->where("userkey",$userkey)->where("status",CommentModel::STATUS_OK)->count($this->_collection);
+		$wait = $this->mongo_db->where("userkey",$userkey)->where("status",CommentModel::STATUS_WAIT)->count($this->_collection);
+		$check = $this->mongo_db->where("userkey",$userkey)->where("status",CommentModel::STATUS_CHECK)->count($this->_collection);
+	
+		return Array($wait,$bad,$ok,$check);
+	}
+	
 	public function get_reply_stats(){
 		$bad = $this->mongo_db->where("status",CommentModel::REPLY_OK)->count($this->_collection_reply);
 //		$ok = $this->mongo_db->where("status",CommentModel::REPLY_HISTORY)->count($this->_collection_reply);
