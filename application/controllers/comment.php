@@ -23,6 +23,28 @@ class Comment extends MY_Controller {
 		));		
 	}
 	
+	public function confirmr($type = 0,$page = 0){
+		session_write_close();
+		if(!is_login()){
+			redirect(site_url("user/login"));
+			return true;
+		}
+	
+		$this->load->model("commentModel");
+// 		$comments = $this->commentModel->get_confirming(intval($type,10),intval($page,10));
+		
+		$stats = $this->commentModel->get_stats();
+		$tokens = $this->commentModel->get_tokens();
+	
+		$this->load->view('comment/confirm_react',Array(
+				"pageTitle" => "確認跳針留言" ,
+				"selector" => "confirm",
+				"comments" => $comments,
+				"stats" => $stats,
+				"tokens" => $tokens
+		));
+	}
+	
 	public function search(){
 		session_write_close();
 		if(!is_login()){
