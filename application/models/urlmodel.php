@@ -24,7 +24,7 @@ class UrlModel extends MONGO_MODEL {
 	}
 	
 	public function get_unsolved_urls(){
-		return $this->mongo_db->where("resolved",false)->get($this->_collection);
+		return $this->mongo_db->where("resolved",false)->limit(50)->get($this->_collection);
 	}
 	
 
