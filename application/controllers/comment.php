@@ -168,7 +168,8 @@ class Comment extends MY_Controller {
 			"pageTitle" => $comments[0]["name"]." 跳針留言清單" ,
 			"selector" => "comments",
 			"comments" => $comments,
-			"count" => $count
+			"count" => $count,
+			"stats" => $stats
 		));
 	}
 	
