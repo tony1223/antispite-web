@@ -19,6 +19,7 @@ class Welcome extends MY_Controller {
 	 */
 	public function index()
 	{
+		session_write_close();
 		$this->load->view('welcome_message',Array(
 			"selector" => "intro"
 		));

@@ -3,6 +3,7 @@
 class Url extends MY_Controller {
 	
 	public function resolver(){
+		session_write_close();
 		$this->load->model("urlModel");
 		$urls = $this->urlModel->get_unsolved_urls();
 		foreach($urls as $url){

@@ -3,6 +3,7 @@
 class Comment extends MY_Controller {
 	
 	public function confirm($type = 0,$page = 0){
+		session_write_close();
 		if(!is_login()){
 			redirect(site_url("user/login"));
 			return true;
@@ -23,6 +24,7 @@ class Comment extends MY_Controller {
 	}
 	
 	public function search(){
+		session_write_close();
 		if(!is_login()){
 			redirect(site_url("user/login"));
 			return true;
@@ -49,6 +51,7 @@ class Comment extends MY_Controller {
 	}
 	
 	public function add_token(){
+		session_write_close();
 		if(!is_login()){
 			redirect(site_url("user/login"));
 			return true;
@@ -73,6 +76,7 @@ class Comment extends MY_Controller {
 	}
 
 	public function index(){
+		session_write_close();
 		$this->load->model("commentModel");
 		$comments = $this->commentModel->get_bads();
 	
@@ -85,6 +89,7 @@ class Comment extends MY_Controller {
 	
 
 	public function provide(){
+		session_write_close();
 		$key = $this->input->get("key");
 		$this->load->model("commentModel");
 	
@@ -106,6 +111,7 @@ class Comment extends MY_Controller {
 	
 
 	public function reply(){
+		session_write_close();
 		$info = $this->input->post("info");
 		$url = $this->input->post("url");
 		$id = $this->input->post("id");
@@ -126,6 +132,7 @@ class Comment extends MY_Controller {
 	}
 	
 	public function thanks(){
+		session_write_close();
 		$id = $this->input->get("key");
 		$this->load->model("commentModel");
 		$comment = $this->commentModel->get($id);
@@ -142,6 +149,7 @@ class Comment extends MY_Controller {
 		
 
 	public function user(){
+		session_write_close();
 		$key = $this->input->get("key");
 		
 		$status = $this->input->get("status");
@@ -174,6 +182,8 @@ class Comment extends MY_Controller {
 	}
 	
 	public function url(){
+		session_write_close();
+		
 		$url = $this->input->get("id");
 		$this->load->model("commentModel");
 		$this->load->model("urlModel");
@@ -193,6 +203,8 @@ class Comment extends MY_Controller {
 		if(count($comments) == 0){
 			return show_404();
 		}
+		
+		session_write_close();
 
 		$title = isset($url_item["title"]) ? $url_item["title"] : $url_item["_id"];
 		
@@ -210,6 +222,7 @@ class Comment extends MY_Controller {
 	}
 	
 	public function rank(){
+		session_write_close();
 		$this->load->model("commentModel");
 		$users = $this->commentModel->get_ranked_users(10);
 		if(count($users) == 0){
@@ -225,6 +238,7 @@ class Comment extends MY_Controller {
 	
 	
 	public function mark($key,$status){
+		session_write_close();
 		if(!is_login()){
 			redirect(site_url("user/login"));
 			return true;
