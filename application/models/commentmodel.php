@@ -85,7 +85,31 @@ class CommentModel extends MONGO_MODEL {
 				
 		}
 		return $items;
-		
+	}
+	public function get_confirming_hot($page = 0){
+	
+		$pagesize = 1000;
+		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
+		$query->where("reporters.3",Array('$exist' => true));
+		$items = $query->get($this->_collection);
+	
+		$users = Array();
+		foreach($items as &$item){
+			if(!isset($users[$item["userkey"]])){
+				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
+				$not_reported = 0;
+				if(count($result) <= 0){
+					$users[$item["userkey"]] = Array("count"=>0 ,"reported" => $not_reported) ;
+				}else{
+					$users[$item["userkey"]] = Array("count"=> $result[0]["count"] ,"not_reported" => $not_reported) ;
+				}
+				$users[$item["userkey"]] = $not_reported;
+			}
+			$item["count"] = $users[$item["userkey"]];
+	
+		}
+		return $items;
+	
 	}
 	
 	public function get_bads(){

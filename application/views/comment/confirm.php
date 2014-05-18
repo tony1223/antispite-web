@@ -55,6 +55,7 @@
 	<h2>待確認留言清單</h2>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/-1")?>">確認全部留言</a>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
+	<a class="btn btn-default" href="<?=site_url("comment/confirm_hot/")?>">確認熱門跳針留言</a>
 	
 	<hr />
 	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題,<?=$stats[3]?> 其他.
