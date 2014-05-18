@@ -106,14 +106,14 @@ class CommentModel extends MONGO_MODEL {
 	public function mark($key,$status,$user){
 		$now = time() *1000.0;
 		
-		$this->mongo_db->where("_id",$key)->set("status",$status)->set("status_update",$now)->update($this->_collection);
+		$this->mongo_db->where("_id",$key)->set("status",$status)->set("status_update",$now)->update($this->_collection,Array("w"=>0));
 		$this->mongo_db->insert($this->_collection_record,
 			Array(
 					"createDate" => $now,
 					"target" => $key,
 					"type" => "update_mark",
 					"confirm_user" => $user,
-					"status" => $status ));
+					"status" => $status ),Array("w"=>0));
 
 		$items = $this->mongo_db->where("_id",$key)->limit(1)->get($this->_collection);
 		if(count($items) > 0 ){
@@ -132,7 +132,7 @@ class CommentModel extends MONGO_MODEL {
 				"last_count_update" => $now
 			));
 			$this->mongo_db->where("_id", $current["url"]);
-			$this->mongo_db->update($this->_collection_urls);
+			$this->mongo_db->update($this->_collection_urls,Array("w"=>0));
 			
 		}
 	}
@@ -486,7 +486,7 @@ class CommentModel extends MONGO_MODEL {
 				"last_update" => $now
 		));
 		$this->mongo_db->where("_id", $type.":".$userkey);
-		$this->mongo_db->update($this->_collection_user);
+		$this->mongo_db->update($this->_collection_user,Array("w"=>0));
 		
 	}
 	
