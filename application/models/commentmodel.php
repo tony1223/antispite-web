@@ -378,6 +378,8 @@ class CommentModel extends MONGO_MODEL {
 			$query->update($this->_collection);
 		}
 		
+		$this->update_user_count($data["type"],$data["userkey"]);
+		
 		$this->mongo_db->insert($this->_collection_record, 
 			Array("reporter"=>$data["ueid"], 
 				"createDate" => $now,
