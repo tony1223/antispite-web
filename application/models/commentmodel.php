@@ -75,9 +75,19 @@ class CommentModel extends MONGO_MODEL {
 // 				$not_reported = $this->mongo_db->where(Array("status" => -1,"user" => $item["userkey"]))->count($this->_collection);
 				$not_reported = 0;
 				if(count($result) <= 0){
-					$users[$item["userkey"]] = Array("count"=>0 ,"reported" => $not_reported) ;
+					$users[$item["userkey"]] = Array(
+						"count"=>0 ,
+						"all_count" =>0,
+						"wait_count" =>0,
+						"check_count" =>0
+					) ;
 				}else{
-					$users[$item["userkey"]] = Array("count"=> $result[0]["count"] ,"not_reported" => $not_reported) ; 
+					$users[$item["userkey"]] = $result[0];
+					if(!isset($result[0]["wait_count"])){
+						$users[$item["userkey"]]["all_count"] = 0;
+						$users[$item["userkey"]]["wait_count"] = 0;
+						$users[$item["userkey"]]["check_count"] = 0;
+					} 
 				}				
 				$users[$item["userkey"]] = $not_reported;
 			}
@@ -90,7 +100,7 @@ class CommentModel extends MONGO_MODEL {
 	
 		$pagesize = 1000;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
-		$query->where("reporters.3",Array('$exist' => true));
+		$query->where("reporters.5",array("\$exists" => true));
 		$items = $query->get($this->_collection);
 	
 		$users = Array();
@@ -475,6 +485,8 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function update_user_count($type,$userkey){
+		$now = time() *1000.0;
+		
 		$exists = $this->mongo_db->where("_id",$type.":".$userkey)->count($this->_collection_user) > 0;
 		if(!$exists){
 			$this->mongo_db->insert($this->_collection_user,Array("_id" => $type.":".$userkey,"createDate" => $now));
@@ -492,7 +504,7 @@ class CommentModel extends MONGO_MODEL {
 				"wait_count" => $wait_count,
 				"check_count" => $check_count,
 				"all_count" => $bad_count + $wait_count + $check_count,
-				"last_count_update" => $now
+				"last_update" => $now
 		));
 		$this->mongo_db->where("_id", $type.":".$userkey);
 		$this->mongo_db->update($this->_collection_user);
