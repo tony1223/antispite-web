@@ -109,29 +109,15 @@ class CommentModel extends MONGO_MODEL {
 			$current = $items[0];
 			
 			//update user
-			$now_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
-
-			$exists = $this->mongo_db->where("_id",$current["type"].":".$current["userkey"])->count($this->_collection_user) > 0;
-			
-			if(!$exists){
-				$this->mongo_db->insert($this->_collection_user,Array("_id" => $current["type"].":".$current["userkey"],"createDate" => $now));
-			}
-			
-			$this->mongo_db->set(Array(
-				"type" => $current["type"],
-				"user" => $current["userkey"],
-				"name" => $current["name"],
-				"count" => $now_count,
-				"last_update" => $now
-			));
-			$this->mongo_db->where("_id", $current["type"].":".$current["userkey"]);
-			$this->mongo_db->update($this->_collection_user);
+			$this->update_user_count($curret["type"],$current["userkey"]);
 			
 			//update urls
 			$now_url_count = $this->mongo_db->where(Array("url" => $current["url"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
+			$all_url_count = $this->mongo_db->where(Array("url" => $current["url"]))->count($this->_collection);
 
 			$this->mongo_db->set(Array(
 				"count" => $now_url_count,
+				"all_count" => $all_url_count,
 				"last_count_update" => $now
 			));
 			$this->mongo_db->where("_id", $current["url"]);
@@ -462,6 +448,31 @@ class CommentModel extends MONGO_MODEL {
 		$query->unsetField("reply");
 		$query->set(Array("reply_updated" => time() *1000.0));
 		$query->update($this->_collection);
+	}
+	
+	public function update_user_count($type,$userkey){
+		$exists = $this->mongo_db->where("_id",$type.":".$userkey)->count($this->_collection_user) > 0;
+		if(!$exists){
+			$this->mongo_db->insert($this->_collection_user,Array("_id" => $type.":".$userkey,"createDate" => $now));
+		}
+		
+		$bad_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
+				"status" => CommentModel::STATUS_BAD))->count($this->_collection);
+		$check_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
+				"status" => CommentModel::STATUS_CHECK))->count($this->_collection);
+		$wait_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
+				"status" => CommentModel::STATUS_CHECK))->count($this->_collection);				
+		
+		$this->mongo_db->set(Array(
+				"count" => $bad_count,
+				"wait_count" => $wait_count,
+				"check_count" => $check_count,
+				"all_count" => $bad_count + $wait_count + $check_count,
+				"last_count_update" => $now
+		));
+		$this->mongo_db->where("_id", $type.":".$userkey);
+		$this->mongo_db->update($this->_collection_user);
+		
 	}
 	
 }
