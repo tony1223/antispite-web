@@ -115,7 +115,16 @@
 		?>
 		<tr >
 			<td>
-				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>
+				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> 
+				(
+				<span style='color:red;'> 
+					 <a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["userkey"])."&status=1") ?>"><?=$user["count"]["count"]?></a>
+				</span>
+				/
+				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["userkey"])."&status=0") ?>"><?=$user["count"]["wait_count"]?></a>
+				/
+				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["userkey"])."&status=0") ?>"><?=$user["count"]["check_count"]?></a> 
+				 )
 				
 					<?php if($user["confirm_count"] >0 ){?>
 					/ <span style='color:red;'><?=$user["confirm_count"]?></span>
