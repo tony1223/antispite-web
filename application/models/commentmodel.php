@@ -100,7 +100,8 @@ class CommentModel extends MONGO_MODEL {
 	
 		$pagesize = 1000;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
-		$query->where("reporters.5",array("\$exists" => true));
+		$query->where("reporters.3",array("\$exists" => true));
+		$query->where("status",0);
 		$items = $query->get($this->_collection);
 	
 		$users = Array();
