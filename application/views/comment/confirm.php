@@ -122,7 +122,7 @@
 				/
 				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=0") ?>"><?=$user["confirm_count"]["wait_count"]?></a>
 				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=0") ?>"><?=$user["confirm_count"]["check_count"]?></a> 
+				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=-1") ?>"><?=$user["confirm_count"]["check_count"]?></a> 
 				
 				)
 				<br />
