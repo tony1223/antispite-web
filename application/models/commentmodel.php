@@ -115,7 +115,7 @@ class CommentModel extends MONGO_MODEL {
 					"confirm_user" => $user,
 					"status" => $status ));
 
-		$items = $this->mongo_db->where("_id",$key)->get($this->_collection);
+		$items = $this->mongo_db->where("_id",$key)->limit(1)->get($this->_collection);
 		if(count($items) > 0 ){
 			$current = $items[0];
 			
@@ -471,12 +471,12 @@ class CommentModel extends MONGO_MODEL {
 			$this->mongo_db->insert($this->_collection_user,Array("_id" => $type.":".$userkey,"createDate" => $now));
 		}
 		
-		$bad_count = $this->mongo_db->where(Array("userkey" => $userkey,
-				"status" => CommentModel::STATUS_BAD))->count($this->_collection);
-		$check_count = $this->mongo_db->where(Array("userkey" => $userkey,
-				"status" => CommentModel::STATUS_CHECK))->count($this->_collection);
-		$wait_count = $this->mongo_db->where(Array("userkey" => $userkey,
-				"status" => CommentModel::STATUS_WAIT))->count($this->_collection);				
+		$bad_count = $this->mongo_db->where(Array(
+				"status" => CommentModel::STATUS_BAD,"userkey" => $userkey))->count($this->_collection);
+		$check_count = $this->mongo_db->where(Array(
+				"status" => CommentModel::STATUS_CHECK,"userkey" => $userkey))->count($this->_collection);
+		$wait_count = $this->mongo_db->where(Array(
+				"status" => CommentModel::STATUS_WAIT,"userkey" => $userkey))->count($this->_collection);				
 		
 		$this->mongo_db->set(Array(
 				"count" => $bad_count,
