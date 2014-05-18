@@ -143,7 +143,7 @@ class CommentModel extends MONGO_MODEL {
 			$current = $items[0];
 			
 			//update user
-			$this->update_user_count($curret["type"],$current["userkey"]);
+			$this->update_user_count($current["type"],$current["userkey"]);
 			
 			//update urls
 			$now_url_count = $this->mongo_db->where(Array("url" => $current["url"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
