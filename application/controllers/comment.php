@@ -23,7 +23,7 @@ class Comment extends MY_Controller {
 		));
 	}
 	
-	public function confirm_hot($type = 0,$page = 0){
+	public function confirm_hot($page = 0){
 		session_write_close();
 		if(!is_login()){
 			redirect(site_url("user/login"));
@@ -31,7 +31,7 @@ class Comment extends MY_Controller {
 		}
 	
 		$this->load->model("commentModel");
-		$comments = $this->commentModel->get_confirming(intval($type,10),intval($page,10));
+		$comments = $this->commentModel->get_confirming_hot(intval($page,10));
 		$stats = $this->commentModel->get_stats();
 		$tokens = $this->commentModel->get_tokens();
 	
