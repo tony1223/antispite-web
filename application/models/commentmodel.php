@@ -44,56 +44,46 @@ class CommentModel extends MONGO_MODEL {
 		$query->whereLike("content" , $keyword);
 		$query->whereIn("status",Array(CommentModel::STATUS_CHECK,CommentModel::STATUS_WAIT));
 		$items=  $query->get($this->_collection);
+		$items = $this->_merge_user_count($items);
+		return $items;
+	}
+	
+	public function _merge_user_count(&$items){
 		$users = Array();
 		foreach($items as &$item){
 			if(!isset($users[$item["userkey"]])){
 				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
 				if(count($result) <= 0){
-					$users[$item["userkey"]] = 0;
+					$users[$item["userkey"]] = Array(
+							"count"=>0 ,
+							"all_count" => -1,
+							"wait_count" => -1,
+							"check_count" => -1
+					) ;
 				}else{
-					$users[$item["userkey"]] = $result[0]["count"];
+					$users[$item["userkey"]] = $result[0];
+					if(!isset($result[0]["wait_count"])){
+						$users[$item["userkey"]]["all_count"] =  -1;
+						$users[$item["userkey"]]["wait_count"] =  -1;
+						$users[$item["userkey"]]["check_count"] =  -1;
+					}
 				}
 			}
 			$item["count"] = $users[$item["userkey"]];
+		
 		}
 		return $items;
 	}
 	
 	public function get_confirming($status = 0,$page = 0){
 		
-		$pagesize = 600;
+		$pagesize = 10;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
 		if($status != -1){
 			$query->where("status",$status);
 		}
 		$items = $query->get($this->_collection);
-		
-		$users = Array();
-		foreach($items as &$item){
-			if(!isset($users[$item["userkey"]])){
-				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
-// 				$not_reported = $this->mongo_db->where(Array("status" => -1,"user" => $item["userkey"]))->count($this->_collection);
-				$not_reported = 0;
-				if(count($result) <= 0){
-					$users[$item["userkey"]] = Array(
-						"count"=>0 ,
-						"all_count" =>0,
-						"wait_count" =>0,
-						"check_count" =>0
-					) ;
-				}else{
-					$users[$item["userkey"]] = $result[0];
-					if(!isset($result[0]["wait_count"])){
-						$users[$item["userkey"]]["all_count"] = 0;
-						$users[$item["userkey"]]["wait_count"] = 0;
-						$users[$item["userkey"]]["check_count"] = 0;
-					} 
-				}				
-				$users[$item["userkey"]] = $not_reported;
-			}
-			$item["count"] = $users[$item["userkey"]];
-				
-		}
+		$this->_merge_user_count($items);
 		return $items;
 	}
 	public function get_confirming_hot($page = 0){
@@ -103,22 +93,8 @@ class CommentModel extends MONGO_MODEL {
 		$query->where("reporters.3",array("\$exists" => true));
 		$query->where("status",0);
 		$items = $query->get($this->_collection);
-	
-		$users = Array();
-		foreach($items as &$item){
-			if(!isset($users[$item["userkey"]])){
-				$result = $this->mongo_db->where(Array("user" => $item["userkey"]))->get($this->_collection_user);
-				$not_reported = 0;
-				if(count($result) <= 0){
-					$users[$item["userkey"]] = Array("count"=>0 ,"reported" => $not_reported) ;
-				}else{
-					$users[$item["userkey"]] = Array("count"=> $result[0]["count"] ,"not_reported" => $not_reported) ;
-				}
-				$users[$item["userkey"]] = $not_reported;
-			}
-			$item["count"] = $users[$item["userkey"]];
-	
-		}
+		$this->_merge_user_count($items);
+		
 		return $items;
 	
 	}
