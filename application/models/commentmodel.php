@@ -497,7 +497,7 @@ class CommentModel extends MONGO_MODEL {
 		$check_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
 				"status" => CommentModel::STATUS_CHECK))->count($this->_collection);
 		$wait_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
-				"status" => CommentModel::STATUS_CHECK))->count($this->_collection);				
+				"status" => CommentModel::STATUS_WAIT))->count($this->_collection);				
 		
 		$this->mongo_db->set(Array(
 				"count" => $bad_count,
