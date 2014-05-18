@@ -117,18 +117,12 @@
 			<td>
 				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> 
 				(
-				<span style='color:red;'> 
-					 <a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["userkey"])."&status=1") ?>"><?=$user["count"]["count"]?></a>
-				</span>
+					 <a target="_blank" style='color:red;' href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=1") ?>"><?=$user["confirm_count"]["count"]?></a>
 				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["userkey"])."&status=0") ?>"><?=$user["count"]["wait_count"]?></a>
+				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=0") ?>"><?=$user["confirm_count"]["wait_count"]?></a>
 				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["userkey"])."&status=0") ?>"><?=$user["count"]["check_count"]?></a> 
-				 )
+				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=0") ?>"><?=$user["confirm_count"]["check_count"]?></a> 
 				
-					<?php if($user["confirm_count"] >0 ){?>
-					/ <span style='color:red;'><?=$user["confirm_count"]?></span>
-					<?php }?>
 				)
 				<br />
 				<?php foreach($confirming_users[$userkey]["keywords"] as $keyword => $detail){ ?>
@@ -168,9 +162,7 @@
 				<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a>
 				目前跳針指數
 				(
-				<span style='color:red;'> 
-					 <a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=1") ?>"><?=$comment["count"]["count"]?></a>
-				</span>
+					 <a target="_blank" style='color:red;'  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=1") ?>"><?=$comment["count"]["count"]?></a>
 				/
 				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=0") ?>"><?=$comment["count"]["wait_count"]?></a>
 				/
