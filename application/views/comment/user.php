@@ -23,6 +23,7 @@
 	<p>跳針指數：<?=$count?></p>
 	<div id="chart_div" style="width: 100%; height: 500px;"></div>
 	<hr />
+	<p><a href="<?=site_url("/extension/download")?>" target="_blank" class="btn btn-primary">想要閱讀留言時馬上看到跳針指數嗎？請安裝跳針小幫手</a></p>
 	<?php if(is_login()){?>
 	<hr />
 	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=0")?>" href="">待審(<?=$stats[0]?>)</a>
@@ -114,7 +115,7 @@
 		</tr>			
 		<?php }?>
 	</table>
-	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a></p>
+	<p><a href="<?=site_url("/extension/download")?>" target="_blank" class="btn btn-primary">想要閱讀留言時馬上看到跳針指數嗎？請安裝跳針小幫手</a></p>
 	
 </div>
 
