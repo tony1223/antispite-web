@@ -16,6 +16,7 @@ class Url extends MY_Controller {
 				}else if($result[0] =="badurl"){
 					$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
 				}else{
+					$this->urlModel->resolve_fail($url["_id"]);
 					echo "can't resolve:".$url["_id"]."<br />";
 				}
 			}catch(Exception $ex){
@@ -30,7 +31,8 @@ class Url extends MY_Controller {
 
 		try{
 			$this->load->library("simple_html_dom");
-			$content = @file_get_contents($url);
+			$context = stream_context_create(array('http' => array('header'=>'Connection: close\r\n')));
+			$content = @file_get_contents($url,false,$context);
 			if(strpos($url,"www.nownews.com") !== FALSE){
 				//do nothing 
 			}else	if(strpos($url,"udn.com") !== FALSE && strpos($url,"blog.udn.com") === FALSE){
