@@ -115,7 +115,8 @@
 		?>
 		<tr >
 			<td>
-				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> 
+				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a>
+				<?=h($user["count"])?> ,  
 				(
 					 <a target="_blank" style='color:red;' href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=1") ?>"><?=$user["confirm_count"]["count"]?></a>
 				/
