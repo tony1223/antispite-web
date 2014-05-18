@@ -493,11 +493,11 @@ class CommentModel extends MONGO_MODEL {
 			$this->mongo_db->insert($this->_collection_user,Array("_id" => $type.":".$userkey,"createDate" => $now));
 		}
 		
-		$bad_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
+		$bad_count = $this->mongo_db->where(Array("userkey" => $userkey,
 				"status" => CommentModel::STATUS_BAD))->count($this->_collection);
-		$check_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
+		$check_count = $this->mongo_db->where(Array("userkey" => $userkey,
 				"status" => CommentModel::STATUS_CHECK))->count($this->_collection);
-		$wait_count = $this->mongo_db->where(Array("userkey" => $current["userkey"],
+		$wait_count = $this->mongo_db->where(Array("userkey" => $userkey,
 				"status" => CommentModel::STATUS_WAIT))->count($this->_collection);				
 		
 		$this->mongo_db->set(Array(
