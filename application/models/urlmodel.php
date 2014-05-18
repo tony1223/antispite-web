@@ -24,7 +24,7 @@ class UrlModel extends MONGO_MODEL {
 	}
 	
 	public function get_unsolved_urls(){
-		return $this->mongo_db->whereLte("fail",10)->where("resolved",false)->orderBy("createDate","desc")->limit(100)->get($this->_collection);
+		return $this->mongo_db->whereLte("fail",5)->where("resolved",false)->orderBy("createDate","desc")->limit(100)->get($this->_collection);
 	}
 	
 
@@ -65,12 +65,12 @@ class UrlModel extends MONGO_MODEL {
 		return $this->mongo_db->whereGt("count",0)->orderBy(Array("count" => "desc","createDate"=>"desc"))->get($this->_collection);
 	}
 	
-	public function resolve_fail($url){
-		$url = $this->get($url);
+	public function resolve_fail($url,$tried = null){
+		$orig_url = $this->get($url);
 		
 		$fail = 0 ;
-		if(isset($url["fail"])){
-			$fail = intval($url["fail"],10);
+		if(isset($orig_url["fail"])){
+			$fail = intval($orig_url["fail"],10);
 		}
 		$this->mongo_db->where("_id",$url)
 		->set("fail",$fail +1 )
