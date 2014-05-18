@@ -167,7 +167,7 @@
 				/
 				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=0") ?>"><?=$comment["count"]["wait_count"]?></a>
 				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=0") ?>"><?=$comment["count"]["check_count"]?></a> 
+				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=-1") ?>"><?=$comment["count"]["check_count"]?></a> 
 				 )
 				<br />
 			</td>
