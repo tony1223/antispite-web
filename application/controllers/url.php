@@ -27,6 +27,24 @@ class Url extends MY_Controller {
 		}
 	}
 	
+	private function _page_title($url) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$fp = curl_exec($ch);
+		if (!$fp)
+			return null;
+	
+		$res = preg_match("/<title>(.*)<\/title>/siU", $fp, $title_matches);
+		if (!$res)
+			return null;
+	
+		// Clean up title: remove EOL's and excessive whitespace.
+		$title = preg_replace('/\s+/', ' ', $title_matches[1]);
+		$title = trim($title);
+		return $title;
+	}
+	
 	private function parse_url($url){
 
 		try{

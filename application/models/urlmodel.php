@@ -84,16 +84,20 @@ class UrlModel extends MONGO_MODEL {
 			->set("resolved_date",time()*1000.0)
 		->update($this->_collection);
 		
-		$this->mongo_db->where("url",$url)
+		$this->mongo_db
+			->where("url",$url)
+			->whereNe("url_title",null)
 			->set("url_title",$title)
 			->updateAll($this->_collection_comment);
 		
 		$this->mongo_db->where("url",$url)
-		->set("url_title",$title)
-		->updateAll($this->_collection_reply);
+			->set("url_title",$title)
+			->whereNe("url_title",null)
+			->updateAll($this->_collection_reply);
 		
 		$this->mongo_db->where("reply.url",$url)
 		->set("reply.url_title",$title)
+		->whereNe("reply.url_title",null)
 		->updateAll($this->_collection_comment);
 		
 	}
