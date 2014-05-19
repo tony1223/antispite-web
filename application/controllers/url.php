@@ -32,7 +32,7 @@ class Url extends MY_Controller {
 		$this->load->model("urlModel");
 		$urls = $this->urlModel->get_unsolved_urls();
 		foreach($urls as $url){
-			$result = $this->parse_url($url["_id"]);
+			$result = $this->_page_title($url["_id"]);
 			echo $url["_id"].":::[".$url["fail"]."]- ".$result[1]."<Br />";
 		}
 	}
@@ -43,16 +43,16 @@ class Url extends MY_Controller {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$fp = curl_exec($ch);
 		if (!$fp)
-			return null;
+			return Array("exception",null);
 	
 		$res = preg_match("/<title>(.*)<\/title>/siU", $fp, $title_matches);
 		if (!$res)
-			return null;
+			return Array("exception",null);
 	
 		// Clean up title: remove EOL's and excessive whitespace.
 		$title = preg_replace('/\s+/', ' ', $title_matches[1]);
 		$title = trim($title);
-		return $title;
+		return Array("ok",$title);
 	}
 	
 	private function parse_url($url){
