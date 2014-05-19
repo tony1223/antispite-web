@@ -32,8 +32,8 @@ class Url extends MY_Controller {
 		$this->load->model("urlModel");
 		$urls = $this->urlModel->get_unsolved_urls();
 		foreach($urls as $url){
-			
-			echo $url["_id"].":::[".$url["fail"]."]<Br />";
+			$result = $this->parse_url($url["_id"]);
+			echo $url["_id"].":::[".$url["fail"]."]- ".$result[1]."<Br />";
 		}
 	}
 	
