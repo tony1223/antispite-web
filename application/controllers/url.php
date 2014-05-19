@@ -27,6 +27,16 @@ class Url extends MY_Controller {
 		}
 	}
 	
+	public function todo(){
+		session_write_close();
+		$this->load->model("urlModel");
+		$urls = $this->urlModel->get_unsolved_urls();
+		foreach($urls as $url){
+			
+			echo $url["_id"].":::[".$url["fail"]."]<Br />";
+		}
+	}
+	
 	private function _page_title($url) {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
