@@ -96,8 +96,31 @@ class CommentModel extends MONGO_MODEL {
 		$this->_merge_user_count($items);
 		
 		return $items;
-	
 	}
+
+	public function get_confirming_users($page = 0){
+	
+		$pagesize = 50;
+		$users = $this->mongo_db->orderBy("wait_count","desc")
+			->limit($pageSize)->offset($page * $pagesize)->get($this->_collection_user);
+		
+
+		$results = Array();
+		foreach($users as $user){
+			$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
+			$query->where("status",0);
+			$query->where("userkey",$user["user"]);
+			$items = $query->get($this->_collection);
+			
+			foreach($items as $item){
+				$results[] = $item;
+			}
+		}
+		$this->_merge_user_count($results);
+	
+		return $results;
+	}
+	
 	
 	public function get_bads(){
 		return $this->mongo_db->orderBy("time","desc")->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
