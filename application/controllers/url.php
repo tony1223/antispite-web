@@ -27,6 +27,34 @@ class Url extends MY_Controller {
 		}
 	}
 	
+	public function todo(){
+		session_write_close();
+		$this->load->model("urlModel");
+		$urls = $this->urlModel->get_unsolved_urls();
+		foreach($urls as $url){
+			$result = $this->_page_title($url["_id"]);
+			echo $url["_id"].":::[".$url["fail"]."]- ".$result[1]."<Br />";
+		}
+	}
+	
+	private function _page_title($url) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$fp = curl_exec($ch);
+		if (!$fp)
+			return Array("exception",null);
+	
+		$res = preg_match("/<title>(.*)<\/title>/siU", $fp, $title_matches);
+		if (!$res)
+			return Array("exception",null);
+	
+		// Clean up title: remove EOL's and excessive whitespace.
+		$title = preg_replace('/\s+/', ' ', $title_matches[1]);
+		$title = trim($title);
+		return Array("ok",$title);
+	}
+	
 	private function parse_url($url){
 
 		try{

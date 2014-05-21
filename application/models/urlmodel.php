@@ -17,14 +17,14 @@ class UrlModel extends MONGO_MODEL {
 		$results = $this->mongo_db->where("_id",$url)->limit(1)->get($this->_collection);
 	
 		if(count($results) <= 0){
-			$this->mongo_db->insert($this->_collection,Array("_id" => $url,"createDate" => time()*1000.0,"title" => null,"resolved" => false));
+			$this->mongo_db->insert($this->_collection,Array("_id" => $url,"createDate" => time()*1000.0 , "fail" => 0 ,"title" => null,"resolved" => false));
 			return null;
 		}
 		return $results[0]["title"];
 	}
 	
 	public function get_unsolved_urls(){
-		return $this->mongo_db->whereLte("fail",5)->where("resolved",false)->orderBy("createDate","desc")->limit(200)->get($this->_collection);
+		return $this->mongo_db->whereLte("fail",5)->where("resolved",false)->orderBy("createDate","desc")->limit(40)->get($this->_collection);
 	}
 	
 
@@ -84,16 +84,20 @@ class UrlModel extends MONGO_MODEL {
 			->set("resolved_date",time()*1000.0)
 		->update($this->_collection);
 		
-		$this->mongo_db->where("url",$url)
+		$this->mongo_db
+			->where("url",$url)
+			->where("url_title",null)
 			->set("url_title",$title)
 			->updateAll($this->_collection_comment);
 		
 		$this->mongo_db->where("url",$url)
-		->set("url_title",$title)
-		->updateAll($this->_collection_reply);
+			->set("url_title",$title)
+			->where("url_title",null)
+			->updateAll($this->_collection_reply);
 		
 		$this->mongo_db->where("reply.url",$url)
 		->set("reply.url_title",$title)
+		->where("reply.url_title",null)
 		->updateAll($this->_collection_comment);
 		
 	}
