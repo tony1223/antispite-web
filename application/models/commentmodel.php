@@ -100,14 +100,14 @@ class CommentModel extends MONGO_MODEL {
 
 	public function get_confirming_users($page = 0){
 	
-		$pagesize = 50;
+		$pageSize = 50;
 		$users = $this->mongo_db->orderBy("wait_count","desc")
-			->limit($pageSize)->offset($page * $pagesize)->get($this->_collection_user);
+			->limit($pageSize)->offset($page * $pageSize)->get($this->_collection_user);
 		
 
 		$results = Array();
 		foreach($users as $user){
-			$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
+			$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") );
 			$query->where("status",0);
 			$query->where("userkey",$user["user"]);
 			$items = $query->get($this->_collection);
