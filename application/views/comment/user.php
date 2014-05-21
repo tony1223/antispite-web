@@ -34,6 +34,16 @@
 	<a class="btn btn-default" onclick='$(".btn-type-1").click()'>全列跳針</a>
 	<a class="btn btn-default" onclick='$(".btn-type-0").click()'>全列待審</a>
 	<?php }?>
+	<pre>
+跳針小幫手聲明：
+ 
+本服務透過台灣獨特的「工人」智慧演算法來標示跳針言論，
+「工人」智慧的標示趨向並不代表本網站立場。
+ 
+言論自由時代，您有發表言論的自由，
+別人也有對您的言論發表評論的自由。
+「工人」智慧的跳針標示僅評論您的發言，而非針對您個人。
+	</pre>
 	<table class="table table-bordered table-comment">
 		<tr class="comment-row">
 			<td>類型</td>
