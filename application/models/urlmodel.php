@@ -74,7 +74,7 @@ class UrlModel extends MONGO_MODEL {
 		}
 		$this->mongo_db->where("_id",$url)
 		->set("fail",$fail +1 )
-		->update($this->_collection);
+		->update($this->_collection,Array("w"=>0));
 	}
 	
 	public function resolve_url($url,$title){
@@ -82,23 +82,23 @@ class UrlModel extends MONGO_MODEL {
 			->set("title",$title)
 			->set("resolved",true)
 			->set("resolved_date",time()*1000.0)
-		->update($this->_collection);
+		->update($this->_collection,Array("w"=>0));
 		
 		$this->mongo_db
 			->where("url",$url)
 			->where("url_title",null)
 			->set("url_title",$title)
-			->updateAll($this->_collection_comment);
+			->updateAll($this->_collection_comment,Array("w"=>0));
 		
 		$this->mongo_db->where("url",$url)
 			->set("url_title",$title)
 			->where("url_title",null)
-			->updateAll($this->_collection_reply);
+			->updateAll($this->_collection_reply,Array("w"=>0));
 		
 		$this->mongo_db->where("reply.url",$url)
 		->set("reply.url_title",$title)
 		->where("reply.url_title",null)
-		->updateAll($this->_collection_comment);
+		->updateAll($this->_collection_comment,Array("w"=>0));
 		
 	}
 	

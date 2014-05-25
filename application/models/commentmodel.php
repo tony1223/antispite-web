@@ -175,7 +175,7 @@ class CommentModel extends MONGO_MODEL {
 				"createDate" => $item["time"],
 			));
 			$this->mongo_db->where("_id", $url["_id"]);
-			$this->mongo_db->update($this->_collection_urls);
+			$this->mongo_db->update($this->_collection_urls,Array("w"=>0));
 		}
 			
 	}
@@ -206,7 +206,7 @@ class CommentModel extends MONGO_MODEL {
 						"last_update" => $now
 				));
 				$this->mongo_db->where("_id", $current["type"].":".$current["userkey"]);
-				$this->mongo_db->update($this->_collection_user);
+				$this->mongo_db->update($this->_collection_user,Array("w"=>0));
 					
 			}
 		}
@@ -380,7 +380,7 @@ class CommentModel extends MONGO_MODEL {
 			if($exist[0]["status"] == CommentModel::STATUS_CHECK ){
 				$query->set("status",  CommentModel::STATUS_WAIT);
 			}
-			$query->update($this->_collection);
+			$query->update($this->_collection,Array("w"=>0));
 		}
 		
 		$this->update_user_count($data["type"],$data["userkey"],$data["name"]);
@@ -469,7 +469,7 @@ class CommentModel extends MONGO_MODEL {
 			$query->set("url_title" ,$url_title);
 		}
 		
-		$query->update($this->_collection_reply);		
+		$query->update($this->_collection_reply,Array("w"=>0));		
 		
 		if($status == CommentModel::REPLY_OK){
 			$reply["status"] = $status;
@@ -481,7 +481,7 @@ class CommentModel extends MONGO_MODEL {
 			
 			$query = $this->mongo_db->where("_id", $reply["commentID"]);
 			$query->set(Array("reply" => $reply,"reply_updated" => time() *1000.0));
-			$query->update($this->_collection);
+			$query->update($this->_collection,Array("w"=>0));
 		}
 	}
 	
@@ -489,7 +489,7 @@ class CommentModel extends MONGO_MODEL {
 		$query = $this->mongo_db->where("_id", $key);
 		$query->unsetField("reply");
 		$query->set(Array("reply_updated" => time() *1000.0));
-		$query->update($this->_collection);
+		$query->update($this->_collection,Array("w"=>0));
 	}
 	
 	public function update_user_count($type,$userkey,$name){
