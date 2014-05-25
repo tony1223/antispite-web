@@ -37,7 +37,7 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function search_check($keyword,$page){
-		$pagesize = 200;
+		$pagesize = 10;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )
 			->offset($page * $pagesize)
 			->limit($pagesize);
@@ -143,7 +143,7 @@ class CommentModel extends MONGO_MODEL {
 			$current = $items[0];
 			
 			//update user
-			$this->update_user_count($current["type"],$current["userkey"]);
+			$this->update_user_count($current["type"],$current["userkey"],$current["name"]);
 			
 			//update urls
 			$now_url_count = $this->mongo_db->where(Array("url" => $current["url"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
@@ -343,6 +343,12 @@ class CommentModel extends MONGO_MODEL {
 		return $query->get($this->_collection_user);
 	}
 	
+	public function insert_user_tags($userID,$tags){
+		
+// 		$this->
+		
+	}
+	
 	public function insert($data,$client = "chrome",$check = false){
 		
 // 		{
@@ -377,7 +383,7 @@ class CommentModel extends MONGO_MODEL {
 			$query->update($this->_collection);
 		}
 		
-		$this->update_user_count($data["type"],$data["userkey"]);
+		$this->update_user_count($data["type"],$data["userkey"],$data["name"]);
 		
 		$this->mongo_db->insert($this->_collection_record, 
 			Array("reporter"=>$data["ueid"], 
@@ -486,12 +492,12 @@ class CommentModel extends MONGO_MODEL {
 		$query->update($this->_collection);
 	}
 	
-	public function update_user_count($type,$userkey){
+	public function update_user_count($type,$userkey,$name){
 		$now = time() *1000.0;
 		
 		$exists = $this->mongo_db->where("_id",$type.":".$userkey)->count($this->_collection_user) > 0;
 		if(!$exists){
-			$this->mongo_db->insert($this->_collection_user,Array("_id" => $type.":".$userkey,"createDate" => $now));
+			$this->mongo_db->insert($this->_collection_user,Array("_id" => $type.":".$userkey,"createDate" => $now,"type" => $type,"user" => $userkey));
 		}
 		
 		$bad_count = $this->mongo_db->where(Array(
@@ -503,6 +509,9 @@ class CommentModel extends MONGO_MODEL {
 		
 		$this->mongo_db->set(Array(
 				"count" => $bad_count,
+				"name" => $name,
+				"type" => $type,
+				"user" => $userkey,
 				"wait_count" => $wait_count,
 				"check_count" => $check_count,
 				"all_count" => $bad_count + $wait_count + $check_count,

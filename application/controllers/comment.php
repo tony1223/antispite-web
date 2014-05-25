@@ -65,6 +65,14 @@ class Comment extends MY_Controller {
 		));
 	}
 	
+	public function tag_user(){
+		session_write_close();
+		if(!is_login()){
+			redirect(site_url("user/login"));
+			return true;
+		}
+	}
+	
 	public function confirmr($type = 0,$page = 0){
 		session_write_close();
 		if(!is_login()){
