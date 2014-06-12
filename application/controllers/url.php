@@ -3,28 +3,70 @@
 class Url extends MY_Controller {
 	
 	public function resolver(){
+		session_write_close();
 		$this->load->model("urlModel");
 		$urls = $this->urlModel->get_unsolved_urls();
 		foreach($urls as $url){
 			$result = $this->parse_url($url["_id"]);
-			if($result[0] == "ok"){
-				$this->urlModel->resolve_url($url["_id"],$result[1]);
-			}else if($result[0] == "notitle"){
-				$this->urlModel->resolve_url($url["_id"],"no-title");
-			}else if($result[0] =="badurl"){
-				$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
-			}else{
-				echo "can't resolve:".$url["_id"]."<br />";
+			try{
+				if($result[0] == "ok"){
+					$this->urlModel->resolve_url($url["_id"],$result[1]);
+				}else if($result[0] == "notitle"){
+					$this->urlModel->resolve_url($url["_id"],"no-title");
+				}else if($result[0] =="badurl"){
+					$this->urlModel->resolve_url($url["_id"],"(不正確的網址)");
+				}else{
+					$this->urlModel->resolve_fail($url["_id"]);
+					echo "can't resolve:".$url["_id"]."<br />";
+				}
+				echo $result[0];
+			}catch(Exception $ex){
+				$this->urlModel->resolve_fail($url["_id"],$result[1]);
+				echo " resolve but got exception:".$url["_id"]."<br />";
 			}
 		}
+	}
+	
+	public function todo(){
+		session_write_close();
+		$this->load->model("urlModel");
+		$urls = $this->urlModel->get_unsolved_urls();
+		foreach($urls as $url){
+			$result = $this->_page_title($url["_id"]);
+			echo $url["_id"].":::[".$url["fail"]."]- ".$result[1]."<Br />";
+		}
+	}
+	
+	private function _page_title($url) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$fp = curl_exec($ch);
+		if (!$fp)
+			return Array("exception",null);
+	
+		$res = preg_match("/<title>(.*)<\/title>/siU", $fp, $title_matches);
+		if (!$res)
+			return Array("exception",null);
+	
+		// Clean up title: remove EOL's and excessive whitespace.
+		$title = preg_replace('/\s+/', ' ', $title_matches[1]);
+		$title = trim($title);
+		return Array("ok",$title);
 	}
 	
 	private function parse_url($url){
 
 		try{
 			$this->load->library("simple_html_dom");
-			$content = @file_get_contents($url);
-			if(strpos($url,"udn.com") !== FALSE && strpos($url,"blog.udn.com") === FALSE){
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			$content = curl_exec($ch);
+			
+			if(strpos($url,"www.nownews.com") !== FALSE){
+				//do nothing 
+			}else	if(strpos($url,"udn.com") !== FALSE && strpos($url,"blog.udn.com") === FALSE){
 				$content = @iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);
 			}else if(strpos($content,'charset="big5"') !==FALSE || strpos($content,'charset=big5') !== FALSE){
 				$content = @iconv("big5","UTF-8//TRANSLIT//IGNORE",$content);

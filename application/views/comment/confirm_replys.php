@@ -77,9 +77,7 @@
 			<td><?=h($comment["_id"]) ?></td>
 			<td><?=_display_date_with_fulldate_ms($comment["createDate"]) ?></td>
 			<td>
-				<?php if($comment["type"] == "FBComment"){ ?>
-				FB 留言
-				<?php }?>
+				<?=get_comment_type_description($comment["type"])?>
 			</td>	
 			<td>
 				<a name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>) <br />
@@ -158,7 +156,7 @@
 				<?php foreach($replys as $reply){?>
 				<div class="reply reply-<?=$reply["status"]?>" >
 					<p class="url"><a href="<?=h($reply["url"])?>"><?=h($reply["url"])?></a></p>
-					<p class="內容"><?=nl2br(($reply["content"]))?></p>
+					<p class="content"><?=nl2br(h($reply["content"]))?></p>
 					<button data-id="<?=h($reply["_id"])?>" data-status="0" class="btn-approve btn">未處理</button>
 					<button data-id="<?=h($reply["_id"])?>" data-status="2" class="btn-approve btn">採用</button>
 					<button data-id="<?=h($reply["_id"])?>" data-status="1" class="btn-approve btn">不採用</button>

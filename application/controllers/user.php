@@ -3,7 +3,7 @@
 class User extends MY_Controller {
 
 	public function login(){
-		
+		session_write_close();
 		if(is_login()){
 			redirect(site_url("/"));
 			return true;
@@ -16,6 +16,7 @@ class User extends MY_Controller {
 	}
 	
 	public function reigster(){
+		session_write_close();
 		if(is_login()){
 			redirect(site_url("/"));
 			return true;
@@ -28,6 +29,7 @@ class User extends MY_Controller {
 	}
 	
 	public function registering(){
+		session_write_close();
 		if(is_login()){
 			redirect(site_url("/"));
 			return true;

@@ -27,9 +27,7 @@
 		</tr>
 		<tr>
 			<td rowspan="2" width="150px">
-				<?php if($comment["type"] == "FBComment"){ ?>
-				FB 留言
-				<?php }?>
+				<?=get_comment_type_description($comment["type"])?>
 			</td>	
 			<td>
 				<p>
@@ -41,6 +39,7 @@
 					<?php }else{?>
 						<?=h($comment["name"]) ?>&nbsp;
 					<?php }?>
+					 (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>">瀏覽 <?=h($comment["name"]) ?> 的跳針留言</a>) 
 					<br />
 					留言網頁：
 					<a class="news-title" target="_blank"  href="<?=h($comment["url"]) ?>">

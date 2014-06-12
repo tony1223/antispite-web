@@ -55,7 +55,6 @@
 	<h2>待確認留言清單</h2>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/-1")?>">確認全部留言</a>
 	<a class="btn btn-default" href="<?=site_url("comment/confirm/1")?>">確認跳針留言</a>
-	<a class="btn btn-default" href="<?=site_url("comment/confirm_hot/")?>">確認熱門跳針留言</a>
 	
 	<hr />
 	<?=$stats[0]?> 待審,<?=$stats[1]?> 跳針,<?=$stats[2]?> 沒問題,<?=$stats[3]?> 其他.
@@ -115,15 +114,11 @@
 		?>
 		<tr >
 			<td>
-				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a>
-				<?=h($user["count"])?> ,  
-				(
-					 <a target="_blank" style='color:red;' href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=1") ?>"><?=$user["confirm_count"]["count"]?></a>
-				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=0") ?>"><?=$user["confirm_count"]["wait_count"]?></a>
-				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($user["key"])."&status=-1") ?>"><?=$user["confirm_count"]["check_count"]?></a> 
+				<a class="user-link" href="#<?=h($user["key"]) ?>"><?=h($user["name"])?></a> (<?=h($user["count"])?>
 				
+					<?php if($user["confirm_count"] >0 ){?>
+					/ <span style='color:red;'><?=$user["confirm_count"]?></span>
+					<?php }?>
 				)
 				<br />
 				<?php foreach($confirming_users[$userkey]["keywords"] as $keyword => $detail){ ?>
@@ -143,7 +138,7 @@
 			</td>
 		</tr>
 	</table>
-	<table class="table table-bordered table-confirm">
+	<table id="confirms" class="table table-bordered table-confirm">
 		<tr class="comment-row-head">
 			<td>key</td>
 			<td>回報時間</td>			
@@ -160,16 +155,11 @@
 				<?=get_comment_type_description($comment["type"])?>
 			</td>	
 			<td>
-				<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a>
-				目前跳針指數
-				(
-					 <a target="_blank" style='color:red;'  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=1") ?>"><?=$comment["count"]["count"]?></a>
-				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=0") ?>"><?=$comment["count"]["wait_count"]?></a>
-				/
-				<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=-1") ?>"><?=$comment["count"]["check_count"]?></a> 
-				 )
-				<br />
+				<?php if($comment["count"]["count"] >0 ){?>
+					<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])) ?>"><span style='color:red;'>目前跳針指數 <?=$comment["count"]["count"]?> </span> <br />
+				<?php }?>
+					<br />
+					<a target="_blank"  name="<?=h($comment["userkey"])?>" href="<?=h(comment_user_link($comment))?>"><?=h($comment["name"]) ?></a> (<a target="_blank"  href="<?=site_url("comment/user/?key=".rawurlencode($comment["userkey"])."&status=-1") ?>"><span >未列入審查資料 </span> <br />
 			</td>
 			<td><?=_display_date_with_fulldate_ms($comment["time"]) ?></td>
 			<td>
@@ -234,8 +224,6 @@
 				<a class="btn btn-confirm-all btn-default" data-type="2" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> OK</a>
 				<a class="btn btn-confirm-all btn-default" data-type="1" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> 跳針</a>
 				<a class="btn btn-confirm-all btn-default" data-type="0" href="javascript:void 0;" data-key="<?=h($comment["userkey"]) ?>"><?=h($comment["name"]) ?> 待審查</a>
-				
-								
 			</td>
 		</tr>			
 		<?php }?>
@@ -244,7 +232,13 @@
 </div>
 
 <?php function js_section(){?>
+<script src="<?=base_url("js/showdown.js")?>"></script>
+<script src="<?=base_url("js/react-with-addons.min.js")?>"></script>
+<script src="<?=base_url("js/JSXTransformer.js")?>"></script>
+<script type="text/jsx" src="<?=base_url("js/component/confirm.js")?>"></script>
+
 <script>
+/*
 	$(function(){
 		$(".page-controls .btn-reset").click(function(){
 			$(".comment-handle").show();
@@ -399,6 +393,7 @@
 			return false;
 		});
 	});
+*/
 </script>
 <?php }?>
 

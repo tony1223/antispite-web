@@ -31,6 +31,27 @@
 		</div>
 	</div>
 	<hr />
+	<p><a href="<?=site_url("/extension/download")?>" target="_blank" class="btn btn-primary">想要閱讀留言時馬上看到跳針指數嗎？安裝跳針小幫手就行了！</a></p>
+	<?php if(is_login()){?>
+	<hr />
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=0")?>" href="">待審(<?=$stats[0]?>)</a>
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=1")?>">跳針(<?=$stats[1]?>)</a>
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=2")?>">ok(<?=$stats[2]?>)</a>
+	<a class="btn btn-default"  href="<?=site_url("/comment/user/?key=".h($comments[0]["userkey"])."&status=-1")?>">其他(<?=$stats[3]?>)</a>
+	<Br />
+	<a class="btn btn-default" onclick='$(".btn-type-1").click()'>全列跳針</a>
+	<a class="btn btn-default" onclick='$(".btn-type-0").click()'>全列待審</a>
+	<?php }?>
+	<pre>
+跳針小幫手聲明：
+ 
+本服務透過台灣獨特的「工人」智慧演算法來標示跳針言論，
+「工人」智慧的標示趨向並不代表本網站立場。
+ 
+言論自由時代，您有發表言論的自由，
+別人也有對您的言論發表評論的自由。
+「工人」智慧的跳針標示僅評論您的發言，而非針對您個人。
+	</pre>
 	<table class="table table-bordered table-comment">
 		<tr class="comment-row">
 			<td>類型</td>
@@ -40,9 +61,7 @@
 		<?php foreach($comments as $comment){?>
 		<tr>
 			<td rowspan="2" width="100px">
-				<?php if($comment["type"] == "FBComment"){ ?>
-				FB 留言
-				<?php }?>
+				<?=get_comment_type_description($comment["type"])?>
 			</td>	
 			<td>
 				<p>
@@ -114,7 +133,11 @@
 		</tr>			
 		<?php }?>
 	</table>
+<<<<<<< HEAD
 	<p><a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/"  target="_blank" class="btn btn-primary install_extension">馬上安裝跳針留言小幫手</a></p>
+=======
+	<p><a href="<?=site_url("/extension/download")?>" target="_blank" class="btn btn-primary">想要閱讀留言時馬上看到跳針指數嗎？安裝跳針小幫手就行了！</a></p>
+>>>>>>> 01bb20410d7b94842af6ea7ca2c1a9dcdd3d30dc
 	
 </div>
 

@@ -31,4 +31,14 @@ function get_ip(){
 	return $ip;
 }
 
+function get_comment_type_description($type){
+	if($type == "FBComment"){
+		return "FB 留言板";
+	}
+	if($type == "YahooComment"){
+		return "Yahoo 留言板";
+	}
+	return "";
+}
+
 ?>

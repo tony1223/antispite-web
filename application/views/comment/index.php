@@ -30,9 +30,7 @@
 		<?php foreach($comments as $comment){?>
 		<tr class="comment-row">
 			<td rowspan="2" width="100px">
-				<?php if($comment["type"] == "FBComment"){ ?>
-				FB 留言
-				<?php }?>
+				<?=get_comment_type_description($comment["type"])?>
 			</td>	
 			<td>
 				<p>
