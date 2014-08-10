@@ -401,14 +401,14 @@ class CommentModel extends MONGO_MODEL {
 			
 			$find = false;
 				
-			foreach($exists[0]["reporters"] as $reporter){
+			foreach($exist[0]["reporters"] as $reporter){
 				if($reporter == $data["ueid"]){
 					$find = true;
 				}
 			}
 						
 			if(!$find){
-				$query->set("reporter_count", count($exists[0]["reporters"]) +1);
+				$query->set("reporter_count", count($exist[0]["reporters"]) +1);
 			}
 			$query->update($this->_collection,Array("w"=>0));
 		}
