@@ -218,7 +218,7 @@ class Comment extends MY_Controller {
 				"comment" => $comment,
 		));
 	}
-		
+	
 
 	public function user(){
 		session_write_close();
@@ -380,7 +380,7 @@ class Comment extends MY_Controller {
 			}catch(Exception $e){
 			
 			}
-			$users[$post["user"]] = 1;
+			$users[$post["type"].":".$post["user"]] = 1;
 		}
 		
 		$this->load->model("commentModel");

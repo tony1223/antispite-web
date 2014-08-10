@@ -232,12 +232,14 @@ class CommentModel extends MONGO_MODEL {
 	public function check_users($users){
 		$results = Array();
 		
-		foreach($users as $user){
-			$user_count = $this->mongo_db->where("userkey",$user)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
-			if($user_count > 0 ){
-				$results[] = Array("user" => $user,"count" => $user_count);
-			}
+
+		//optimzed query
+		$query_results = $this->mongo_db->select(Array("user","bad_count"))->whereIn("_id",$users)->get($this->_collection_user);
+		
+		foreach($query_results as $user){
+			$results[] = Array("user" => $user["user"],"count" => $user["bad_count"]);
 		}
+		
 		return $results;
 	}
 	
