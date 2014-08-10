@@ -376,7 +376,7 @@ class CommentModel extends MONGO_MODEL {
 // 			url:url,
 // 			ueid:chrome.runtime.id
 // 		}
-		$exist = $this->mongo_db->select("status")->where("_id",$data["key"])->get($this->_collection);
+		$exist = $this->mongo_db->select("status","reporters")->where("_id",$data["key"])->get($this->_collection);
 		$now = time() * 1000.0;
 		if(count($exist) == 0 ){
 			$data["createDate"] = $now;
@@ -385,15 +385,30 @@ class CommentModel extends MONGO_MODEL {
 			if($check){
 				$data["status"] = CommentModel::STATUS_CHECK;
 				$data["reporters"] = Array();
+				$data["reporter_count"] = 0 ;
 			}else{
 				$data["status"] = CommentModel::STATUS_WAIT;
 				$data["reporters"] = Array($data["ueid"]);
+				$data["reporter_count"] = 1 ;
 			}
 			$this->mongo_db->insert($this->_collection,$data);			
 		}else if(!$check){
+			
 			$query = $this->mongo_db->where("_id",$data["key"])->addToSet("reporters",$data["ueid"]);
 			if($exist[0]["status"] == CommentModel::STATUS_CHECK ){
 				$query->set("status",  CommentModel::STATUS_WAIT);
+			}
+			
+			$find = false;
+				
+			foreach($exists[0]["reporters"] as $reporter){
+				if($reporter == $data["ueid"]){
+					$find = true;
+				}
+			}
+						
+			if(!$find){
+				$query->set("reporter_count", count($exists[0]["reporters"]) +1);
 			}
 			$query->update($this->_collection,Array("w"=>0));
 		}
