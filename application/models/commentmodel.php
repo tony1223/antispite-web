@@ -58,12 +58,14 @@ class CommentModel extends MONGO_MODEL {
 							"count"=>0 ,
 							"all_count" => -1,
 							"wait_count" => -1,
+							"bad_count" => -1,
 							"check_count" => -1
 					) ;
 				}else{
 					$users[$item["userkey"]] = $result[0];
 					if(!isset($result[0]["wait_count"])){
 						$users[$item["userkey"]]["all_count"] =  -1;
+						$users[$item["userkey"]]["bad_count"] =  -1;
 						$users[$item["userkey"]]["wait_count"] =  -1;
 						$users[$item["userkey"]]["check_count"] =  -1;
 					}
@@ -229,6 +231,7 @@ class CommentModel extends MONGO_MODEL {
 	
 	public function check_users($users){
 		$results = Array();
+		
 		foreach($users as $user){
 			$user_count = $this->mongo_db->where("userkey",$user)->where("status",CommentModel::STATUS_BAD)->count($this->_collection);
 			if($user_count > 0 ){
@@ -512,6 +515,7 @@ class CommentModel extends MONGO_MODEL {
 				"name" => $name,
 				"type" => $type,
 				"user" => $userkey,
+				"bad_count" => $bad_count,
 				"wait_count" => $wait_count,
 				"check_count" => $check_count,
 				"all_count" => $bad_count + $wait_count + $check_count,
