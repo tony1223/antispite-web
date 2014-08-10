@@ -376,7 +376,7 @@ class CommentModel extends MONGO_MODEL {
 // 			url:url,
 // 			ueid:chrome.runtime.id
 // 		}
-		$exist = $this->mongo_db->select("status","reporters")->where("_id",$data["key"])->get($this->_collection);
+		$exist = $this->mongo_db->select(Array("status","reporters"))->where("_id",$data["key"])->get($this->_collection);
 		$now = time() * 1000.0;
 		if(count($exist) == 0 ){
 			$data["createDate"] = $now;
