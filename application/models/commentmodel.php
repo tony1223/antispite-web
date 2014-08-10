@@ -88,6 +88,7 @@ class CommentModel extends MONGO_MODEL {
 		$this->_merge_user_count($items);
 		return $items;
 	}
+	
 	public function get_confirming_hot($page = 0){
 	
 		$pagesize = 1000;

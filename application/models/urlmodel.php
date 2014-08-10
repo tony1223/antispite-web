@@ -30,7 +30,7 @@ class UrlModel extends MONGO_MODEL {
 
 	public function get_urls($order = "recent"){
 		
-		$query = $this->mongo_db->whereGt("count",0);
+		$query = $this->mongo_db->whereGt("count",0)->limit(500);
 		
 		if($order =="recent" ){
 			$query->orderBy("createDate","desc");
