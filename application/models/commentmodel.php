@@ -353,6 +353,8 @@ class CommentModel extends MONGO_MODEL {
 			$query->whereGte("count",$minial_bad);
 		}
 		
+		$query->limit(500);
+		
 		return $query->get($this->_collection_user);
 	}
 	
