@@ -219,14 +219,22 @@ class CommentModel extends MONGO_MODEL {
 	}
 	
 	public function check_id_not_exists($post_ids){
-		$results = Array();
-		foreach($post_ids as $id){ 
-			$id_count = $this->mongo_db->where("_id",$id)->count($this->_collection);
-			if($id_count <= 0 ){
-				$results[] = $id;
-			} 
+		$map = Array();
+
+		foreach($post_ids as $id){
+			$map[$id] = 1;
 		}
-		return $results;
+		
+		$ids = $this->mongo_db->select("_id")->whereIn("_id",$post_ids)->get($this->_collection);
+		
+		foreach($ids as $id){
+			if(!isset($map[$id["_id"]])){
+				die("error");
+			}
+			unset($map[$id["_id"]]);
+		}
+		
+		return array_keys($map);
 	}
 	
 	public function check_users($users){
@@ -234,10 +242,10 @@ class CommentModel extends MONGO_MODEL {
 		
 
 		//optimzed query
-		$query_results = $this->mongo_db->select(Array("user","bad_count"))->whereIn("_id",$users)->get($this->_collection_user);
+		$query_results = $this->mongo_db->select(Array("user","bad_count"))->whereGt("bad_count",0)->whereIn("_id",$users)->get($this->_collection_user);
 		
 		foreach($query_results as $user){
-			$results[] = Array("user" => $user["user"],"count" => $user["bad_count"]);
+			$results[] = Array("user" => $user["user"],"count" => isset($user["bad_count"]) ? $user["bad_count"] : 0 );
 		}
 		
 		return $results;
