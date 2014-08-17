@@ -39,7 +39,11 @@
 		<p>&nbsp;</p>
 		<h2>拒絕跳針、鼓勵認真討論。</h2>
 		<h2>我們相信，你，值得有更多的資訊來判斷。</h2>
+<<<<<<< HEAD
+		<a href="https://chrome.google.com/webstore/detail/pppcoehiccnccehmfpmanaekjkcijmpj/" target="_blank" class="btn btn-primary install_extension">馬上安裝跳針留言小幫手</a>
+=======
 		<a href="<?=site_url("extension/download")?>" target="_blank" class="btn btn-primary">馬上安裝跳針留言小幫手</a>
+>>>>>>> 01bb20410d7b94842af6ea7ca2c1a9dcdd3d30dc
 		<hr />
 		<p><img src="<?=base_url("img/example.png")?>" /></p>
 		<hr />
