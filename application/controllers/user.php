@@ -76,7 +76,7 @@ class User extends MY_Controller {
 		unset($user["password"]);
 		unset($user["_id"]);
 		$_SESSION["suser"] = $user;
-		redirect(site_url("comment/confirm"));
+		redirect(site_url("comment/confirm_hot"));
 	
 	}
 	

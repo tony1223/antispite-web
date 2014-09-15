@@ -79,7 +79,7 @@ class CommentModel extends MONGO_MODEL {
 	
 	public function get_confirming($status = 0,$page = 0){
 		
-		$pagesize = 1000;
+		$pagesize = 200;
 		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
 		if($status != -1){
 			$query->where("status",$status);
@@ -91,9 +91,9 @@ class CommentModel extends MONGO_MODEL {
 	
 	public function get_confirming_hot($page = 0){
 	
-		$pagesize = 1000;
-		$query =  $this->mongo_db->orderBy(Array("userkey" => "asc","createDate" => "desc") )->offset($page * $pagesize)->limit($pagesize);
-		$query->where("reporters.3",array("\$exists" => true));
+		$pagesize = 200;
+		$query =  $this->mongo_db->orderBy(Array("reporter_count" => "desc") )->offset($page * $pagesize)->limit($pagesize);
+		$query->whereGt("reporter_count",5);
 		$query->where("status",0);
 		$items = $query->get($this->_collection);
 		$this->_merge_user_count($items);
@@ -129,7 +129,7 @@ class CommentModel extends MONGO_MODEL {
 		return $this->mongo_db->orderBy("time","desc")->where("status",CommentModel::STATUS_BAD)->limit(100)->get($this->_collection);
 	}
 	
-	public function mark($key,$status,$user){
+	public function mark($key,$status,$user,$auto = false){
 		$now = time() *1000.0;
 		
 		$this->mongo_db->where("_id",$key)->set("status",$status)->set("status_update",$now)->update($this->_collection,Array("w"=>0));
@@ -152,11 +152,15 @@ class CommentModel extends MONGO_MODEL {
 			$now_url_count = $this->mongo_db->where(Array("url" => $current["url"],"status" => CommentModel::STATUS_BAD))->count($this->_collection);
 			$all_url_count = $this->mongo_db->where(Array("url" => $current["url"]))->count($this->_collection);
 
-			$this->mongo_db->set(Array(
+			$data = Array(
 				"count" => $now_url_count,
 				"all_count" => $all_url_count,
 				"last_count_update" => $now
-			));
+			);
+			if($auto){
+				$data["auto"] = true;
+			}
+			$this->mongo_db->set($data);
 			$this->mongo_db->where("_id", $current["url"]);
 			$this->mongo_db->update($this->_collection_urls,Array("w"=>0));
 			
@@ -411,6 +415,10 @@ class CommentModel extends MONGO_MODEL {
 			if(!$find){
 				$query->set("reporter_count", count($exist[0]["reporters"]) +1);
 			}
+			if(count($exist[0]["reporters"]) > 10){
+				$this->mark($data["key"],CommentModel::STATUS_BAD,$data["userkey"],true);
+			}
+			
 			$query->update($this->_collection,Array("w"=>0));
 		}
 		
@@ -424,7 +432,8 @@ class CommentModel extends MONGO_MODEL {
 				"userkey" => $data["userkey"],
 				"client" => $client ,
 				"check" => $check
-			));
+			),
+			Array("w" =>1));
 	}
 	
 	public function insert_reply($commentID,$url,$comment){ 
