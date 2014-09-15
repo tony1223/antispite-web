@@ -21,7 +21,6 @@
 	
 	<h2><?=$comments[0]["name"] ?> 近期跳針留言清單（<?=count($comments)>=100 ?"最近一百筆" :count($comments) ?>）<div style="float:right;" class="fb-like" data-href="http://antispite.tonyq.org/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></h2>
 	<p>跳針指數：<?=$count?></p>
-	<div id="chart_div" style="width: 100%; height: 500px;"></div>
 	<hr />
 	<p><a href="<?=site_url("/extension/download")?>" target="_blank" class="btn btn-primary">想要閱讀留言時馬上看到跳針指數嗎？安裝跳針小幫手就行了！</a></p>
 	<?php if(is_login()){?>
@@ -130,35 +129,7 @@
 </div>
 
 
-<?php 
-$data = array();
-foreach($comments as $comment){
- 	$data[]=array($comment["time"],mb_strlen($comment["content"]),$comment["content"]);
-} 			
-?>
-<script>
-	window.datas = <?=json_encode($data)?>;
-	for(var i =0 ; i < window.datas.length;++i){
-		window.datas[i][0] = new Date(window.datas[i][0]);
-	}
-</script>
 <?php function js_section(){ ?>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load('visualization', '1', {'packages':['annotatedtimeline']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('datetime', '時間');
-        data.addColumn('number', '字數');
-        data.addColumn('string', '內容');
-        
-        data.addRows(window.datas);
-
-        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
-        chart.draw(data, {displayAnnotations: true});
-      }
-    </script>
 
 <?php if(is_login()){?>
 	<script>
