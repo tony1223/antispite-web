@@ -470,7 +470,7 @@ class Comment extends MY_Controller {
 		$inserting_data["_id"] = $data->key;
 		$this->commentModel->insert($inserting_data,$client,$check);
 		
-		$this->commentModel->update_wait_count($inserting_data["type"],$inserting_data["userkey"]);
+		// $this->commentModel->update_wait_count($inserting_data["type"],$inserting_data["userkey"]);
 		
 		return $this->return_success_json();
 	}
